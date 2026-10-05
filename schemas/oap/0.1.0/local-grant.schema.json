@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local-grant.schema.json",
+  "title": "OAP 0.1.0 local monitoring grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "grant_id",
+    "recipient_id",
+    "device_binding_id",
+    "user_binding_id",
+    "scope_revision",
+    "state",
+    "created_at",
+    "approved_at",
+    "expires_at",
+    "scope"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "grant_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "device_binding_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "user_binding_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "state": {
+      "enum": [
+        "active",
+        "paused",
+        "revoked"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "approved_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "expires_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "scope": {
+      "$ref": "common.schema.json#/$defs/scope"
+    }
+  },
+  "description": "LOCAL ONLY. An actual user approval creates authority; accepting this JSON never grants authority. Keep identity bindings on the device, outside activity delivery."
+}

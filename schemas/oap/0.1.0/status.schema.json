@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "status.schema.json",
+  "title": "OAP 0.1.0 safe local recipient status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "recipient_id",
+    "subscription_id",
+    "stream_id",
+    "scope_revision",
+    "consent_state",
+    "collection_permission",
+    "delivery_state",
+    "retention",
+    "gap_count"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "subscription_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "stream_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "consent_state": {
+      "enum": [
+        "active",
+        "paused",
+        "revoked",
+        "expired",
+        "unknown"
+      ]
+    },
+    "collection_permission": {
+      "enum": [
+        "granted",
+        "denied",
+        "unknown",
+        "unavailable"
+      ]
+    },
+    "delivery_state": {
+      "enum": [
+        "idle",
+        "pending",
+        "delivering",
+        "backoff",
+        "exhausted",
+        "blocked",
+        "offline",
+        "paused",
+        "revoked",
+        "expired",
+        "credential_unusable",
+        "permanent_error",
+        "unsupported"
+      ]
+    },
+    "grant_expires_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_age_ms",
+        "max_bytes",
+        "queued_events",
+        "retained_bytes"
+      ],
+      "properties": {
+        "max_age_ms": {
+          "type": "integer",
+          "minimum": 900000,
+          "maximum": 86400000
+        },
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 16384,
+          "maximum": 4194304
+        },
+        "queued_events": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "retained_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4194304
+        }
+      }
+    },
+    "last_receipt_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "last_valid_consumption_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "gap_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+    }
+  },
+  "description": "LOCAL ONLY. Counts and timestamps describe permitted-recipient delivery state, never application names, durations, goals or secrets. Unknown consent fails closed.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "consent_state": {
+            "const": "unknown"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "grant_expires_at"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "grant_expires_at"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "batch.schema.json",
+  "title": "OAP 0.1.0 local replay-selection batch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "recipient_id",
+    "stream_id",
+    "scope_revision",
+    "events",
+    "gaps",
+    "has_more"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "stream_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "events": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "$ref": "activity-summary.schema.json"
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_sequence",
+          "to_sequence",
+          "reason"
+        ],
+        "properties": {
+          "from_sequence": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "to_sequence": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "reason": {
+            "enum": [
+              "eviction",
+              "expired",
+              "explicit_delete"
+            ]
+          }
+        }
+      }
+    },
+    "has_more": {
+      "type": "boolean"
+    },
+    "next_cursor": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 256,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    }
+  },
+  "description": "LOCAL ONLY. The device selects authorized retained events; this is not an inbound server or cloud history endpoint. Cursors are scoped opaque local references.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "has_more": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "next_cursor"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "next_cursor"
+          ]
+        }
+      }
+    }
+  ]
+}

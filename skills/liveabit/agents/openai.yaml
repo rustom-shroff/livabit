@@ -1,0 +1,3 @@
+interface:
+  display_name: "liveabit Skill"
+  short_description: "Interpret activity with your own agent's policy"

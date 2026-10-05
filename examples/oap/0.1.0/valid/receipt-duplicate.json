@@ -1,0 +1,10 @@
+{
+  "protocol_version": "0.1.0",
+  "event_id": "00000000-0000-4000-8000-000000000010",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "stream_id": "00000000-0000-4000-8000-000000000002",
+  "sequence": 1,
+  "received_at": "2026-10-03T09:15:01.000Z",
+  "disposition": "duplicate",
+  "validation": "valid"
+}

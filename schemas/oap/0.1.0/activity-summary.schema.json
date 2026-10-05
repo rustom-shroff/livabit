@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "activity-summary.schema.json",
+  "title": "Open Activity Protocol 0.1.0 activity summary",
+  "description": "Recipient-scoped immutable activity page. JSON Schema validation is necessary but does not replace semantic, byte-limit, profile authentication or live local-consent checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "event_name",
+    "event_id",
+    "recipient_id",
+    "stream_id",
+    "subscription_id",
+    "scope_revision",
+    "sequence",
+    "emitted_at",
+    "expires_at",
+    "window",
+    "summary"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "event_name": {
+      "const": "activity.summary"
+    },
+    "event_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "stream_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "subscription_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "emitted_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "expires_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "window_id",
+        "start",
+        "end"
+      ],
+      "properties": {
+        "window_id": {
+          "$ref": "common.schema.json#/$defs/uuid"
+        },
+        "start": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        "end": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric",
+        "unit",
+        "aggregation_interval_ms",
+        "page_index",
+        "page_count",
+        "coverage",
+        "apps"
+      ],
+      "properties": {
+        "metric": {
+          "const": "foreground_duration"
+        },
+        "unit": {
+          "const": "millisecond"
+        },
+        "aggregation_interval_ms": {
+          "$ref": "common.schema.json#/$defs/aggregationInterval"
+        },
+        "page_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "page_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "observed_intervals",
+            "reasons"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "complete",
+                "partial"
+              ]
+            },
+            "observed_intervals": {
+              "type": "array",
+              "maxItems": 64,
+              "items": {
+                "$ref": "common.schema.json#/$defs/interval"
+              }
+            },
+            "reasons": {
+              "type": "array",
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "permission_missing",
+                  "source_unavailable",
+                  "clock_discontinuity",
+                  "consent_boundary"
+                ]
+              }
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "complete"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "observed_intervals": {
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "type": "array"
+                  },
+                  "reasons": {
+                    "maxItems": 0,
+                    "type": "array"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "status": {
+                    "const": "partial"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "observed_intervals": {
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "reasons": {
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "apps": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "application",
+              "foreground_duration_ms"
+            ],
+            "properties": {
+              "application": {
+                "$ref": "common.schema.json#/$defs/applicationWithLabel"
+              },
+              "foreground_duration_ms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3600000
+              }
+            }
+          }
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "maxProperties": 8,
+      "propertyNames": {
+        "pattern": "^x\\.(?:[a-z][a-z0-9-]*\\.)+[a-z][a-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 256
+      }
+    }
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "protocol_version": "0.1.0",
+  "event_name": "activity.summary",
+  "event_id": "00000000-0000-4000-8000-000000000040",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "stream_id": "00000000-0000-4000-8000-000000000032",
+  "subscription_id": "00000000-0000-4000-8000-000000000031",
+  "scope_revision": 1,
+  "sequence": 1,
+  "emitted_at": "2026-10-03T10:30:00.100Z",
+  "expires_at": "2026-10-03T23:59:00.000Z",
+  "window": {
+    "window_id": "00000000-0000-4000-8000-000000000042",
+    "start": "2026-10-03T10:00:00.000Z",
+    "end": "2026-10-03T10:30:00.000Z"
+  },
+  "summary": {
+    "metric": "foreground_duration",
+    "unit": "millisecond",
+    "aggregation_interval_ms": 1800000,
+    "page_index": 0,
+    "page_count": 2,
+    "coverage": {
+      "status": "complete",
+      "observed_intervals": [
+        {
+          "start": "2026-10-03T10:00:00.000Z",
+          "end": "2026-10-03T10:30:00.000Z"
+        }
+      ],
+      "reasons": []
+    },
+    "apps": [
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app000"
+        },
+        "foreground_duration_ms": 1000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app001"
+        },
+        "foreground_duration_ms": 2000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app002"
+        },
+        "foreground_duration_ms": 3000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app003"
+        },
+        "foreground_duration_ms": 4000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app004"
+        },
+        "foreground_duration_ms": 5000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app005"
+        },
+        "foreground_duration_ms": 6000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app006"
+        },
+        "foreground_duration_ms": 7000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app007"
+        },
+        "foreground_duration_ms": 8000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app008"
+        },
+        "foreground_duration_ms": 9000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app009"
+        },
+        "foreground_duration_ms": 10000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app010"
+        },
+        "foreground_duration_ms": 11000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app011"
+        },
+        "foreground_duration_ms": 12000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app012"
+        },
+        "foreground_duration_ms": 13000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app013"
+        },
+        "foreground_duration_ms": 14000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app014"
+        },
+        "foreground_duration_ms": 15000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app015"
+        },
+        "foreground_duration_ms": 16000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app016"
+        },
+        "foreground_duration_ms": 17000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app017"
+        },
+        "foreground_duration_ms": 18000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app018"
+        },
+        "foreground_duration_ms": 19000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app019"
+        },
+        "foreground_duration_ms": 20000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app020"
+        },
+        "foreground_duration_ms": 21000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app021"
+        },
+        "foreground_duration_ms": 22000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app022"
+        },
+        "foreground_duration_ms": 23000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app023"
+        },
+        "foreground_duration_ms": 24000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app024"
+        },
+        "foreground_duration_ms": 25000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app025"
+        },
+        "foreground_duration_ms": 26000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app026"
+        },
+        "foreground_duration_ms": 27000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app027"
+        },
+        "foreground_duration_ms": 28000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app028"
+        },
+        "foreground_duration_ms": 29000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app029"
+        },
+        "foreground_duration_ms": 30000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app030"
+        },
+        "foreground_duration_ms": 31000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.app031"
+        },
+        "foreground_duration_ms": 32000
+      }
+    ]
+  }
+}

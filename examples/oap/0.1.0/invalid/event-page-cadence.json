@@ -1,0 +1,50 @@
+{
+  "protocol_version": "0.1.0",
+  "event_name": "activity.summary",
+  "event_id": "00000000-0000-4000-8000-000000000010",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "stream_id": "00000000-0000-4000-8000-000000000002",
+  "subscription_id": "00000000-0000-4000-8000-000000000003",
+  "scope_revision": 1,
+  "sequence": 1,
+  "emitted_at": "2026-10-03T09:15:00.100Z",
+  "expires_at": "2026-10-03T23:59:00.000Z",
+  "window": {
+    "window_id": "00000000-0000-4000-8000-000000000011",
+    "start": "2026-10-03T09:00:00.000Z",
+    "end": "2026-10-03T09:15:00.000Z"
+  },
+  "summary": {
+    "metric": "foreground_duration",
+    "unit": "millisecond",
+    "aggregation_interval_ms": 900000,
+    "page_index": 0,
+    "page_count": 2,
+    "coverage": {
+      "status": "complete",
+      "observed_intervals": [
+        {
+          "start": "2026-10-03T09:00:00.000Z",
+          "end": "2026-10-03T09:15:00.000Z"
+        }
+      ],
+      "reasons": []
+    },
+    "apps": [
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.reader"
+        },
+        "foreground_duration_ms": 120000
+      },
+      {
+        "application": {
+          "namespace": "android",
+          "id": "com.example.video"
+        },
+        "foreground_duration_ms": 300000
+      }
+    ]
+  }
+}

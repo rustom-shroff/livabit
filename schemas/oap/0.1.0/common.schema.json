@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "title": "OAP 0.1.0 shared definitions",
+  "description": "Offline-resolvable shared definitions. Cross-field and authorization rules are specified in the OAP contract.",
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "namespace",
+        "id"
+      ],
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,31}$"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+        }
+      }
+    },
+    "applicationWithLabel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "namespace",
+        "id"
+      ],
+      "properties": {
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{0,31}$"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      }
+    },
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        },
+        "end": {
+          "$ref": "common.schema.json#/$defs/timestamp"
+        }
+      }
+    },
+    "aggregationInterval": {
+      "type": "integer",
+      "minimum": 900000,
+      "maximum": 3600000,
+      "multipleOf": 900000
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "applications",
+        "allowed_fields",
+        "event_names",
+        "aggregation_interval_ms",
+        "history_max_age_ms",
+        "history_max_bytes"
+      ],
+      "properties": {
+        "applications": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/application"
+          }
+        },
+        "allowed_fields": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "foreground_duration_ms",
+              "label"
+            ]
+          },
+          "contains": {
+            "const": "foreground_duration_ms"
+          }
+        },
+        "event_names": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "const": "activity.summary"
+          }
+        },
+        "aggregation_interval_ms": {
+          "$ref": "common.schema.json#/$defs/aggregationInterval"
+        },
+        "history_max_age_ms": {
+          "type": "integer",
+          "minimum": 900000,
+          "maximum": 86400000
+        },
+        "history_max_bytes": {
+          "type": "integer",
+          "minimum": 16384,
+          "maximum": 4194304
+        },
+        "extension_keys": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^x\\.(?:[a-z][a-z0-9-]*\\.)+[a-z][a-z0-9_-]*$"
+          }
+        }
+      }
+    },
+    "errorCode": {
+      "enum": [
+        "invalid_event",
+        "incompatible_version",
+        "unsupported_capability",
+        "unauthorized",
+        "scope_mismatch",
+        "consent_inactive",
+        "expired",
+        "payload_too_large",
+        "rate_limited",
+        "destination_rejected",
+        "temporary_unavailable",
+        "cursor_invalid",
+        "history_unavailable",
+        "conflicting_duplicate",
+        "invalid_request",
+        "scope_unsupported",
+        "storage_unavailable",
+        "clock_untrusted",
+        "cursor_stale",
+        "endpoint_unsupported",
+        "media_type_unsupported"
+      ]
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "receipt.schema.json",
+  "title": "OAP 0.1.0 valid-consumption receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "event_id",
+    "recipient_id",
+    "stream_id",
+    "sequence",
+    "received_at",
+    "disposition",
+    "validation"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "event_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "stream_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "received_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "disposition": {
+      "enum": [
+        "accepted",
+        "duplicate"
+      ]
+    },
+    "validation": {
+      "const": "valid"
+    }
+  },
+  "description": "A valid-consumption receipt follows durable validation and deduplication. It does not attest to agent evaluation or user notification. Rejections use error.schema.json."
+}

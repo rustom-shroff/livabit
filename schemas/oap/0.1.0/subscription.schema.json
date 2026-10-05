@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "subscription.schema.json",
+  "title": "OAP 0.1.0 local subscription",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "subscription_id",
+    "grant_id",
+    "recipient_id",
+    "stream_id",
+    "scope_revision",
+    "state",
+    "created_at",
+    "expires_at",
+    "idempotency_key",
+    "scope"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "subscription_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "grant_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "recipient_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "stream_id": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope_revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "state": {
+      "enum": [
+        "active",
+        "paused",
+        "revoked",
+        "expired"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "expires_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "idempotency_key": {
+      "$ref": "common.schema.json#/$defs/uuid"
+    },
+    "scope": {
+      "$ref": "common.schema.json#/$defs/scope"
+    }
+  },
+  "description": "LOCAL ONLY. Effective scope is the intersection with a live approved local grant. Repeating an idempotency key with conflicting input is invalid."
+}

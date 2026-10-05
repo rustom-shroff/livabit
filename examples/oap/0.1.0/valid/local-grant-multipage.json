@@ -1,0 +1,186 @@
+{
+  "protocol_version": "0.1.0",
+  "grant_id": "00000000-0000-4000-8000-000000000030",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "device_binding_id": "00000000-0000-4000-8000-000000000005",
+  "user_binding_id": "00000000-0000-4000-8000-000000000006",
+  "scope_revision": 1,
+  "state": "active",
+  "created_at": "2026-10-03T00:00:00.000Z",
+  "approved_at": "2026-10-03T00:00:00.000Z",
+  "expires_at": "2026-10-04T00:00:00.000Z",
+  "scope": {
+    "applications": [
+      {
+        "namespace": "android",
+        "id": "com.example.app000"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app001"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app002"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app003"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app004"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app005"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app006"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app007"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app008"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app009"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app010"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app011"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app012"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app013"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app014"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app015"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app016"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app017"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app018"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app019"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app020"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app021"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app022"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app023"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app024"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app025"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app026"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app027"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app028"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app029"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app030"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app031"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app032"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app033"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app034"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app035"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app036"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app037"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app038"
+      },
+      {
+        "namespace": "android",
+        "id": "com.example.app039"
+      }
+    ],
+    "allowed_fields": [
+      "foreground_duration_ms",
+      "label"
+    ],
+    "event_names": [
+      "activity.summary"
+    ],
+    "aggregation_interval_ms": 1800000,
+    "history_max_age_ms": 86400000,
+    "history_max_bytes": 4194304
+  }
+}

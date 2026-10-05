@@ -1,0 +1,16 @@
+{
+  "protocol_version": "0.1.0",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "stream_id": "00000000-0000-4000-8000-000000000002",
+  "scope_revision": 1,
+  "events": [],
+  "gaps": [
+    {
+      "from_sequence": 4,
+      "to_sequence": 5,
+      "reason": "expired"
+    }
+  ],
+  "has_more": true,
+  "next_cursor": "example_local_cursor_not_a_credential"
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "0.1.0",
+  "code": "unsupported_capability",
+  "message": "Required capability is not supported.",
+  "retryable": true
+}

@@ -1,0 +1,35 @@
+{
+  "protocol_version": "0.1.0",
+  "event_name": "activity.summary",
+  "event_id": "00000000-0000-4000-8000-000000000093",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "stream_id": "00000000-0000-4000-8000-000000000032",
+  "subscription_id": "00000000-0000-4000-8000-000000000031",
+  "scope_revision": 1,
+  "sequence": 2,
+  "emitted_at": "2026-10-03T10:30:00.100Z",
+  "expires_at": "2026-10-03T23:59:00.000Z",
+  "window": {
+    "window_id": "00000000-0000-4000-8000-000000000042",
+    "start": "2026-10-03T10:00:00.000Z",
+    "end": "2026-10-03T10:30:00.000Z"
+  },
+  "summary": {
+    "metric": "foreground_duration",
+    "unit": "millisecond",
+    "aggregation_interval_ms": 1800000,
+    "page_index": 1,
+    "page_count": 2,
+    "coverage": {
+      "status": "complete",
+      "observed_intervals": [
+        {
+          "start": "2026-10-03T10:00:00.000Z",
+          "end": "2026-10-03T10:30:00.000Z"
+        }
+      ],
+      "reasons": []
+    },
+    "apps": []
+  }
+}

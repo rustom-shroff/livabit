@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error.schema.json",
+  "title": "OAP 0.1.0 safe error",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "code",
+    "message",
+    "retryable"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "code": {
+      "$ref": "common.schema.json#/$defs/errorCode"
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "retryable": {
+      "type": "boolean"
+    },
+    "retry_after_ms": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3600000
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "retryable": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "retry_after_ms"
+          ]
+        }
+      }
+    }
+  ]
+}

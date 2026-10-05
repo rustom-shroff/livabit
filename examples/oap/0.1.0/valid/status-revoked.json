@@ -1,0 +1,20 @@
+{
+  "protocol_version": "0.1.0",
+  "recipient_id": "00000000-0000-4000-8000-000000000001",
+  "subscription_id": "00000000-0000-4000-8000-000000000003",
+  "stream_id": "00000000-0000-4000-8000-000000000002",
+  "scope_revision": 1,
+  "consent_state": "revoked",
+  "collection_permission": "granted",
+  "delivery_state": "revoked",
+  "grant_expires_at": "2026-10-04T00:00:00.000Z",
+  "retention": {
+    "max_age_ms": 86400000,
+    "max_bytes": 4194304,
+    "queued_events": 0,
+    "retained_bytes": 0
+  },
+  "last_receipt_at": "2026-10-03T09:15:00.200Z",
+  "last_valid_consumption_at": "2026-10-03T09:15:00.200Z",
+  "gap_count": 0
+}

@@ -1,0 +1,669 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Prepared OAP host capability catalog 1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "reviewed_at",
+    "implementation_status",
+    "selected_host_id",
+    "production_selectable",
+    "policy",
+    "status_vocabulary",
+    "sources",
+    "hosts"
+  ],
+  "properties": {
+    "format_version": {
+      "const": "1.0.0"
+    },
+    "reviewed_at": {
+      "const": "2026-10-04"
+    },
+    "implementation_status": {
+      "const": "not_implemented"
+    },
+    "selected_host_id": {
+      "type": "null"
+    },
+    "production_selectable": {
+      "const": false
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "windows_reference_sufficient_to_proceed",
+        "linux_portability",
+        "no_intermediary",
+        "existing_agent_required",
+        "new_agent_substitute_allowed",
+        "catalog_is_runtime_configuration",
+        "tokens_or_account_actions_performed"
+      ],
+      "properties": {
+        "windows_reference_sufficient_to_proceed": {
+          "const": true
+        },
+        "linux_portability": {
+          "const": "on_hold_unverified"
+        },
+        "no_intermediary": {
+          "const": true
+        },
+        "existing_agent_required": {
+          "const": true
+        },
+        "new_agent_substitute_allowed": {
+          "const": false
+        },
+        "catalog_is_runtime_configuration": {
+          "const": false
+        },
+        "tokens_or_account_actions_performed": {
+          "const": false
+        }
+      }
+    },
+    "status_vocabulary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documented",
+        "unverified",
+        "not_supported",
+        "not_applicable"
+      ],
+      "properties": {
+        "documented": {
+          "const": "Official source describes the primitive; account/runtime support is not established."
+        },
+        "unverified": {
+          "const": "Required capability, account access or actual behavior is not established."
+        },
+        "not_supported": {
+          "const": "Official source explicitly excludes this named surface or production primitive."
+        },
+        "not_applicable": {
+          "const": "The primitive does not apply to this branch."
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "provider",
+          "title",
+          "url",
+          "verified_at",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "openai_events",
+              "openai_tunnel",
+              "openai_trigger",
+              "openai_workspace_auth",
+              "openai_access_tokens",
+              "openai_dot_context",
+              "openai_workspace_memory",
+              "openai_trigger_example",
+              "claude_connectors",
+              "claude_schedules",
+              "claude_tunnel",
+              "gemini_custom_apps",
+              "gemini_schedules",
+              "codex_app_server"
+            ]
+          },
+          "provider": {
+            "enum": [
+              "OpenAI",
+              "Anthropic",
+              "Google"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://(?:developers\\.openai\\.com|learn\\.chatgpt\\.com|support\\.claude\\.com|platform\\.claude\\.com|support\\.google\\.com)/",
+            "maxLength": 2048
+          },
+          "verified_at": {
+            "const": "2026-10-04"
+          },
+          "type": {
+            "const": "official_documentation"
+          }
+        }
+      }
+    },
+    "hosts": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "provider",
+          "surface",
+          "classification",
+          "production_selectable",
+          "account_availability",
+          "oap_profile_selected",
+          "adapter_contract",
+          "complete_path_status",
+          "capabilities",
+          "prerequisites",
+          "blockers",
+          "runtime_evidence",
+          "source_ids"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "openai-dot-mcp-events-tunnel",
+              "openai-workspace-agent-native-trigger",
+              "claude-consumer-remote-mcp",
+              "gemini-consumer-custom-mcp",
+              "existing-local-oap-runtime",
+              "codex-local-app-server"
+            ]
+          },
+          "provider": {
+            "enum": [
+              "OpenAI",
+              "Anthropic",
+              "Google",
+              "Unspecified existing agent"
+            ]
+          },
+          "surface": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "classification": {
+            "enum": [
+              "candidate",
+              "unavailable_pending_evidence",
+              "unidentified_candidate",
+              "experimental_candidate"
+            ]
+          },
+          "production_selectable": {
+            "const": false
+          },
+          "account_availability": {
+            "const": "unverified"
+          },
+          "oap_profile_selected": {
+            "type": "null"
+          },
+          "adapter_contract": {
+            "enum": [
+              "requires_reviewed_amendment",
+              "unchanged_only_if_existing_conforming_receiver",
+              "unavailable_pending_new_native_support"
+            ]
+          },
+          "complete_path_status": {
+            "const": "unverified"
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "custom_mcp_tools",
+              "native_activity_ingress",
+              "private_control_path",
+              "valid_consumption_receipt",
+              "existing_context",
+              "personal_memory_inheritance",
+              "user_notification",
+              "production_transport",
+              "android_execution"
+            ],
+            "properties": {
+              "custom_mcp_tools": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "native_activity_ingress": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "private_control_path": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "valid_consumption_receipt": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "existing_context": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "personal_memory_inheritance": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "user_notification": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "production_transport": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              },
+              "android_execution": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "source_ids"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "documented",
+                      "unverified",
+                      "not_supported",
+                      "not_applicable"
+                    ]
+                  },
+                  "source_ids": {
+                    "type": "array",
+                    "items": {
+                      "enum": [
+                        "openai_events",
+                        "openai_tunnel",
+                        "openai_trigger",
+                        "openai_workspace_auth",
+                        "openai_access_tokens",
+                        "openai_dot_context",
+                        "openai_workspace_memory",
+                        "openai_trigger_example",
+                        "claude_connectors",
+                        "claude_schedules",
+                        "claude_tunnel",
+                        "gemini_custom_apps",
+                        "gemini_schedules",
+                        "codex_app_server"
+                      ]
+                    },
+                    "uniqueItems": true,
+                    "maxItems": 16
+                  }
+                }
+              }
+            }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "minItems": 1,
+            "maxItems": 16,
+            "uniqueItems": true
+          },
+          "runtime_evidence": {
+            "type": "array",
+            "maxItems": 0
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "openai_events",
+                "openai_tunnel",
+                "openai_trigger",
+                "openai_workspace_auth",
+                "openai_access_tokens",
+                "openai_dot_context",
+                "openai_workspace_memory",
+                "openai_trigger_example",
+                "claude_connectors",
+                "claude_schedules",
+                "claude_tunnel",
+                "gemini_custom_apps",
+                "gemini_schedules",
+                "codex_app_server"
+              ]
+            },
+            "uniqueItems": true,
+            "maxItems": 16
+          }
+        }
+      }
+    }
+  }
+}

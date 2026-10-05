@@ -1,0 +1,80 @@
+{
+  "result": "pass_with_device_limits",
+  "generated_at": "2026-10-05T19:11:29.9099593Z",
+  "scope": "native_local_only_build_and_jvm_fixtures",
+  "decision": "docs/decisions/0009-android-local-inspection-first.md",
+  "sdk_terms_accepted_by_user": "2026-10-05",
+  "environment": {
+    "build_tools": "36.0.0",
+    "agp": "9.2.1",
+    "platform": "Windows",
+    "jdk": "Temurin 17.0.20.1+1",
+    "version_provenance": "pinned_build_configuration_and_checksum_verified_tool_archives",
+    "gradle": "9.4.1",
+    "sdk_platform": "android-37.0 revision 2"
+  },
+  "jvm_fixtures": {
+    "passed": 19,
+    "android_runtime_verified": false
+  },
+  "apk": {
+    "path": "artifacts/android-local-inspector/liveabit-local-inspector-0.1.0.apk",
+    "sha256": "93ade977b624ff1ecc94de6fbff4ef9f7cf5119b91a346bd8f6dba2ba28d479c",
+    "signing": "local_debug_only",
+    "signature_verified": true,
+    "min_sdk": 35,
+    "permissions": [
+      "android.permission.PACKAGE_USAGE_STATS"
+    ],
+    "internet_permission": false,
+    "target_sdk": 37
+  },
+  "lint": {
+    "performed_by_this_run": true,
+    "errors": 0,
+    "report": "android/app/build/reports/lint-results-debug.xml",
+    "warnings": 3
+  },
+  "topology": {
+    "agent_endpoint": "absent",
+    "activity_delivery": "absent",
+    "observation_storage": "process_ram",
+    "persistent_storage": "local_control_preferences_only",
+    "background_collection": false
+  },
+  "input_drift": [],
+  "source_sha256": {
+    "android/app/build.gradle": "5a0903406c12026ce1279f90e7b1c45d071b81a35d84f2ccbf8d2f0055fa42fa",
+    "android/app/src/main/AndroidManifest.xml": "8a567d2bed2268622ce7bad9a5b31c07f11f24188349524527de9949cd5df572",
+    "android/app/src/main/java/org/liveabit/inspect/AndroidUsageSource.java": "10ec25b95b2a9b18aa99b4c37ec65ba7f5fe1728e28527fd00d61c409d11dfcb",
+    "android/app/src/main/java/org/liveabit/inspect/InspectionStore.java": "be04d50065532243eab11719f1e73b0dfd6bab09b8df284c7286fcf5612b465e",
+    "android/app/src/main/java/org/liveabit/inspect/LocalInspectionApplication.java": "79a4890936dcafc1834b5d577c6baabca6db413a4b104b6867f7e698087035a9",
+    "android/app/src/main/java/org/liveabit/inspect/MainActivity.java": "08e1e50cdc596132089869c30c2cc7f6319aa5a9a6a5bb10db234fbac72c2a17",
+    "android/app/src/main/res/values/strings.xml": "5e08370f9db88ef8181b7fa94f1889ef7cceb4f3183f25120b930b65ecc6281c",
+    "android/app/src/main/res/values/styles.xml": "44ad4b808f414288bbffb7307c19454bd1fcfa2c73bb8fa4c5e9cdc76ebcf3fc",
+    "android/app/src/main/res/xml/backup_rules.xml": "2c5c697984f4c52b526337ab61113f5843e0bfc6af4722374916ffe6da38dd9a",
+    "android/app/src/main/res/xml/data_extraction_rules.xml": "8b55ff5489071bb19a4e89967b604a16c0e4d1e87a2df3c73c64417314a59f22",
+    "android/build.gradle": "390d81e8fd209e0f2ab34f6c21f9a74ad10557991f50113134f754f087207276",
+    "android/collector-core/build.gradle": "4502d822ebbb6032a9bc7f7812bba03cd0edac5f37df732920363dd39547b9f3",
+    "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java": "2f583eead4639b53ab80f292037af6effec4137e399169e01ff118991f0c2838",
+    "android/collector-core/src/test/java/org/liveabit/collector/core/LocalInspectionCoreTest.java": "f084a5a9ffd060bf9602c40928d6a5f32ab62d8457a5c457837740fe4d182590",
+    "android/gradle.properties": "8d775c690778103d35686bd5148013bbf5c10dfd2049787b69f3a5d352099976",
+    "android/settings.gradle": "44124851b974cb746ac9bd946a5c0f0f4de3db377fd13d6c5107c7f81dd3b326",
+    "docs/decisions/0009-android-local-inspection-first.md": "ae2033452d234707372389a491e742caf911562dbf2692aea1ed5cf436e2b928",
+    "scripts/build-android.ps1": "0a3c3d99af2e9f2cf29f5c0a646e1cfb87cb5a9309d5d8814e4dba26ef15aaa6",
+    "scripts/setup-android-tools.ps1": "33a5ea267194eab2cddc033ef61a972d10fb1381e99631c9332b966805833ac2",
+    "scripts/test-android-core.ps1": "6e5ba9fead92f837b1d955842d959fc05c83f6f03fcb67f09b8b106c490b3f46",
+    "scripts/verify-android.ps1": "a01c1f3dbf4e326444b0362b5c817660d0a25ab6e8de5bdf9ae8cd4913b77117",
+    "specs/android/local-inspector.md": "c7d9acf4c8be2a4099ef9dfd9026feb1e803de45b747d5865f6bb252bc17ee65"
+  },
+  "physical_device_tested": false,
+  "emulator_tested": false,
+  "m2_proven": false,
+  "m3_proven": false,
+  "limits": [
+    "APK build, permission/signature audit and JVM fixtures only; no Android runtime or device measurement.",
+    "System picker, OEM AppOps notifications, usage source and UI behavior require actual-device verification.",
+    "All duration estimates are unverified diagnostics; initial state and source completeness stay unknown.",
+    "No production publication, existing-agent integration, background timing, battery or accuracy quality claim."
+  ]
+}

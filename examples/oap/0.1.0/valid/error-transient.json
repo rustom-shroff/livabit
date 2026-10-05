@@ -1,0 +1,7 @@
+{
+  "protocol_version": "0.1.0",
+  "code": "temporary_unavailable",
+  "message": "Receiver temporarily unavailable.",
+  "retryable": true,
+  "retry_after_ms": 1000
+}

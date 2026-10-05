@@ -1,0 +1,34 @@
+{
+  "protocol_version": "0.1.0",
+  "role": "receiver",
+  "supported_versions": [
+    "0.1.0"
+  ],
+  "event_names": [
+    "activity.summary"
+  ],
+  "metrics": [
+    "foreground_duration"
+  ],
+  "application_namespaces": [
+    "android"
+  ],
+  "allowed_fields": [
+    "foreground_duration_ms",
+    "label"
+  ],
+  "delivery_profiles": [
+    "direct-loopback-test-v1"
+  ],
+  "limits": {
+    "max_event_bytes": 16384,
+    "max_batch_bytes": 65536,
+    "max_apps_per_page": 32,
+    "max_pages": 4,
+    "max_fresh_events_per_hour": 4,
+    "max_history_age_ms": 86400000,
+    "max_history_bytes": 4194304,
+    "max_attempts_per_cycle": 6
+  },
+  "device_actions_enabled": false
+}

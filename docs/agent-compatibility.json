@@ -1,0 +1,1272 @@
+{
+  "schema": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Prepared OAP host capability catalog 1.0.0",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "format_version",
+      "reviewed_at",
+      "implementation_status",
+      "selected_host_id",
+      "production_selectable",
+      "policy",
+      "status_vocabulary",
+      "sources",
+      "hosts"
+    ],
+    "properties": {
+      "format_version": {
+        "const": "1.0.0"
+      },
+      "reviewed_at": {
+        "const": "2026-10-04"
+      },
+      "implementation_status": {
+        "const": "not_implemented"
+      },
+      "selected_host_id": {
+        "type": "null"
+      },
+      "production_selectable": {
+        "const": false
+      },
+      "policy": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "windows_reference_sufficient_to_proceed",
+          "linux_portability",
+          "no_intermediary",
+          "existing_agent_required",
+          "new_agent_substitute_allowed",
+          "catalog_is_runtime_configuration",
+          "tokens_or_account_actions_performed"
+        ],
+        "properties": {
+          "windows_reference_sufficient_to_proceed": {
+            "const": true
+          },
+          "linux_portability": {
+            "const": "on_hold_unverified"
+          },
+          "no_intermediary": {
+            "const": true
+          },
+          "existing_agent_required": {
+            "const": true
+          },
+          "new_agent_substitute_allowed": {
+            "const": false
+          },
+          "catalog_is_runtime_configuration": {
+            "const": false
+          },
+          "tokens_or_account_actions_performed": {
+            "const": false
+          }
+        }
+      },
+      "status_vocabulary": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "documented",
+          "unverified",
+          "not_supported",
+          "not_applicable"
+        ],
+        "properties": {
+          "documented": {
+            "const": "Official source describes the primitive; account/runtime support is not established."
+          },
+          "unverified": {
+            "const": "Required capability, account access or actual behavior is not established."
+          },
+          "not_supported": {
+            "const": "Official source explicitly excludes this named surface or production primitive."
+          },
+          "not_applicable": {
+            "const": "The primitive does not apply to this branch."
+          }
+        }
+      },
+      "sources": {
+        "type": "array",
+        "minItems": 14,
+        "maxItems": 14,
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "provider",
+            "title",
+            "url",
+            "verified_at",
+            "type"
+          ],
+          "properties": {
+            "id": {
+              "enum": [
+                "openai_events",
+                "openai_tunnel",
+                "openai_trigger",
+                "openai_workspace_auth",
+                "openai_access_tokens",
+                "openai_dot_context",
+                "openai_workspace_memory",
+                "openai_trigger_example",
+                "claude_connectors",
+                "claude_schedules",
+                "claude_tunnel",
+                "gemini_custom_apps",
+                "gemini_schedules",
+                "codex_app_server"
+              ]
+            },
+            "provider": {
+              "enum": [
+                "OpenAI",
+                "Anthropic",
+                "Google"
+              ]
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://(?:developers\\.openai\\.com|learn\\.chatgpt\\.com|support\\.claude\\.com|platform\\.claude\\.com|support\\.google\\.com)/",
+              "maxLength": 2048
+            },
+            "verified_at": {
+              "const": "2026-10-04"
+            },
+            "type": {
+              "const": "official_documentation"
+            }
+          }
+        }
+      },
+      "hosts": {
+        "type": "array",
+        "minItems": 6,
+        "maxItems": 6,
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "provider",
+            "surface",
+            "classification",
+            "production_selectable",
+            "account_availability",
+            "oap_profile_selected",
+            "adapter_contract",
+            "complete_path_status",
+            "capabilities",
+            "prerequisites",
+            "blockers",
+            "runtime_evidence",
+            "source_ids"
+          ],
+          "properties": {
+            "id": {
+              "enum": [
+                "openai-dot-mcp-events-tunnel",
+                "openai-workspace-agent-native-trigger",
+                "claude-consumer-remote-mcp",
+                "gemini-consumer-custom-mcp",
+                "existing-local-oap-runtime",
+                "codex-local-app-server"
+              ]
+            },
+            "provider": {
+              "enum": [
+                "OpenAI",
+                "Anthropic",
+                "Google",
+                "Unspecified existing agent"
+              ]
+            },
+            "surface": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "classification": {
+              "enum": [
+                "candidate",
+                "unavailable_pending_evidence",
+                "unidentified_candidate",
+                "experimental_candidate"
+              ]
+            },
+            "production_selectable": {
+              "const": false
+            },
+            "account_availability": {
+              "const": "unverified"
+            },
+            "oap_profile_selected": {
+              "type": "null"
+            },
+            "adapter_contract": {
+              "enum": [
+                "requires_reviewed_amendment",
+                "unchanged_only_if_existing_conforming_receiver",
+                "unavailable_pending_new_native_support"
+              ]
+            },
+            "complete_path_status": {
+              "const": "unverified"
+            },
+            "capabilities": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "custom_mcp_tools",
+                "native_activity_ingress",
+                "private_control_path",
+                "valid_consumption_receipt",
+                "existing_context",
+                "personal_memory_inheritance",
+                "user_notification",
+                "production_transport",
+                "android_execution"
+              ],
+              "properties": {
+                "custom_mcp_tools": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "native_activity_ingress": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "private_control_path": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "valid_consumption_receipt": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "existing_context": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "personal_memory_inheritance": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "user_notification": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "production_transport": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                },
+                "android_execution": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "status",
+                    "source_ids"
+                  ],
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "documented",
+                        "unverified",
+                        "not_supported",
+                        "not_applicable"
+                      ]
+                    },
+                    "source_ids": {
+                      "type": "array",
+                      "items": {
+                        "enum": [
+                          "openai_events",
+                          "openai_tunnel",
+                          "openai_trigger",
+                          "openai_workspace_auth",
+                          "openai_access_tokens",
+                          "openai_dot_context",
+                          "openai_workspace_memory",
+                          "openai_trigger_example",
+                          "claude_connectors",
+                          "claude_schedules",
+                          "claude_tunnel",
+                          "gemini_custom_apps",
+                          "gemini_schedules",
+                          "codex_app_server"
+                        ]
+                      },
+                      "uniqueItems": true,
+                      "maxItems": 16
+                    }
+                  }
+                }
+              }
+            },
+            "prerequisites": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "minItems": 1,
+              "maxItems": 16,
+              "uniqueItems": true
+            },
+            "blockers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2048
+              },
+              "minItems": 1,
+              "maxItems": 16,
+              "uniqueItems": true
+            },
+            "runtime_evidence": {
+              "type": "array",
+              "maxItems": 0
+            },
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "openai_events",
+                  "openai_tunnel",
+                  "openai_trigger",
+                  "openai_workspace_auth",
+                  "openai_access_tokens",
+                  "openai_dot_context",
+                  "openai_workspace_memory",
+                  "openai_trigger_example",
+                  "claude_connectors",
+                  "claude_schedules",
+                  "claude_tunnel",
+                  "gemini_custom_apps",
+                  "gemini_schedules",
+                  "codex_app_server"
+                ]
+              },
+              "uniqueItems": true,
+              "maxItems": 16
+            }
+          }
+        }
+      }
+    }
+  },
+  "catalog": {
+    "format_version": "1.0.0",
+    "reviewed_at": "2026-10-04",
+    "implementation_status": "not_implemented",
+    "selected_host_id": null,
+    "production_selectable": false,
+    "policy": {
+      "windows_reference_sufficient_to_proceed": true,
+      "linux_portability": "on_hold_unverified",
+      "no_intermediary": true,
+      "existing_agent_required": true,
+      "new_agent_substitute_allowed": false,
+      "catalog_is_runtime_configuration": false,
+      "tokens_or_account_actions_performed": false
+    },
+    "status_vocabulary": {
+      "documented": "Official source describes the primitive; account/runtime support is not established.",
+      "unverified": "Required capability, account access or actual behavior is not established.",
+      "not_supported": "Official source explicitly excludes this named surface or production primitive.",
+      "not_applicable": "The primitive does not apply to this branch."
+    },
+    "sources": [
+      {
+        "id": "openai_events",
+        "provider": "OpenAI",
+        "title": "MCP Events",
+        "url": "https://developers.openai.com/plugins/build/mcp-events",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_tunnel",
+        "provider": "OpenAI",
+        "title": "Secure MCP Tunnel",
+        "url": "https://developers.openai.com/api/docs/guides/secure-mcp-tunnels",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_trigger",
+        "provider": "OpenAI",
+        "title": "Trigger workspace agent runs",
+        "url": "https://developers.openai.com/workspace-agents/trigger-runs",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_workspace_auth",
+        "provider": "OpenAI",
+        "title": "Workspace Agent access tokens",
+        "url": "https://developers.openai.com/workspace-agents/authentication",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_access_tokens",
+        "provider": "OpenAI",
+        "title": "Access tokens",
+        "url": "https://learn.chatgpt.com/docs/enterprise/access-tokens",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_dot_context",
+        "provider": "OpenAI",
+        "title": "Dots tasks and memory",
+        "url": "https://learn.chatgpt.com/docs/dots/tasks-and-memory",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_workspace_memory",
+        "provider": "OpenAI",
+        "title": "Workspace Agent memory",
+        "url": "https://developers.openai.com/cookbook/articles/chatgpt-agents-sales-meeting-prep",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "openai_trigger_example",
+        "provider": "OpenAI",
+        "title": "Workspace Agent API trigger example",
+        "url": "https://developers.openai.com/cookbook/examples/chatgpt/workspace_agents/workspace-agents-api-trigger",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "claude_connectors",
+        "provider": "Anthropic",
+        "title": "Custom connectors using remote MCP",
+        "url": "https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "claude_schedules",
+        "provider": "Anthropic",
+        "title": "Scheduled tasks in Claude Cowork",
+        "url": "https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "claude_tunnel",
+        "provider": "Anthropic",
+        "title": "MCP tunnels overview",
+        "url": "https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "gemini_custom_apps",
+        "provider": "Google",
+        "title": "Custom apps for Gemini Apps",
+        "url": "https://support.google.com/gemini/answer/17209137?co=GENIE.Platform%3DDesktop&hl=en-EC",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "gemini_schedules",
+        "provider": "Google",
+        "title": "Schedules for Gemini Spark",
+        "url": "https://support.google.com/gemini/answer/17094710?co=GENIE.Platform%3DDesktop&hl=en",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      },
+      {
+        "id": "codex_app_server",
+        "provider": "OpenAI",
+        "title": "Codex App Server",
+        "url": "https://learn.chatgpt.com/docs/app-server",
+        "verified_at": "2026-10-04",
+        "type": "official_documentation"
+      }
+    ],
+    "hosts": [
+      {
+        "id": "openai-dot-mcp-events-tunnel",
+        "provider": "OpenAI",
+        "surface": "Existing dot or Work Cloud with MCP Events and Secure MCP Tunnel",
+        "classification": "candidate",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "requires_reviewed_amendment",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "documented",
+            "source_ids": [
+              "openai_events",
+              "openai_tunnel"
+            ]
+          },
+          "native_activity_ingress": {
+            "status": "documented",
+            "source_ids": [
+              "openai_events"
+            ]
+          },
+          "private_control_path": {
+            "status": "documented",
+            "source_ids": [
+              "openai_tunnel"
+            ]
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "documented",
+            "source_ids": [
+              "openai_dot_context"
+            ]
+          },
+          "personal_memory_inheritance": {
+            "status": "documented",
+            "source_ids": [
+              "openai_dot_context"
+            ]
+          },
+          "user_notification": {
+            "status": "documented",
+            "source_ids": [
+              "openai_dot_context"
+            ]
+          },
+          "production_transport": {
+            "status": "unverified",
+            "source_ids": [
+              "openai_tunnel"
+            ]
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": [
+              "openai_tunnel"
+            ]
+          }
+        },
+        "prerequisites": [
+          "Chosen existing eligible dot/workspace",
+          "Plugin and event-task policy enabled",
+          "Platform tunnel permissions, runtime key, tunnel ID and workspace association",
+          "Same-device MCP endpoint and protected persistent subscription state",
+          "Reviewed event/authentication/result profile"
+        ],
+        "blockers": [
+          "Events-through-Tunnel composition not verified",
+          "Android client packaging/background reconnect and private/public distribution unresolved",
+          "Complete discovery/subscribe/refresh/rotation/unsubscribe/authentication path unverified",
+          "Webhook 2xx is receipt only; no OAP consumed receipt proven",
+          "Selected personal context and response not observed"
+        ],
+        "runtime_evidence": [],
+        "source_ids": [
+          "openai_events",
+          "openai_tunnel",
+          "openai_dot_context"
+        ]
+      },
+      {
+        "id": "openai-workspace-agent-native-trigger",
+        "provider": "OpenAI",
+        "surface": "Existing published ChatGPT Workspace Agent API channel",
+        "classification": "candidate",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "requires_reviewed_amendment",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "not_applicable",
+            "source_ids": []
+          },
+          "native_activity_ingress": {
+            "status": "documented",
+            "source_ids": [
+              "openai_trigger"
+            ]
+          },
+          "private_control_path": {
+            "status": "not_applicable",
+            "source_ids": []
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "documented",
+            "source_ids": [
+              "openai_trigger_example",
+              "openai_workspace_memory"
+            ]
+          },
+          "personal_memory_inheritance": {
+            "status": "unverified",
+            "source_ids": [
+              "openai_workspace_memory"
+            ]
+          },
+          "user_notification": {
+            "status": "unverified",
+            "source_ids": [
+              "openai_trigger"
+            ]
+          },
+          "production_transport": {
+            "status": "documented",
+            "source_ids": [
+              "openai_trigger"
+            ]
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": []
+          }
+        },
+        "prerequisites": [
+          "User-selected existing saved Workspace Agent",
+          "Agents and personal-token creation enabled in actual workspace",
+          "Published runnable agtch_ API channel shared with token owner",
+          "Workspace Agents scoped token with known finite issued expiry at most 30 days unless an explicit amendment is approved",
+          "Reviewed native pairing/authentication/result profile"
+        ],
+        "blockers": [
+          "Native 202 proves durable queueing, not OAP consumed receipt",
+          "String input lacks documented OAP validation/capability registry",
+          "Token device/recipient/channel/scope-epoch restrictions unverified",
+          "Input/rate limits and idempotency retention/conflicting-body semantics unverified",
+          "Agent-specific context differs from dot memory; actual interpretation/output unobserved"
+        ],
+        "runtime_evidence": [],
+        "source_ids": [
+          "openai_trigger",
+          "openai_workspace_auth",
+          "openai_access_tokens",
+          "openai_trigger_example",
+          "openai_workspace_memory"
+        ]
+      },
+      {
+        "id": "claude-consumer-remote-mcp",
+        "provider": "Anthropic",
+        "surface": "Existing Claude consumer or Cowork with remote MCP",
+        "classification": "unavailable_pending_evidence",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "unavailable_pending_new_native_support",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "documented",
+            "source_ids": [
+              "claude_connectors"
+            ]
+          },
+          "native_activity_ingress": {
+            "status": "unverified",
+            "source_ids": [
+              "claude_connectors",
+              "claude_schedules"
+            ]
+          },
+          "private_control_path": {
+            "status": "unverified",
+            "source_ids": [
+              "claude_connectors",
+              "claude_tunnel"
+            ]
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "unverified",
+            "source_ids": [
+              "claude_schedules"
+            ]
+          },
+          "personal_memory_inheritance": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "user_notification": {
+            "status": "unverified",
+            "source_ids": [
+              "claude_schedules"
+            ]
+          },
+          "production_transport": {
+            "status": "documented",
+            "source_ids": [
+              "claude_connectors"
+            ]
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": []
+          }
+        },
+        "prerequisites": [
+          "Chosen existing account and connector policy",
+          "New official evidence of compatible consumer inbound activity and direct device control"
+        ],
+        "blockers": [
+          "Remote MCP originates in Anthropic cloud and needs public reachability",
+          "Platform tunnel preview is unavailable to claude.ai connectors",
+          "Scheduled connector access does not establish arbitrary OAP wake",
+          "No conforming full device-to-existing-agent path proven; relay/new API agent prohibited"
+        ],
+        "runtime_evidence": [],
+        "source_ids": [
+          "claude_connectors",
+          "claude_schedules",
+          "claude_tunnel"
+        ]
+      },
+      {
+        "id": "gemini-consumer-custom-mcp",
+        "provider": "Google",
+        "surface": "Existing Gemini or Spark with a custom MCP connected app",
+        "classification": "unavailable_pending_evidence",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "unavailable_pending_new_native_support",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "documented",
+            "source_ids": [
+              "gemini_custom_apps"
+            ]
+          },
+          "native_activity_ingress": {
+            "status": "unverified",
+            "source_ids": [
+              "gemini_schedules"
+            ]
+          },
+          "private_control_path": {
+            "status": "unverified",
+            "source_ids": [
+              "gemini_custom_apps"
+            ]
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "personal_memory_inheritance": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "user_notification": {
+            "status": "unverified",
+            "source_ids": [
+              "gemini_schedules"
+            ]
+          },
+          "production_transport": {
+            "status": "documented",
+            "source_ids": [
+              "gemini_custom_apps"
+            ]
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": [
+              "gemini_custom_apps"
+            ]
+          }
+        },
+        "prerequisites": [
+          "Chosen existing personal account with actual eligibility",
+          "Custom-app requirements: US, age 18+, English, Keep Activity on",
+          "Actual Spark eligibility if scheduled tasks are used",
+          "New official evidence of arbitrary activity ingress and direct private-device control"
+        ],
+        "blockers": [
+          "Custom MCP retrieval does not establish arbitrary OAP event trigger",
+          "Time/Gmail/topic monitors are not a custom OAP webhook API",
+          "Private same-device control and OAP receipt/deduplication semantics unverified",
+          "Email forwarding or hosted MCP proxy cannot repair missing ingress"
+        ],
+        "runtime_evidence": [],
+        "source_ids": [
+          "gemini_custom_apps",
+          "gemini_schedules"
+        ]
+      },
+      {
+        "id": "existing-local-oap-runtime",
+        "provider": "Unspecified existing agent",
+        "surface": "User-selected local agent with an embedded conforming OAP receiver",
+        "classification": "unidentified_candidate",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "unchanged_only_if_existing_conforming_receiver",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "not_applicable",
+            "source_ids": []
+          },
+          "native_activity_ingress": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "private_control_path": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "personal_memory_inheritance": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "user_notification": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "production_transport": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": []
+          }
+        },
+        "prerequisites": [
+          "Identify actual existing runtime and receiving/extension interface",
+          "Receiver must execute inside that existing runtime",
+          "Protected per-device/recipient TLS pairing, admission and durable ledger",
+          "Direct device reachability and observed existing context"
+        ],
+        "blockers": [
+          "No concrete runtime or built-in OAP receiver identified",
+          "A separate helper forwarding activity to another agent is prohibited",
+          "No production transport, credential or consumption evidence"
+        ],
+        "runtime_evidence": [],
+        "source_ids": []
+      },
+      {
+        "id": "codex-local-app-server",
+        "provider": "OpenAI",
+        "surface": "Existing Codex local runtime and user-selected stored thread",
+        "classification": "experimental_candidate",
+        "production_selectable": false,
+        "account_availability": "unverified",
+        "oap_profile_selected": null,
+        "adapter_contract": "requires_reviewed_amendment",
+        "complete_path_status": "unverified",
+        "capabilities": {
+          "custom_mcp_tools": {
+            "status": "not_applicable",
+            "source_ids": []
+          },
+          "native_activity_ingress": {
+            "status": "documented",
+            "source_ids": [
+              "codex_app_server"
+            ]
+          },
+          "private_control_path": {
+            "status": "unverified",
+            "source_ids": [
+              "codex_app_server"
+            ]
+          },
+          "valid_consumption_receipt": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "existing_context": {
+            "status": "documented",
+            "source_ids": [
+              "codex_app_server"
+            ]
+          },
+          "personal_memory_inheritance": {
+            "status": "unverified",
+            "source_ids": [
+              "codex_app_server"
+            ]
+          },
+          "user_notification": {
+            "status": "unverified",
+            "source_ids": []
+          },
+          "production_transport": {
+            "status": "not_supported",
+            "source_ids": [
+              "codex_app_server"
+            ]
+          },
+          "android_execution": {
+            "status": "unverified",
+            "source_ids": []
+          }
+        },
+        "prerequisites": [
+          "User-selected existing thread and actual owning runtime",
+          "Version-pinned app-server API schema",
+          "Explicit transport authentication and TLS for non-local access",
+          "Restricted thread authority and reviewed native result/profile policy"
+        ],
+        "blockers": [
+          "App-server/WebSocket experimental and unsupported for production",
+          "Native JSON-RPC has no OAP capability/consumption interface",
+          "Default non-loopback listener is not safe to expose",
+          "Broad agent-control token is not proven device/recipient scoped",
+          "Direct Android reachability and no-forwarder deployment unverified"
+        ],
+        "runtime_evidence": [],
+        "source_ids": [
+          "codex_app_server"
+        ]
+      }
+    ]
+  }
+}

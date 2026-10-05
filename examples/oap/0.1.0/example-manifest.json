@@ -1,0 +1,900 @@
+{
+  "protocol_version": "0.1.0",
+  "description": "Static contract fixtures. Validity requires the named schema and indicated semantic/context or group checks. These fixtures are not runtime delivery evidence.",
+  "fixtures": [
+    {
+      "id": "valid-event-complete-json",
+      "file": "valid/event-complete.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Complete 15-minute retrospective summary."
+    },
+    {
+      "id": "valid-event-partial-json",
+      "file": "valid/event-partial.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Consent-boundary coverage excludes unobserved intervals."
+    },
+    {
+      "id": "valid-event-label-untrusted-json",
+      "file": "valid/event-label-untrusted.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Explicitly approved label remains untrusted data, even when it looks like an instruction."
+    },
+    {
+      "id": "valid-event-page-0-json",
+      "file": "valid/event-page-0.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "First immutable page of a 40-application 30-minute window."
+    },
+    {
+      "id": "valid-event-page-1-json",
+      "file": "valid/event-page-1.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Second immutable page of the same window."
+    },
+    {
+      "id": "valid-local-grant-json",
+      "file": "valid/local-grant.json",
+      "schema": "local-grant.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/local-grant.json"
+    },
+    {
+      "id": "valid-local-grant-multipage-json",
+      "file": "valid/local-grant-multipage.json",
+      "schema": "local-grant.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/local-grant-multipage.json"
+    },
+    {
+      "id": "valid-local-grant-paused-json",
+      "file": "valid/local-grant-paused.json",
+      "schema": "local-grant.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/local-grant-paused.json"
+    },
+    {
+      "id": "valid-local-grant-no-label-json",
+      "file": "valid/local-grant-no-label.json",
+      "schema": "local-grant.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/local-grant-no-label.json"
+    },
+    {
+      "id": "valid-subscription-json",
+      "file": "valid/subscription.json",
+      "schema": "subscription.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/subscription.json"
+    },
+    {
+      "id": "valid-subscription-multipage-json",
+      "file": "valid/subscription-multipage.json",
+      "schema": "subscription.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/subscription-multipage.json"
+    },
+    {
+      "id": "valid-capabilities-publisher-json",
+      "file": "valid/capabilities-publisher.json",
+      "schema": "capabilities.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/capabilities-publisher.json"
+    },
+    {
+      "id": "valid-capabilities-receiver-json",
+      "file": "valid/capabilities-receiver.json",
+      "schema": "capabilities.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/capabilities-receiver.json"
+    },
+    {
+      "id": "valid-receipt-accepted-json",
+      "file": "valid/receipt-accepted.json",
+      "schema": "receipt.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/receipt-accepted.json"
+    },
+    {
+      "id": "valid-receipt-duplicate-json",
+      "file": "valid/receipt-duplicate.json",
+      "schema": "receipt.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/receipt-duplicate.json"
+    },
+    {
+      "id": "valid-error-transient-json",
+      "file": "valid/error-transient.json",
+      "schema": "error.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/error-transient.json"
+    },
+    {
+      "id": "valid-error-permanent-json",
+      "file": "valid/error-permanent.json",
+      "schema": "error.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/error-permanent.json"
+    },
+    {
+      "id": "valid-batch-json",
+      "file": "valid/batch.json",
+      "schema": "batch.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/batch.json"
+    },
+    {
+      "id": "valid-batch-gap-json",
+      "file": "valid/batch-gap.json",
+      "schema": "batch.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/batch-gap.json"
+    },
+    {
+      "id": "valid-status-active-json",
+      "file": "valid/status-active.json",
+      "schema": "status.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/status-active.json"
+    },
+    {
+      "id": "valid-status-offline-json",
+      "file": "valid/status-offline.json",
+      "schema": "status.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/status-offline.json"
+    },
+    {
+      "id": "valid-status-revoked-json",
+      "file": "valid/status-revoked.json",
+      "schema": "status.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/status-revoked.json"
+    },
+    {
+      "id": "valid-status-unavailable-json",
+      "file": "valid/status-unavailable.json",
+      "schema": "status.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/status-unavailable.json"
+    },
+    {
+      "id": "invalid-event-extra-field-json",
+      "file": "invalid/event-extra-field.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Fields outside the closed core are forbidden."
+    },
+    {
+      "id": "invalid-event-negative-duration-json",
+      "file": "invalid/event-negative-duration.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Negative foreground duration is invalid."
+    },
+    {
+      "id": "invalid-event-zero-duration-json",
+      "file": "invalid/event-zero-duration.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Zero-duration apps are omitted; empty groups are suppressed."
+    },
+    {
+      "id": "invalid-event-unsupported-version-json",
+      "file": "invalid/event-unsupported-version.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "An unsupported protocol version is never silently coerced."
+    },
+    {
+      "id": "invalid-event-id-not-v4-json",
+      "file": "invalid/event-id-not-v4.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Identifiers must be lowercase UUIDv4."
+    },
+    {
+      "id": "invalid-event-time-zone-json",
+      "file": "invalid/event-time-zone.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Wire times use the exact UTC millisecond form."
+    },
+    {
+      "id": "invalid-event-impossible-date-json",
+      "file": "invalid/event-impossible-date.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Date-time format assertion rejects impossible calendar dates."
+    },
+    {
+      "id": "invalid-event-unknown-coverage-json",
+      "file": "invalid/event-unknown-coverage.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Coverage reasons use the defined vocabulary."
+    },
+    {
+      "id": "invalid-event-unavailable-json",
+      "file": "invalid/event-unavailable.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Unavailable coverage is local status; it is not an activity summary."
+    },
+    {
+      "id": "invalid-event-window-reversed-json",
+      "file": "invalid/event-window-reversed.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S02",
+      "description": "A window cannot end before its start."
+    },
+    {
+      "id": "invalid-event-window-duration-json",
+      "file": "invalid/event-window-duration.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S02",
+      "description": "Window duration must equal the chosen aggregation interval."
+    },
+    {
+      "id": "invalid-event-publication-early-json",
+      "file": "invalid/event-publication-early.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S03",
+      "description": "Publication cannot precede window finalization."
+    },
+    {
+      "id": "invalid-event-retention-reset-json",
+      "file": "invalid/event-retention-reset.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S04",
+      "description": "Retried or replayed data cannot extend observation-based retention."
+    },
+    {
+      "id": "invalid-event-coverage-outside-json",
+      "file": "invalid/event-coverage-outside.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S05",
+      "description": "Observed intervals must lie inside the summary window."
+    },
+    {
+      "id": "invalid-event-coverage-adjacent-json",
+      "file": "invalid/event-coverage-adjacent.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S05",
+      "description": "Adjacent observed intervals must be merged into canonical coverage."
+    },
+    {
+      "id": "invalid-event-duration-over-coverage-json",
+      "file": "invalid/event-duration-over-coverage.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S06",
+      "description": "One application's duration cannot exceed observed coverage."
+    },
+    {
+      "id": "invalid-event-duplicate-app-json",
+      "file": "invalid/event-duplicate-app.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S07",
+      "description": "Application identity may appear only once within a window."
+    },
+    {
+      "id": "invalid-event-unsorted-apps-json",
+      "file": "invalid/event-unsorted-apps.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S07",
+      "description": "Apps use ordinal namespace/id order."
+    },
+    {
+      "id": "invalid-event-page-index-json",
+      "file": "invalid/event-page-index.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S08",
+      "description": "Page index must be smaller than page count."
+    },
+    {
+      "id": "invalid-event-page-cadence-json",
+      "file": "invalid/event-page-cadence.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S08",
+      "description": "Two pages require at least a 30-minute aggregation interval."
+    },
+    {
+      "id": "invalid-event-oversize-json",
+      "file": "invalid/event-oversize.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S10",
+      "description": "UTF-8 bytes, including permitted labels, cannot exceed 16 KiB."
+    },
+    {
+      "id": "invalid-batch-missing-cursor-json",
+      "file": "invalid/batch-missing-cursor.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "More retained results require a bounded scoped cursor."
+    },
+    {
+      "id": "invalid-receipt-rejected-json",
+      "file": "invalid/receipt-rejected.json",
+      "schema": "receipt.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "Rejections are errors, never valid-consumption receipts."
+    },
+    {
+      "id": "invalid-error-permanent-retry-json",
+      "file": "invalid/error-permanent-retry.json",
+      "schema": "error.schema.json",
+      "valid": false,
+      "validation": "schema",
+      "expected_rule": "schema",
+      "description": "A permanent failure cannot carry a retry hint."
+    },
+    {
+      "id": "valid-status-unknown",
+      "file": "valid/status-unknown.json",
+      "schema": "status.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "Unknown consent blocks operations and omits untrusted expiry."
+    },
+    {
+      "id": "valid-local-grant-extensions",
+      "file": "valid/local-grant-extensions.json",
+      "schema": "local-grant.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/local-grant-extensions.json"
+    },
+    {
+      "id": "valid-subscription-extensions",
+      "file": "valid/subscription-extensions.json",
+      "schema": "subscription.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/subscription-extensions.json"
+    },
+    {
+      "id": "valid-event-extension",
+      "file": "valid/event-extension.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "context",
+      "description": "An optional extension is authorized by its exact local scope key.",
+      "context": {
+        "grant": "valid/local-grant-extensions.json",
+        "subscription": "valid/subscription-extensions.json",
+        "now": "2026-10-03T09:15:00.200Z"
+      }
+    },
+    {
+      "id": "valid-subscription-no-label",
+      "file": "valid/subscription-no-label.json",
+      "schema": "subscription.schema.json",
+      "valid": true,
+      "validation": "schema",
+      "description": "valid/subscription-no-label.json"
+    },
+    {
+      "id": "invalid-event-excluded-app",
+      "file": "invalid/event-excluded-app.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S11",
+      "description": "A shape-valid event cannot export an excluded application.",
+      "context": {
+        "grant": "valid/local-grant.json",
+        "subscription": "valid/subscription.json",
+        "now": "2026-10-03T09:15:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-event-label-without-consent",
+      "file": "invalid/event-label-without-consent.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S11",
+      "description": "Labels require explicit field permission.",
+      "context": {
+        "grant": "valid/local-grant-no-label.json",
+        "subscription": "valid/subscription-no-label.json",
+        "now": "2026-10-03T09:45:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-event-extension-without-consent",
+      "file": "invalid/event-extension-without-consent.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S11",
+      "description": "Unknown extensions are ignored only after their inclusion was authorized locally.",
+      "context": {
+        "grant": "valid/local-grant.json",
+        "subscription": "valid/subscription.json",
+        "now": "2026-10-03T09:15:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-event-consent-paused",
+      "file": "invalid/event-consent-paused.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S12",
+      "description": "Paused local consent forbids dispatch and retained reads.",
+      "context": {
+        "grant": "valid/local-grant-paused.json",
+        "subscription": "valid/subscription.json",
+        "now": "2026-10-03T09:15:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-event-binding-mismatch",
+      "file": "invalid/event-binding-mismatch.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S17",
+      "description": "Valid syntax does not establish the authenticated recipient binding.",
+      "context": {
+        "grant": "valid/local-grant.json",
+        "subscription": "valid/subscription.json",
+        "now": "2026-10-03T09:15:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-event-expired-at-receive",
+      "file": "invalid/event-expired-at-receive.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "context",
+      "expected_rule": "S15",
+      "description": "A receiver rejects an event at or after its original expiration deadline.",
+      "context": {
+        "grant": "valid/local-grant.json",
+        "subscription": "valid/subscription.json",
+        "now": "2026-10-03T23:59:00.000Z"
+      }
+    },
+    {
+      "id": "group-event-page-window-mismatch",
+      "file": "group/event-page-window-mismatch.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Individually valid page; incompatible with the other page's group identity."
+    },
+    {
+      "id": "group-event-page-duplicate-index",
+      "file": "group/event-page-duplicate-index.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Individually valid page; a new identity cannot replace an occupied page index."
+    },
+    {
+      "id": "group-event-page-repeated-app",
+      "file": "group/event-page-repeated-app.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Individually sorted page; repeats an application's identity across the window group."
+    },
+    {
+      "id": "invalid-event-duplicate-key",
+      "file": "invalid/event-duplicate-key.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S10",
+      "description": "Raw duplicate object members are rejected before JSON parsing loses them."
+    },
+    {
+      "id": "invalid-event-negative-zero",
+      "file": "invalid/event-negative-zero.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S10",
+      "description": "Negative zero is excluded by the canonical numeric input contract."
+    },
+    {
+      "id": "invalid-event-lone-surrogate",
+      "file": "invalid/event-lone-surrogate.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S10",
+      "description": "Lone Unicode surrogates are excluded before canonicalization or storage."
+    },
+    {
+      "id": "valid-event-overlapping-apps",
+      "file": "valid/event-overlapping-apps.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Both apps can occupy foreground intervals simultaneously; the sum may exceed window duration."
+    },
+    {
+      "id": "invalid-grant-time-order",
+      "file": "invalid/grant-time-order.json",
+      "schema": "local-grant.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S19",
+      "description": "Approval must precede grant expiry."
+    },
+    {
+      "id": "invalid-grant-unsorted-roster",
+      "file": "invalid/grant-unsorted-roster.json",
+      "schema": "local-grant.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S19",
+      "description": "Approved roster uses stable ordinal namespace/id ordering."
+    },
+    {
+      "id": "invalid-grant-roster-cadence",
+      "file": "invalid/grant-roster-cadence.json",
+      "schema": "local-grant.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S19",
+      "description": "Forty approved applications require at least two pages and a 30-minute cadence."
+    },
+    {
+      "id": "invalid-grant-history-age",
+      "file": "invalid/grant-history-age.json",
+      "schema": "local-grant.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S19",
+      "description": "Observation-based retention must exceed the aggregation interval."
+    },
+    {
+      "id": "invalid-subscription-time-order",
+      "file": "invalid/subscription-time-order.json",
+      "schema": "subscription.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S19",
+      "description": "A subscription's expiry must be later than creation."
+    },
+    {
+      "id": "invalid-batch-unsorted-events",
+      "file": "invalid/batch-unsorted-events.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S20",
+      "description": "Local replay returns events in increasing unique stream sequence order."
+    },
+    {
+      "id": "invalid-batch-recipient-mismatch",
+      "file": "invalid/batch-recipient-mismatch.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S20",
+      "description": "Every batch event belongs to its wrapper recipient."
+    },
+    {
+      "id": "invalid-batch-gap-reversed",
+      "file": "invalid/batch-gap-reversed.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S20",
+      "description": "Gap ranges cannot reverse their sequence bounds."
+    },
+    {
+      "id": "invalid-batch-gap-overlap",
+      "file": "invalid/batch-gap-overlap.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S20",
+      "description": "A gap cannot claim a returned event sequence is missing."
+    },
+    {
+      "id": "invalid-batch-gap-adjacent",
+      "file": "invalid/batch-gap-adjacent.json",
+      "schema": "batch.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S20",
+      "description": "Adjacent equal-reason gap ranges must be merged."
+    },
+    {
+      "id": "invalid-error-retryability",
+      "file": "invalid/error-retryability.json",
+      "schema": "error.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S21",
+      "description": "Unsupported capabilities are permanent and not retry eligible."
+    },
+    {
+      "id": "invalid-error-transient-classification",
+      "file": "invalid/error-transient-classification.json",
+      "schema": "error.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S21",
+      "description": "Temporary-unavailable errors are classified as retry eligible; dispatch still requires authority."
+    },
+    {
+      "id": "invalid-status-retention-overflow",
+      "file": "invalid/status-retention-overflow.json",
+      "schema": "status.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "expected_rule": "S22",
+      "description": "Safe status cannot claim bytes above its effective retention cap."
+    },
+    {
+      "id": "group-event-page-empty",
+      "file": "group/event-page-empty.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "An approved fixed partition may have zero positive apps if another page makes the complete group nonempty."
+    },
+    {
+      "id": "group-event-page-empty-1",
+      "file": "group/event-page-empty-1.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "Individually valid empty partition; wholly empty group is suppressed."
+    },
+    {
+      "id": "invalid-source-utf8",
+      "file": "invalid/source-utf8.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "description": "Invalid UTF-8 fails before replacement decoding can hide it.",
+      "expected_rule": "S10"
+    },
+    {
+      "id": "invalid-malformed-json",
+      "file": "invalid/malformed-json.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "description": "Incomplete JSON is rejected at the representation boundary.",
+      "expected_rule": "S10"
+    },
+    {
+      "id": "invalid-json-bom",
+      "file": "invalid/json-bom.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "description": "A byte-order mark is not accepted.",
+      "expected_rule": "S10"
+    },
+    {
+      "id": "invalid-escape-equivalent-keys",
+      "file": "invalid/escape-equivalent-keys.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "description": "Escaped and literal member names cannot bypass duplicate-key rejection.",
+      "expected_rule": "S10"
+    },
+    {
+      "id": "invalid-unsafe-integer",
+      "file": "invalid/unsafe-integer.json",
+      "schema": "activity-summary.schema.json",
+      "valid": false,
+      "validation": "semantic",
+      "description": "Counters outside the safe integer range fail representation validation.",
+      "expected_rule": "S10"
+    },
+    {
+      "id": "valid-timestamp-looking-label",
+      "file": "valid/timestamp-looking-label.json",
+      "schema": "activity-summary.schema.json",
+      "valid": true,
+      "validation": "semantic",
+      "description": "An ordinary data label is not interpreted as a timestamp."
+    }
+  ],
+  "groups": [
+    {
+      "id": "valid-complete-multipage",
+      "files": [
+        "valid/event-page-0.json",
+        "valid/event-page-1.json"
+      ],
+      "valid": true,
+      "description": "All 40 approved application measurements are represented exactly once.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "valid-repeated-delivery",
+      "files": [
+        "valid/event-page-0.json",
+        "valid/event-page-0.json",
+        "valid/event-page-1.json"
+      ],
+      "valid": true,
+      "description": "An exact event retry is deduplicated before assembling a window.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-incomplete-window",
+      "files": [
+        "valid/event-page-0.json"
+      ],
+      "valid": false,
+      "expected_rule": "S13",
+      "description": "An accepted page alone is incomplete and cannot be interpreted as a full window.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-window-identity",
+      "files": [
+        "valid/event-page-0.json",
+        "group/event-page-window-mismatch.json"
+      ],
+      "valid": false,
+      "expected_rule": "S13",
+      "description": "Different window identities cannot form one complete summary.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-occupied-page",
+      "files": [
+        "valid/event-page-0.json",
+        "group/event-page-duplicate-index.json",
+        "valid/event-page-1.json"
+      ],
+      "valid": false,
+      "expected_rule": "S13",
+      "description": "A second event identity cannot occupy the same immutable page index.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-repeated-application",
+      "files": [
+        "valid/event-page-0.json",
+        "group/event-page-repeated-app.json"
+      ],
+      "valid": false,
+      "expected_rule": "S13",
+      "description": "An application cannot be counted in two pages of the same window.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "valid-empty-page-in-positive-group",
+      "files": [
+        "group/event-page-empty.json",
+        "valid/event-page-1.json"
+      ],
+      "valid": true,
+      "description": "The first fixed partition has measured zero app durations; the other partition is positive.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    },
+    {
+      "id": "invalid-wholly-empty-group",
+      "files": [
+        "group/event-page-empty.json",
+        "group/event-page-empty-1.json"
+      ],
+      "valid": false,
+      "expected_rule": "S13",
+      "description": "A wholly empty window group must be suppressed rather than published.",
+      "context": {
+        "grant": "valid/local-grant-multipage.json",
+        "subscription": "valid/subscription-multipage.json",
+        "now": "2026-10-03T10:30:00.200Z"
+      }
+    }
+  ]
+}

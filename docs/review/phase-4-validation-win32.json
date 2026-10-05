@@ -1,0 +1,1398 @@
+{
+  "evidence_version": 1,
+  "evidence_kind": "phase_4_synthetic_windows_or_linux_reference",
+  "generated_at": "2026-10-05T19:37:19.080Z",
+  "protocol_version": "0.1.0",
+  "approval": {
+    "g1": "agreed",
+    "date": "2026-10-04",
+    "statement": "ok keep going if there is no further input required from my side"
+  },
+  "progression_authorization": {
+    "date": "2026-10-05",
+    "m1_scope": "accepted_windows_reference",
+    "linux_portability": "deferred_by_user",
+    "priorities": [
+      "android_local_collector_and_inspection_first"
+    ],
+    "real_agent_selection": "deferred_until_local_findings",
+    "decision": "docs/decisions/0009-android-local-inspection-first.md",
+    "accepted_evidence": "docs/review/priority-change-2026-10-04.md",
+    "changes_wire_semantics": false
+  },
+  "profile_id": "direct-loopback-test-v1",
+  "result": "pass_with_gate_limits",
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26300",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "kernel_type": "Windows_NT",
+    "dependency_versions": {
+      "ajv": "8.20.0",
+      "ajv-formats": "3.0.1",
+      "ipaddr.js": "2.5.0"
+    },
+    "source_filesystem_type": 0,
+    "temporary_state_filesystem_type": 0
+  },
+  "synthetic_configuration": {
+    "clock_start": "2026-10-04T00:00:00.000Z",
+    "clock": "ManualClock",
+    "retry_random": 0.5,
+    "no_ai_model": true,
+    "no_real_credentials": true,
+    "embedded_state_single_owner": true,
+    "no_forwarding_process": true
+  },
+  "applicability": {
+    "association_is_not_full_case_pass": true,
+    "static_ct": [
+      "CT-01",
+      "CT-02",
+      "CT-03",
+      "CT-04",
+      "CT-05",
+      "CT-06",
+      "CT-07",
+      "CT-08",
+      "CT-37"
+    ],
+    "runtime_ct": [
+      "CT-03",
+      "CT-04",
+      "CT-05",
+      "CT-06",
+      "CT-07",
+      "CT-08",
+      "CT-09",
+      "CT-10",
+      "CT-11",
+      "CT-12",
+      "CT-13",
+      "CT-14",
+      "CT-15",
+      "CT-16",
+      "CT-17",
+      "CT-18",
+      "CT-19",
+      "CT-20",
+      "CT-21",
+      "CT-22",
+      "CT-23",
+      "CT-24",
+      "CT-25",
+      "CT-26",
+      "CT-27",
+      "CT-28",
+      "CT-29",
+      "CT-30"
+    ],
+    "acceptance": [
+      "AC-01",
+      "AC-02",
+      "AC-03",
+      "AC-04",
+      "AC-05",
+      "AC-06",
+      "AC-07",
+      "AC-08",
+      "AC-09",
+      "AC-10",
+      "AC-11",
+      "AC-12",
+      "AC-13",
+      "AC-14",
+      "AC-15",
+      "AC-16",
+      "AC-17",
+      "AC-18",
+      "AC-19",
+      "AC-20",
+      "AC-21",
+      "AC-27",
+      "AC-29"
+    ],
+    "conditional": {
+      "CT-31": "not_applicable; MCP Events unselected"
+    },
+    "deferred": [
+      "CT-32",
+      "CT-33",
+      "CT-34",
+      "CT-35",
+      "CT-36"
+    ],
+    "preparation": {
+      "skill_and_reviewer_scenarios": [
+        "AC-23",
+        "AC-24"
+      ],
+      "direct_readiness": [
+        "AC-22",
+        "AC-29"
+      ],
+      "android_observation_experiment": [
+        "AC-25",
+        "AC-26"
+      ],
+      "actual_m2_or_m3_proven": false,
+      "evidence": "docs/review/phase-5-preparation.md"
+    },
+    "concrete_associations_and_limits": "docs/review/phase-4.md"
+  },
+  "dependency_setup": {
+    "required_package_manager": "pnpm@11.25.0",
+    "documented_command": "pnpm install --frozen-lockfile --ignore-scripts",
+    "performed_by_this_recorder": false,
+    "actual_loaded_versions": "environment.dependency_versions"
+  },
+  "commands": {
+    "runtime": {
+      "executable": "node",
+      "arguments": [
+        "--test",
+        "--test-reporter=tap",
+        "test/agent-readiness.test.mjs",
+        "test/android-observation-model.test.mjs",
+        "test/process.test.mjs",
+        "test/protocol.test.mjs",
+        "test/publisher.test.mjs",
+        "test/receiver.test.mjs",
+        "test/skill-policy.test.mjs",
+        "test/storage-clock.test.mjs",
+        "test/transport.test.mjs"
+      ],
+      "exit_code": 0,
+      "duration_ms": 23854.9542
+    },
+    "demo": {
+      "entry": "src/demo.mjs:runDemo",
+      "result": "pass"
+    },
+    "artifacts": {
+      "executable": "node",
+      "arguments": [
+        "scripts/validate-spec.mjs",
+        "--report",
+        "docs/review/phase-4-contract.json"
+      ],
+      "exit_code": 0
+    }
+  },
+  "runtime": {
+    "tests": 232,
+    "pass": 231,
+    "fail": 0,
+    "skipped": 1,
+    "cancelled": 0,
+    "cases": [
+      {
+        "name": "agent catalog separates documented native ingress from actual supported OAP integration",
+        "result": "pass"
+      },
+      {
+        "name": "all candidate surfaces remain unselected and require actual existing-agent evidence",
+        "result": "pass"
+      },
+      {
+        "name": "unknown agent IDs fail safely without reflecting supplied secret-like input",
+        "result": "pass"
+      },
+      {
+        "name": "catalog edits cannot enable a production host or assert a verified account",
+        "result": "pass"
+      },
+      {
+        "name": "weakening embedded schema cannot turn catalog metadata into runtime authority",
+        "result": "pass"
+      },
+      {
+        "name": "duplicate source or host IDs and unknown capability citations are invalid",
+        "result": "pass"
+      },
+      {
+        "name": "catalog documentation links reject insecure or credential-bearing URLs",
+        "result": "pass"
+      },
+      {
+        "name": "standalone inspection requires an immutable validated preparation catalog",
+        "result": "pass"
+      },
+      {
+        "name": "synthetic package union counts overlapping same-package activities once and permits cross-app overlap",
+        "result": "pass"
+      },
+      {
+        "name": "trusted closed source segments clip exactly to adjacent half-open summary windows",
+        "result": "pass"
+      },
+      {
+        "name": "mid-consent trusted initial state permits clipping without using pre-consent records",
+        "result": "pass"
+      },
+      {
+        "name": "pause and narrow discard open segments and require a fresh state after resumed authorization",
+        "result": "pass"
+      },
+      {
+        "name": "unknown initial state is never made idle by unmatched resume or pause and only an attestation restores it",
+        "result": "pass"
+      },
+      {
+        "name": "duplicate-looking transitions are ambiguous rather than deduplicated or counted as identified activities",
+        "result": "pass"
+      },
+      {
+        "name": "missing starts and stops lose observability without fabricating zero or a window-end close",
+        "result": "pass"
+      },
+      {
+        "name": "later missing-start evidence invalidates earlier inferred phases back to the last independent checkpoint",
+        "result": "pass"
+      },
+      {
+        "name": "source gaps break counter continuity; an empty untrusted query never proves zero",
+        "result": "pass"
+      },
+      {
+        "name": "unknown state of one approved package reduces common coverage and every app duration for reference aggregation",
+        "result": "pass"
+      },
+      {
+        "name": "denied app data and class/extras/labels hostile getters are never read or returned",
+        "result": "pass"
+      },
+      {
+        "name": "synthetic source caps fail closed without truncating scope or leaking malformed values",
+        "result": "pass"
+      },
+      {
+        "name": "actual publisher process exits and another process delivers the identical durable queued page",
+        "result": "pass"
+      },
+      {
+        "name": "offline revocation in one process persists across exit, receiver reconnect and a new publisher process",
+        "result": "pass"
+      },
+      {
+        "name": "a restarted publisher process rejects corrupt existing state without resetting it or exposing credentials",
+        "result": "pass"
+      },
+      {
+        "name": "synthetic process entry rejects unapproved execution, unknown controls and state path traversal",
+        "result": "pass"
+      },
+      {
+        "name": "clock rollback in a fresh publisher process blocks data while an offline revocation still commits",
+        "result": "pass"
+      },
+      {
+        "name": "generated error retryability follows the catalogue despite caller flags",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-complete-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-partial-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-label-untrusted-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-page-0-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-page-1-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-local-grant-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-local-grant-multipage-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-local-grant-paused-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-local-grant-no-label-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-subscription-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-subscription-multipage-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-capabilities-publisher-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-capabilities-receiver-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-receipt-accepted-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-receipt-duplicate-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-error-transient-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-error-permanent-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-batch-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-batch-gap-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-status-active-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-status-offline-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-status-revoked-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-status-unavailable-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-extra-field-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-negative-duration-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-zero-duration-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-unsupported-version-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-id-not-v4-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-time-zone-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-impossible-date-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-unknown-coverage-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-unavailable-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-window-reversed-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-window-duration-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-publication-early-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-retention-reset-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-coverage-outside-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-coverage-adjacent-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-duration-over-coverage-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-duplicate-app-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-unsorted-apps-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-page-index-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-page-cadence-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-oversize-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-missing-cursor-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-receipt-rejected-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-error-permanent-retry-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-status-unknown",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-local-grant-extensions",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-subscription-extensions",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-extension",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: valid-subscription-no-label",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-excluded-app",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-label-without-consent",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-extension-without-consent",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture excluded: invalid-event-consent-paused",
+        "result": "skipped",
+        "reason": "S12: receiver authorization cannot observe device-local pause, permission or collection authority."
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-binding-mismatch",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-expired-at-receive",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: group-event-page-window-mismatch",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: group-event-page-duplicate-index",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: group-event-page-repeated-app",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-duplicate-key",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-negative-zero",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-event-lone-surrogate",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-event-overlapping-apps",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-grant-time-order",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-grant-unsorted-roster",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-grant-roster-cadence",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-grant-history-age",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-subscription-time-order",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-unsorted-events",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-recipient-mismatch",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-gap-reversed",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-gap-overlap",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-batch-gap-adjacent",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-error-retryability",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-error-transient-classification",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture control record predicates: invalid-status-retention-overflow",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: group-event-page-empty",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: group-event-page-empty-1",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-source-utf8",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-malformed-json",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-json-bom",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-escape-equivalent-keys",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: invalid-unsafe-integer",
+        "result": "pass"
+      },
+      {
+        "name": "runtime fixture event predicates: valid-timestamp-looking-label",
+        "result": "pass"
+      },
+      {
+        "name": "raw representation rejects invalid UTF-8 rather than replacing source bytes",
+        "result": "pass"
+      },
+      {
+        "name": "raw representation rejects nested and escape-equivalent duplicate names",
+        "result": "pass"
+      },
+      {
+        "name": "raw representation rejects negative zero and escaped lone Unicode surrogates",
+        "result": "pass"
+      },
+      {
+        "name": "string input cannot conceal an actual lone surrogate through UTF-8 replacement",
+        "result": "pass"
+      },
+      {
+        "name": "raw representation rejects a UTF-8 BOM and admits valid paired Unicode",
+        "result": "pass"
+      },
+      {
+        "name": "representation bounds count UTF-8 bytes at the exact admission boundary",
+        "result": "pass"
+      },
+      {
+        "name": "canonical event digests preserve identity across object key order but detect changed activity",
+        "result": "pass"
+      },
+      {
+        "name": "receiver time admits exactly five minutes of future emission and no expiration grace",
+        "result": "pass"
+      },
+      {
+        "name": "explicit local approval is mandatory; unknown consent cannot publish",
+        "result": "pass"
+      },
+      {
+        "name": "source redaction removes unrelated applications, labels and private extras before durable state",
+        "result": "pass"
+      },
+      {
+        "name": "separable sessions clip at consent boundary; inseparable buckets are never prorated",
+        "result": "pass"
+      },
+      {
+        "name": "whole window immutable finalization survives restart and zero windows are suppressed",
+        "result": "pass"
+      },
+      {
+        "name": "two recipient scopes and pseudonyms remain independent",
+        "result": "pass"
+      },
+      {
+        "name": "pause fences queued reads and sends; resume cannot backfill paused time",
+        "result": "pass"
+      },
+      {
+        "name": "revoke committed during asynchronous transport verification prevents a new network request",
+        "result": "pass"
+      },
+      {
+        "name": "narrowing purges immutable old scope and requires admission for the new epoch",
+        "result": "pass"
+      },
+      {
+        "name": "rolling fresh budget persists across restart and ignores retries of the same identity",
+        "result": "pass"
+      },
+      {
+        "name": "six attempt cycle, receiver retry hint and explicit restart gates are bounded",
+        "result": "pass"
+      },
+      {
+        "name": "malformed acknowledgements are ambiguous and never valid consumption",
+        "result": "pass"
+      },
+      {
+        "name": "page partitions, selection size, replay read limits and cursor isolation are enforced",
+        "result": "pass"
+      },
+      {
+        "name": "expiry uses observation start; renewal cannot extend immutable event lifetime",
+        "result": "pass"
+      },
+      {
+        "name": "clock rollback blocks data operations while local denial still commits",
+        "result": "pass"
+      },
+      {
+        "name": "byte quota evicts complete windows with bounded gaps",
+        "result": "pass"
+      },
+      {
+        "name": "denied OS permission and durable global monitoring off prevent data operations",
+        "result": "pass"
+      },
+      {
+        "name": "creation and renewal keys are idempotent, conflicting input is rejected and revocation cannot be renewed",
+        "result": "pass"
+      },
+      {
+        "name": "four hour offline restart preserves authorized backlog with bounded fresh catchup",
+        "result": "pass"
+      },
+      {
+        "name": "receiver capability intersection rejects unsupported namespace and insufficient approved cadence",
+        "result": "pass"
+      },
+      {
+        "name": "idempotency quota never evicts live keys and cannot block revocation",
+        "result": "pass"
+      },
+      {
+        "name": "accelerated full day respects rolling publication budgets, record limits and final grant expiry",
+        "result": "pass"
+      },
+      {
+        "name": "recipient backpressure cannot be bypassed by another event, restart or an early explicit repair",
+        "result": "pass"
+      },
+      {
+        "name": "short receiver retry hint pauses every pending recipient event until its deadline",
+        "result": "pass"
+      },
+      {
+        "name": "suppressed oversized and unobservable windows expose safe health instead of healthy zero usage",
+        "result": "pass"
+      },
+      {
+        "name": "valid JSON corrupt accounting cannot increase retries or grant activity authority",
+        "result": "pass"
+      },
+      {
+        "name": "a replay cursor cannot cross recipient authority",
+        "result": "pass"
+      },
+      {
+        "name": "cursor lifetime expires while a longer approved subscription remains active",
+        "result": "pass"
+      },
+      {
+        "name": "an evicted cursor position returns cursor_stale with safe current-scope recovery gaps",
+        "result": "pass"
+      },
+      {
+        "name": "scope narrowing invalidates replay cursors even after the new epoch is admitted",
+        "result": "pass"
+      },
+      {
+        "name": "four active recipient cap rejects the fifth without changing existing authority",
+        "result": "pass"
+      },
+      {
+        "name": "revocation markers expire at original credential expiry without affecting unrelated consent",
+        "result": "pass"
+      },
+      {
+        "name": "negative or future persisted publication/read checkpoints fail closed",
+        "result": "pass"
+      },
+      {
+        "name": "gap-detail overflow warning survives successful windows and expires at its fixed control deadline",
+        "result": "pass"
+      },
+      {
+        "name": "scope narrowing and revocation remove old gap-detail warnings",
+        "result": "pass"
+      },
+      {
+        "name": "permanent catalogue errors ignore optimistic retry flags and retry hints",
+        "result": "pass"
+      },
+      {
+        "name": "unclassified lost responses retry the same frozen event with bounded attempts and no private errors",
+        "result": "pass"
+      },
+      {
+        "name": "small forward wall step cannot replenish fresh budget within boot or across a conservative restart",
+        "result": "pass"
+      },
+      {
+        "name": "failed read preserves monotonic checkpoint and a wall step cannot refill reads after restart",
+        "result": "pass"
+      },
+      {
+        "name": "small wall step cannot shorten retry hints or explicit cycle cooldown",
+        "result": "pass"
+      },
+      {
+        "name": "forwarded UTC expires activity and grants strictly while budgets continue on elapsed time",
+        "result": "pass"
+      },
+      {
+        "name": "invalid uncertain UTC cannot prevent durable revocation or poison finite checkpoints",
+        "result": "pass"
+      },
+      {
+        "name": "a substituted protected endpoint is rejected after restart until fresh local pairing",
+        "result": "pass"
+      },
+      {
+        "name": "changed destination trust during asynchronous preparation fails the publisher send fence",
+        "result": "pass"
+      },
+      {
+        "name": "finite same-target credential rotation preserves the pairing and immutable event",
+        "result": "pass"
+      },
+      {
+        "name": "populated state missing its destination approval fingerprint fails closed",
+        "result": "pass"
+      },
+      {
+        "name": "excessive credential rotation lifetime is rejected before reservation and at the asynchronous send fence",
+        "result": "pass"
+      },
+      {
+        "name": "concurrent exact duplicates commit one observation and remain duplicates after restart",
+        "result": "pass"
+      },
+      {
+        "name": "same identity with a changed immutable body rejects without changing accepted state",
+        "result": "pass"
+      },
+      {
+        "name": "same stream sequence with another event identity rejects atomically",
+        "result": "pass"
+      },
+      {
+        "name": "a distinct overlapping window is a conflict even with a unique sequence",
+        "result": "pass"
+      },
+      {
+        "name": "out-of-order windows fill sequence gaps and do not overwrite newer observations",
+        "result": "pass"
+      },
+      {
+        "name": "partial paginated groups preserve unknown pages and become complete exactly once",
+        "result": "pass"
+      },
+      {
+        "name": "inconsistent group metadata rejects before any ledger side effect",
+        "result": "pass"
+      },
+      {
+        "name": "scope partitions, allowed fields and authenticated recipient bindings are checked",
+        "result": "pass"
+      },
+      {
+        "name": "unapproved labels reject and approved hostile labels remain inert data",
+        "result": "pass"
+      },
+      {
+        "name": "receiver ledger capacity rejects new consumption before acknowledgement without eviction",
+        "result": "pass"
+      },
+      {
+        "name": "original event expiry has no grace and ledger retention does not refresh on retry",
+        "result": "pass"
+      },
+      {
+        "name": "wrong or expired tokens, unknown clock and excessive credential lifetime fail closed",
+        "result": "pass"
+      },
+      {
+        "name": "unknown properties, negative durations and all-empty complete groups are rejected",
+        "result": "pass"
+      },
+      {
+        "name": "persisted receiver state has credential hashes rather than usable bearer tokens",
+        "result": "pass"
+      },
+      {
+        "name": "corrupt existing receiver storage is not recreated or accepted",
+        "result": "pass"
+      },
+      {
+        "name": "HTTP final receiver authenticates bounded JSON and returns durable valid receipts",
+        "result": "pass"
+      },
+      {
+        "name": "simulator server refuses public binding and unsupported production shortcuts",
+        "result": "pass"
+      },
+      {
+        "name": "receiver durable clock checkpoint blocks rollback after an actual state reload",
+        "result": "pass"
+      },
+      {
+        "name": "a missing receiver clock checkpoint cannot silently authorize populated state",
+        "result": "pass"
+      },
+      {
+        "name": "protected bearer rotation rejects old tokens and captured peers after restart while preserving duplicate-safe consumption",
+        "result": "pass"
+      },
+      {
+        "name": "bearer rotation is isolated from another authenticated device using the same recipient identity",
+        "result": "pass"
+      },
+      {
+        "name": "protected scope narrowing rejects old token and old epoch without rewriting accepted history",
+        "result": "pass"
+      },
+      {
+        "name": "same-token setup retains original issuance horizon instead of extending it on each setup",
+        "result": "pass"
+      },
+      {
+        "name": "skill scenarios carry valid OAP events while host instructions remain separate",
+        "result": "pass"
+      },
+      {
+        "name": "every recorded synthetic success remains distinct from a real host pass",
+        "result": "pass"
+      },
+      {
+        "name": "every critical privacy/control violation fails an otherwise accepted observation",
+        "result": "pass"
+      },
+      {
+        "name": "unobserved and incomplete reviews cannot become successful evidence",
+        "result": "pass"
+      },
+      {
+        "name": "an incomplete run cannot erase an already observed privacy violation",
+        "result": "pass"
+      },
+      {
+        "name": "budget overflow, unapproved channel and hidden interruption accounting fail",
+        "result": "pass"
+      },
+      {
+        "name": "silence cannot conceal a notification in a quiet or opted-out scenario",
+        "result": "pass"
+      },
+      {
+        "name": "retry scenario repeats identical immutable event bytes and permits no repeated intervention",
+        "result": "pass"
+      },
+      {
+        "name": "staleness and expired delivery are separate fixture conditions",
+        "result": "pass"
+      },
+      {
+        "name": "malformed numerical reviews and a missing approved response channel are rejected",
+        "result": "pass"
+      },
+      {
+        "name": "durable transactions serialize concurrent accounting updates and returned reads cannot mutate state",
+        "result": "pass"
+      },
+      {
+        "name": "failed transaction and quota overflow leave the last committed file unchanged",
+        "result": "pass"
+      },
+      {
+        "name": "post-commit dispatch begins before the next queued denial while seeing only committed state",
+        "result": "pass"
+      },
+      {
+        "name": "corrupt existing UTF-8 or JSON state is refused and never reset to fresh authority",
+        "result": "pass"
+      },
+      {
+        "name": "system clock detects forward and backward discontinuities against elapsed time",
+        "result": "pass"
+      },
+      {
+        "name": "accelerated synthetic time advances both clocks while an unaccounted jump becomes untrusted",
+        "result": "pass"
+      },
+      {
+        "name": "too-short opaque bearer is rejected before discovery or activity request construction",
+        "result": "pass"
+      },
+      {
+        "name": "canonical destination policy rejects downgrade, redirects-as-setup, aliases, credentials and ambiguous paths",
+        "result": "pass"
+      },
+      {
+        "name": "public address policy rejects special-use IPv4, IPv6 and mapped equivalents",
+        "result": "pass"
+      },
+      {
+        "name": "local TLS address policy allows only exact paired addresses",
+        "result": "pass"
+      },
+      {
+        "name": "real isolated loopback receiver supports discovery and valid delivery with identity-bound bearer headers",
+        "result": "pass"
+      },
+      {
+        "name": "every redirect is rejected without a second request",
+        "result": "pass"
+      },
+      {
+        "name": "unsupported protocol, expired credentials and wrong scope fail before request construction",
+        "result": "pass"
+      },
+      {
+        "name": "all DNS results are vetted before connecting; no private mixed-answer fallback",
+        "result": "pass"
+      },
+      {
+        "name": "connection lookup uses the validated answer and rejects an unexpected actual peer before headers or body",
+        "result": "pass"
+      },
+      {
+        "name": "failed TLS peer authorization or certificate validation is permanent and cannot write a request",
+        "result": "pass"
+      },
+      {
+        "name": "local TLS requires paired trust and passes hostname checks before evaluating key pins",
+        "result": "pass"
+      },
+      {
+        "name": "real local TLS verifies the paired CA, certificate hostname and peer key before writing activity",
+        "result": "pass"
+      },
+      {
+        "name": "consent is fenced after asynchronous preparation and again immediately before socket writes",
+        "result": "pass"
+      },
+      {
+        "name": "AbortSignal cancels preparation, connections and pending response reads",
+        "result": "pass"
+      },
+      {
+        "name": "asynchronous fences are rejected instead of being awaited beyond dispatch checks",
+        "result": "pass"
+      },
+      {
+        "name": "missing, generic, malformed, mismatched or encoded receipts do not establish consumption",
+        "result": "pass"
+      },
+      {
+        "name": "response streams and declared body sizes stop at bounded receipt capacity",
+        "result": "pass"
+      },
+      {
+        "name": "permanent HTTP status takes precedence over optimistic or oversized error bodies",
+        "result": "pass"
+      },
+      {
+        "name": "Retry-After preserves long backpressure and malformed hints do not reset a cycle",
+        "result": "pass"
+      },
+      {
+        "name": "connection, total-response and resolver waits are bounded without library retries",
+        "result": "pass"
+      },
+      {
+        "name": "event size and expiry are checked before request construction",
+        "result": "pass"
+      },
+      {
+        "name": "discovery rejects wrong roles or unsupported versions/profile without inventing an endpoint fallback",
+        "result": "pass"
+      },
+      {
+        "name": "paired descriptor fingerprint is token-free and normalizes exact addresses and public trust representations",
+        "result": "pass"
+      },
+      {
+        "name": "same-object endpoint or trust mutation during asynchronous DNS cannot construct a request",
+        "result": "pass"
+      },
+      {
+        "name": "paired endpoint, address and trust changes after connection preparation cannot expose headers or activity",
+        "result": "pass"
+      },
+      {
+        "name": "token and expiry renewal with unchanged paired metadata remains allowed after asynchronous discovery",
+        "result": "pass"
+      },
+      {
+        "name": "an opaque bearer shortened during asynchronous DNS is rejected before request construction",
+        "result": "pass"
+      }
+    ],
+    "stdout_sha256": "ab46da145bf0794f11cd66434ce997e1ee5c167250f1490e380afc215d215376",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_private_output_saved": false
+  },
+  "contract_artifacts": {
+    "passed": true,
+    "schemas": 9,
+    "fixtures": 86,
+    "groups": 8,
+    "local_links": 463,
+    "requirements": 33,
+    "acceptance_mappings": 29,
+    "evidence": "docs/review/phase-4-contract-win32-node24.json"
+  },
+  "direct_demo": {
+    "lifecycle": {
+      "result": "pass",
+      "first_delivery": "accepted",
+      "exact_duplicate_before_and_after_receiver_restart": "duplicate",
+      "outage_hours": 4,
+      "retained_backlog_pages": 16,
+      "recovered_pages": 16,
+      "recovery_fresh_pages_per_hour": 4,
+      "pause_retained_read": "denied",
+      "offline_revoke_after_publisher_restart": "denied",
+      "denied_data_and_bearer_absent_from_device_state": true,
+      "final_destination_origins": [
+        "http://127.0.0.1:65329"
+      ],
+      "processes_at_a_time": [
+        "synthetic_device",
+        "final_deterministic_receiver"
+      ],
+      "intermediaries": 0
+    },
+    "latency": {
+      "result": "pass",
+      "accepted_summaries": 100,
+      "timing": "Real monotonic time from finalization invocation through durable valid receipt and local receipt commit; includes local aggregation computation, outbox commit and dispatch, giving an upper bound on publication-to-valid-consumption.",
+      "p95_ms": 261.4239000000016,
+      "max_ms": 284.9415000000008,
+      "threshold_ms": 2000,
+      "synthetic_clock_hours": 25,
+      "synthetic_authority_hours": 32,
+      "synthetic_interval_ms": 900000,
+      "exclusions": [
+        "simulated observation and aggregation interval",
+        "setup",
+        "outage and fault scenarios",
+        "AI evaluation and notification"
+      ],
+      "profile_id": "direct-loopback-test-v1",
+      "final_destination_origins": [
+        "http://127.0.0.1:65351"
+      ],
+      "production_sla": false
+    },
+    "evidence": "docs/review/phase-4-demo-win32-node24.json"
+  },
+  "gates": {
+    "g1": "agreed",
+    "m1": "accepted_windows_reference",
+    "m2": "not_run",
+    "m3": "not_run",
+    "linux_portability": "deferred_by_user",
+    "ct28_linux": "not_run; deferred_by_user_not_a_progression_blocker",
+    "minimum_node_22": "not_run; recorded_version_identified_above",
+    "ct31_mcp_events": "not_applicable; unselected_conditional_profile"
+  },
+  "limits": [
+    "Synthetic reference only; no existing-agent or Android compatibility claim.",
+    "Windows reference evidence is accepted for progression; Linux extensibility is deferred and untested.",
+    "Skill/scenario and compatibility preparation do not establish actual existing-agent or physical Android behavior.",
+    "Production credential keystore, Windows ACL protection and deployed receiver onboarding are unverified.",
+    "Each JSON state file has one owner; concurrent writers and all-filesystem power-loss durability are unverified.",
+    "No delivery reliability guarantee or production performance SLA."
+  ],
+  "inputs_changed_during_run": [],
+  "sha256": {
+    ".gitignore": "3aef9c6aa175c50827f1036d8616a248c7dd805e6917af97500f07b16bdd333c",
+    "CONTRIBUTING.md": "6ef62c302b5509fc045b8f4ed1dca18b5a0214c5ff1ffbdda0a8d0fc447f0b38",
+    "README.md": "5bd814437eebdf4b3bf87020e426080f75365402684e0287ec9b787a5afcdc7c",
+    "android/README.md": "5818b10580c0068c58c30c6c7da9b21c7293d5b23e32550111e452397a8c461c",
+    "android/app/build.gradle": "5a0903406c12026ce1279f90e7b1c45d071b81a35d84f2ccbf8d2f0055fa42fa",
+    "android/app/src/main/AndroidManifest.xml": "8a567d2bed2268622ce7bad9a5b31c07f11f24188349524527de9949cd5df572",
+    "android/app/src/main/java/org/liveabit/inspect/AndroidUsageSource.java": "10ec25b95b2a9b18aa99b4c37ec65ba7f5fe1728e28527fd00d61c409d11dfcb",
+    "android/app/src/main/java/org/liveabit/inspect/InspectionStore.java": "be04d50065532243eab11719f1e73b0dfd6bab09b8df284c7286fcf5612b465e",
+    "android/app/src/main/java/org/liveabit/inspect/LocalInspectionApplication.java": "79a4890936dcafc1834b5d577c6baabca6db413a4b104b6867f7e698087035a9",
+    "android/app/src/main/java/org/liveabit/inspect/MainActivity.java": "08e1e50cdc596132089869c30c2cc7f6319aa5a9a6a5bb10db234fbac72c2a17",
+    "android/app/src/main/res/values/strings.xml": "5e08370f9db88ef8181b7fa94f1889ef7cceb4f3183f25120b930b65ecc6281c",
+    "android/app/src/main/res/values/styles.xml": "44ad4b808f414288bbffb7307c19454bd1fcfa2c73bb8fa4c5e9cdc76ebcf3fc",
+    "android/app/src/main/res/xml/backup_rules.xml": "2c5c697984f4c52b526337ab61113f5843e0bfc6af4722374916ffe6da38dd9a",
+    "android/app/src/main/res/xml/data_extraction_rules.xml": "8b55ff5489071bb19a4e89967b604a16c0e4d1e87a2df3c73c64417314a59f22",
+    "android/build.gradle": "390d81e8fd209e0f2ab34f6c21f9a74ad10557991f50113134f754f087207276",
+    "android/collector-core/build.gradle": "4502d822ebbb6032a9bc7f7812bba03cd0edac5f37df732920363dd39547b9f3",
+    "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java": "2f583eead4639b53ab80f292037af6effec4137e399169e01ff118991f0c2838",
+    "android/collector-core/src/test/java/org/liveabit/collector/core/LocalInspectionCoreTest.java": "f084a5a9ffd060bf9602c40928d6a5f32ab62d8457a5c457837740fe4d182590",
+    "android/gradle.properties": "8d775c690778103d35686bd5148013bbf5c10dfd2049787b69f3a5d352099976",
+    "android/settings.gradle": "44124851b974cb746ac9bd946a5c0f0f4de3db377fd13d6c5107c7f81dd3b326",
+    "docs/agent-compatibility.json": "cfcf061612969d692dbb1bec6d280bb34d265a2e9bdcc21f269d5c94ea3adce7",
+    "docs/agent-integration-plan.md": "ffa454ccc2e38939e40708ff82ecf4cc2aefc0746c84540a1121963b75ab49ec",
+    "docs/android-feasibility-plan.md": "85fd766eb58578eb8a15d73b62eca538c4b7fdd46e03ffd83a4b1c51341207fa",
+    "docs/decisions/0001-independent-oap-mcp-adapter.md": "1278557b301774b516a2532fbdc1068e6af008469fe4a7e8408580da8d9c6245",
+    "docs/decisions/0002-local-summary-aggregation.md": "9a3cf7e20c2ea51f31dcd49573fb82dc8e06bba5586db0c90899b1e3af5de9bb",
+    "docs/decisions/0003-minimal-durable-reference.md": "b7d7f648ebf21419d72b41e72dcb0c84a4438ba0c68fe3ef4b272075f7a3eb80",
+    "docs/decisions/0004-host-owned-agent-context.md": "b9b7dd728f8deaa72ed1728960f224b5f66f8963d7f54de9d6851bbe543edba5",
+    "docs/decisions/0005-no-intermediary-infrastructure.md": "66b7f7fa343f4ef31c762a1f86ff0251a6ad8c1352454b09723dcaa7905e52bf",
+    "docs/decisions/0006-immutable-finalized-summary-pages.md": "b25f3d47c12179527907a57a06c046f1a337183b20460d65419a2b6f1d3952f3",
+    "docs/decisions/0007-node-reference-and-embedded-state.md": "e681ce6afc189ac16957089ef1fc44c93c661c266473959d959781fe3e3163ba",
+    "docs/decisions/0008-windows-baseline-and-android-integration-priority.md": "a2fdde5dc20f730ed241d9f26cb57c6ebb8e3b3e3ee18ca2cef67e11287721cc",
+    "docs/decisions/0009-android-local-inspection-first.md": "ae2033452d234707372389a491e742caf911562dbf2692aea1ed5cf436e2b928",
+    "docs/integration-drafts/workspace-agent-profile.md": "f254436c095927a1c9ba1e2db5ece3701d6aa9d2b754c0f7322fec64bcc7a6a4",
+    "docs/linux-verification.md": "c41ee9126703ab114cdf483f1481da31fc1989cb04da13973d681e8f9e4d5ef1",
+    "docs/project-roadmap.md": "6a4412b761d17b1324af0b7694568b4ae27649bebe88f6f8dd1f47c2a4240b66",
+    "docs/reference.md": "6e0202cd9a0a6e5691077e205e84e8ce5e70ab4e55fa714f120987def1900176",
+    "docs/research/android-feasibility-2026-10-04.md": "28b857745831acb507cb1cf28d84df75ed14c9654b82cff85ac7ded690ceb729",
+    "docs/research/direct-host-follow-up-2026-10-04.md": "89c1def590cc4967a34f2644fb583a995d8fe119fcf018494054253291026e52",
+    "docs/research/feasibility.md": "fd05a96a744b3a35a990605e1c0e6a6be3b32d737b2c0572d523c77020cb04de",
+    "docs/review/android-local-inspector.md": "80b23c2f6d6ec088b1cc5b9937c62ca5604c9bd8456ba49b7768575ba9f9ae38",
+    "docs/review/phase-1-2.md": "f0243e9a24440f8b10388e0672a6f1078f9289a875589e3a86041f312c2eee37",
+    "docs/review/phase-3.md": "9c0e98f7ad803cc3d6a85a581560a286545608021524578692fbcb3d04381884",
+    "docs/review/phase-4.md": "5d8c5e077eebcb9b092e3554ccc8b4740eb3d61bc0152ee26f37aaf0d6a01d3b",
+    "docs/review/phase-5-preparation.md": "d05dcb352a5a9f04483003a138dd39be86828cf970bd330b1cdb99e32225158b",
+    "docs/review/priority-change-2026-10-04.md": "bfffc946c8af35af5b8b57465b51b8350e3f4a94c9b7772b9c62e4c8a4ce53c1",
+    "examples/oap/0.1.0/example-manifest.json": "9f109d8f87593eb21d3569c07860b2cd91631532fcf4a24a28edc5cf3b83feba",
+    "examples/oap/0.1.0/group/event-page-duplicate-index.json": "01202d3afc384d25e2af19dfd728a828d5bfcc4af1ec1fa2c4eea314106c0f24",
+    "examples/oap/0.1.0/group/event-page-empty-1.json": "62a665cfe73475e6349de8b3dcf2e8ed38e07aa652b99a499a1fa602057d8050",
+    "examples/oap/0.1.0/group/event-page-empty.json": "29bfad433ffd45f81f2732dc64bed4f242d1e0249731f89f5cfc015327d2fb40",
+    "examples/oap/0.1.0/group/event-page-repeated-app.json": "0c9e58d0c04ba70de6c662ccedf34d9c496d48a303eb584bfd764474776f31db",
+    "examples/oap/0.1.0/group/event-page-window-mismatch.json": "f689d44910bb0c7582e73f237c4b1787fff1a83508c6baf07eb3df7798ce2284",
+    "examples/oap/0.1.0/invalid/batch-gap-adjacent.json": "a84811a8474d6968e9b2fc7dd2160cd8c5c527c8c0720c7a704cc70ad291f310",
+    "examples/oap/0.1.0/invalid/batch-gap-overlap.json": "b21ea6d720b7e84b7f8976f1cf1083fb276a19b25d34c6035ea3c3cef03ce860",
+    "examples/oap/0.1.0/invalid/batch-gap-reversed.json": "27779326154582570e9db6cd56681c2b72230c9caccd85460b5260acb1916ae1",
+    "examples/oap/0.1.0/invalid/batch-missing-cursor.json": "005ae2fa53a8e508e7a95abe290d433dd016d828dc50203b77ddd4a9b6a760b2",
+    "examples/oap/0.1.0/invalid/batch-recipient-mismatch.json": "4765f8b5c63a0d4bb11c1259cac01957ea1a31e3a09b18cdfb92a3faee0c4497",
+    "examples/oap/0.1.0/invalid/batch-unsorted-events.json": "00a1c75a0a67d5fb250ccc63de62e8877f3c230da95e9bb0c7098d2d77fa5a60",
+    "examples/oap/0.1.0/invalid/error-permanent-retry.json": "7899731b9cf2e77edaf8c5f2cf0b743954c7acfe0bafe73a8957ccd30dad7b4c",
+    "examples/oap/0.1.0/invalid/error-retryability.json": "10f27b45c08a97ff94f0abf899104a6ac73dcad0927bb2fb6b42e48e1f838c9a",
+    "examples/oap/0.1.0/invalid/error-transient-classification.json": "bccbcb898a0cb9ffb50aebbcddf4c468453ebc66effa8fc2b21fbb5727dad9a1",
+    "examples/oap/0.1.0/invalid/escape-equivalent-keys.json": "0279c7ae1d78de4455344ca263e2f4131bf5d68f8edcc9750ffccf900079bea1",
+    "examples/oap/0.1.0/invalid/event-binding-mismatch.json": "b64be65f418226890eeff2c975079ffa2d7be9d7c2c37c7e7e6b0d9248eb2376",
+    "examples/oap/0.1.0/invalid/event-consent-paused.json": "4e631fb094c68d5421ae0a0564418ab8188d08fe48d81e22170d5dfd6c7d51e2",
+    "examples/oap/0.1.0/invalid/event-coverage-adjacent.json": "be7732cabd87bf1170f61ee79117bd2f90ba48b1c63d773c6d0895d1a8066b0b",
+    "examples/oap/0.1.0/invalid/event-coverage-outside.json": "58ec1723821a922fe426d2acc4da45a9b21ff6f74cbd977f762d3649f5c880f3",
+    "examples/oap/0.1.0/invalid/event-duplicate-app.json": "5330f9e5e20dbd9147b49b9649c5e3b5b627f9434bdce0fad9b8c3dbf417494a",
+    "examples/oap/0.1.0/invalid/event-duplicate-key.json": "6e89e25e979c7148b6fbb140a5d0687c4fc486f1050621ba6bddb7d70d9f11b5",
+    "examples/oap/0.1.0/invalid/event-duration-over-coverage.json": "d0e8a460f362a5aa033882dc0e67865811d95e91f96f76f69581962cf64107bf",
+    "examples/oap/0.1.0/invalid/event-excluded-app.json": "6e2d40f9bef1ce699970929ed00803971da5b9ce70ba90f0099db5a255db7ce2",
+    "examples/oap/0.1.0/invalid/event-expired-at-receive.json": "4e631fb094c68d5421ae0a0564418ab8188d08fe48d81e22170d5dfd6c7d51e2",
+    "examples/oap/0.1.0/invalid/event-extension-without-consent.json": "c0465a871c34341b7f8f423b0051b2a70c68b82156a44e2e807bfa05dee3b8a7",
+    "examples/oap/0.1.0/invalid/event-extra-field.json": "4bf0bdf13fcb360b0318f5701751a3ef1ce212d494ceea2c90810fc972d6cd39",
+    "examples/oap/0.1.0/invalid/event-id-not-v4.json": "0eeb8e32173d0b263b77aaa35feaf228c791699bbc631f1dcee8cdd3e27a2ab1",
+    "examples/oap/0.1.0/invalid/event-impossible-date.json": "4898f10e94acc164568222509a52c7620a94228101958c4b7e304495d9aa0637",
+    "examples/oap/0.1.0/invalid/event-label-without-consent.json": "47c1e3bb0fc7dfc2e4947a50c1031801313ed39140ff2ca4ee1758bbca62979c",
+    "examples/oap/0.1.0/invalid/event-lone-surrogate.json": "264e0221148215009bdbfa550d0e002cda099b5bc6303831139011e1031cac48",
+    "examples/oap/0.1.0/invalid/event-negative-duration.json": "545087078091bb53eb0254c6c276eb06cdd4b84d630f8e7414325b60ba8310ff",
+    "examples/oap/0.1.0/invalid/event-negative-zero.json": "206f78f49372a47ae036aabe0a4a54148029381ef319855bcab096fc51f17fcb",
+    "examples/oap/0.1.0/invalid/event-oversize.json": "993a02fff167fad2b2ba5d8a186abe58b364f740d8bfb67c43f493934ac0cb9c",
+    "examples/oap/0.1.0/invalid/event-page-cadence.json": "791a814923f2371d16293401bd005c8400714410690b474626f1511bccc18939",
+    "examples/oap/0.1.0/invalid/event-page-index.json": "178a654cb984504d3e8cdccd7b79b16cc01c0377f0920c39663ca9e507e1c091",
+    "examples/oap/0.1.0/invalid/event-publication-early.json": "978d4be39b0e5abdb7c3136626ca7c093bfbf36d62430414cb93b52a8e47362a",
+    "examples/oap/0.1.0/invalid/event-retention-reset.json": "a14dfe4d1a3bde1aca7828016d9e858cc9744ecfd6295849420d8eb91e15de86",
+    "examples/oap/0.1.0/invalid/event-time-zone.json": "f0f44c04889a8a8b8600077bb6db9bb3dc27cf1604729050628fb204ec7acc61",
+    "examples/oap/0.1.0/invalid/event-unavailable.json": "cbac93047a2d938367b8a21cb4c0ce7617bed15c8e7d56bc72973f8877ea3e3f",
+    "examples/oap/0.1.0/invalid/event-unknown-coverage.json": "c98494b386a2b677c6ba03bc9d2da3ed62586b2931258c5724b9110eb65da8da",
+    "examples/oap/0.1.0/invalid/event-unsorted-apps.json": "b7d9be495ccf78b973996cce2d97f59589ff28149ce6341d901e1230a6cd57e6",
+    "examples/oap/0.1.0/invalid/event-unsupported-version.json": "da35b21d1ef4255f8e0ba3f30217f9fe250d585120a51d10e35166cfec6ad6b1",
+    "examples/oap/0.1.0/invalid/event-window-duration.json": "3e071c6be8324498099a6cc96ce2a81f6217975d375488728ba3f3e4b6e65f40",
+    "examples/oap/0.1.0/invalid/event-window-reversed.json": "400bf013df8c1a3d445f8303b396036fb856b2ee5877fc9a48427ab392704b94",
+    "examples/oap/0.1.0/invalid/event-zero-duration.json": "f888fe70ffd3f7a62a311aa6cce2f50f74fa32673ead6bf557569ad0e2d68503",
+    "examples/oap/0.1.0/invalid/grant-history-age.json": "f0fef9136e9e40a4731adad23165eb0bd2203d4de1252882898b611760707b78",
+    "examples/oap/0.1.0/invalid/grant-roster-cadence.json": "0f8a16990d919cf7e51c4b1c1f8494173263ccbeeae0da1d81c9ff970da77104",
+    "examples/oap/0.1.0/invalid/grant-time-order.json": "a7cede6e0a9ff5b6b9a57431fc382f2dd2d408391b9e986240bb1bbefd515484",
+    "examples/oap/0.1.0/invalid/grant-unsorted-roster.json": "6dd090347bf79a0122fd65f0332b7b478ea9c518580d4b38bb235a5f60a37f8c",
+    "examples/oap/0.1.0/invalid/json-bom.json": "d79a4ea4f4fc3b63790d3e33ea97c5626f91f481b82b4137c46bb57734674ee3",
+    "examples/oap/0.1.0/invalid/malformed-json.json": "f6d66444b8fd72574548e3a8b531487be35c2372a1801255d09d87f895d0112a",
+    "examples/oap/0.1.0/invalid/receipt-rejected.json": "91e8ea8aeffdac576c9dd3289d2e6c8bfa954cc1182d125b9f1a75bf775acfb4",
+    "examples/oap/0.1.0/invalid/source-utf8.json": "2a5b4ed4d247457b197c41ae0389160ee014382304c55a52acce702155c578ad",
+    "examples/oap/0.1.0/invalid/status-retention-overflow.json": "13c439a1192ad7b55f8629cec8c6e253b21876199de10aaef88e8612ae9efb4c",
+    "examples/oap/0.1.0/invalid/subscription-time-order.json": "cb128fe0b448ddd35ddb256e22b1d1b748fea2e85d8d513033d74a1d84c75955",
+    "examples/oap/0.1.0/invalid/unsafe-integer.json": "6a50e593d678dde5962c8a2ff6615d5fc961055eadf9db7a68aeeec74130fcad",
+    "examples/oap/0.1.0/valid/batch-gap.json": "96e7fa9cff5b32e715e94c073508e4a1f1087fc8b3e167e4cc765948640b6a02",
+    "examples/oap/0.1.0/valid/batch.json": "7195be575e3f0d7da385f24073a327d5e710b6441764dddefaf5636e162b63a2",
+    "examples/oap/0.1.0/valid/capabilities-publisher.json": "1daa9445e64d6b06f9868870b5dc8641fb9c4fc560d48730e11f9dd3d14bce88",
+    "examples/oap/0.1.0/valid/capabilities-receiver.json": "048d020664108cf37138d3ec8d0f5e1f58967366b7239f21a709814c3d178281",
+    "examples/oap/0.1.0/valid/error-permanent.json": "11fdb10f08e09ec38794038b76a970e8700909c863f3dfd2c6600de1eb68a626",
+    "examples/oap/0.1.0/valid/error-transient.json": "6aa1a03fca32bf01e537b258c17121dc991bc79b0df8d4d72e79d1c4dea6c7d8",
+    "examples/oap/0.1.0/valid/event-complete.json": "4e631fb094c68d5421ae0a0564418ab8188d08fe48d81e22170d5dfd6c7d51e2",
+    "examples/oap/0.1.0/valid/event-extension.json": "c0465a871c34341b7f8f423b0051b2a70c68b82156a44e2e807bfa05dee3b8a7",
+    "examples/oap/0.1.0/valid/event-label-untrusted.json": "47c1e3bb0fc7dfc2e4947a50c1031801313ed39140ff2ca4ee1758bbca62979c",
+    "examples/oap/0.1.0/valid/event-overlapping-apps.json": "d84ac9df95120311ac902ee005287c1f74da03f155778f49b84b6a8385cb90f1",
+    "examples/oap/0.1.0/valid/event-page-0.json": "8746ce60bd9cc021c46d7e6b4e7cb0904367899051c73f12f7eec9d4d995904c",
+    "examples/oap/0.1.0/valid/event-page-1.json": "b661283b80dec24936703cefa47a35e7666a4005c670167a61cb2a38dd0b6aec",
+    "examples/oap/0.1.0/valid/event-partial.json": "0243941f8b2ba043ceb10d978ebdf2c794329f69eaeede4df8d095ad10681fea",
+    "examples/oap/0.1.0/valid/local-grant-extensions.json": "3562cf6052d2615449649a55bb49578f4051dc2ed3a58a28fd2bd9dbdf3a22f5",
+    "examples/oap/0.1.0/valid/local-grant-multipage.json": "8a32416214a3fc5356229026fa665bdad074d0b4a4b7a2bb1f6a8da6eecd7b5e",
+    "examples/oap/0.1.0/valid/local-grant-no-label.json": "cdd172d8fffbb25b91e5ec761da38e9b0bb399ad24593dcdc0f5fb5c4664e34b",
+    "examples/oap/0.1.0/valid/local-grant-paused.json": "89b71ecf9c61309b47aafcec592f126643f1e768e91ff3ea081fe76bf02a7c66",
+    "examples/oap/0.1.0/valid/local-grant.json": "8b79b1cd4cf5a6f7054bc13fa47a6759e06033cfb8ff64c6daee476096537f57",
+    "examples/oap/0.1.0/valid/receipt-accepted.json": "986f320c89ca4442f2fb2594b0dd764f28ec02973aeb38a8358323a0aca89d31",
+    "examples/oap/0.1.0/valid/receipt-duplicate.json": "aae60fd1d3b218ff498bd5b2cd8422db571b3a0f7a8e378bb3da1a4f02e8d34c",
+    "examples/oap/0.1.0/valid/status-active.json": "aff8948097db70bf28bbae9bb69412952e2afc84a80b6e39cf3bcd3d00960771",
+    "examples/oap/0.1.0/valid/status-offline.json": "8b61a5b084ec92f979246b08aa1d29e120f65998a8f0afb0f317337e744f29e5",
+    "examples/oap/0.1.0/valid/status-revoked.json": "555e473487515ed3158bbc3d61f20395ebbb73811b5f3b2695d3a2054ad941ee",
+    "examples/oap/0.1.0/valid/status-unavailable.json": "73a6bf20303115a1d6ab6a994b151b6efe08d4d17e6ccf72c305b00e6f9e080f",
+    "examples/oap/0.1.0/valid/status-unknown.json": "b8a1078e7e26252517d80cc792d897523fdd1a9759f80b72f21f994977451c27",
+    "examples/oap/0.1.0/valid/subscription-extensions.json": "d69e122c77046fa2eab33b5e85e5ba74a602820b0b4dd3e28ae20211e88ccece",
+    "examples/oap/0.1.0/valid/subscription-multipage.json": "e3ca5a6180ab6f344fa8816411e0461f640591c9be4692517137dfe94cd9cb29",
+    "examples/oap/0.1.0/valid/subscription-no-label.json": "981954dacaf46ddcc3d391cf02b88f4b803f13e8a4e8b734e0eb71ce2e9cbfeb",
+    "examples/oap/0.1.0/valid/subscription.json": "0b17d2d07162727f3865d1a1b084e39551062a6b48bea9dadd113ab401e9ae2b",
+    "examples/oap/0.1.0/valid/timestamp-looking-label.json": "e6aa152d201c2405ea12d1f40eb528abc626f7c6bf819debdffbc809a0d440f3",
+    "package.json": "94510f9a6e4456eb4a19e8e4c2b1db001fbcbbbf49599bdbe8dc05b2d27dad70",
+    "pnpm-lock.yaml": "24ccf281e5a01fcc471bfd2ed709e91b5703a29f50807b1531d59ee141629cfc",
+    "schemas/oap/0.1.0/activity-summary.schema.json": "5c4ba3b66d47c2aba2799c3e04d26ec3199bd4303ca48c235827fb7314225149",
+    "schemas/oap/0.1.0/batch.schema.json": "cc67fe95f9cd3982ad0369de04266d030892ac3537e58336d33ed9f4079a18e0",
+    "schemas/oap/0.1.0/capabilities.schema.json": "acdf5ce27c318ad4d6f916c9e8105d469864352b2eb20cb39e9fa874597bcfa1",
+    "schemas/oap/0.1.0/common.schema.json": "ee79201ee2631df794ea5edcf185cfa8813766c27a5ec52965e94997f10a2dd2",
+    "schemas/oap/0.1.0/error.schema.json": "e3080d4c3feb1ef4efacd61af2e8eb577bbd32f6a7fce38a272ae445065688b9",
+    "schemas/oap/0.1.0/local-grant.schema.json": "acc22268553420ffef7a6bb1824c70fa9d1d31dec9898679b463fb980af4715a",
+    "schemas/oap/0.1.0/receipt.schema.json": "01a8163bb5440471e6870a1c2a8cc63d48b814e08f8af1bf7f3f3716d8fc01b9",
+    "schemas/oap/0.1.0/status.schema.json": "a525f5d3b7a646b2c11286ac88e13a7d3dd2be863a4e63f3fa7cc0731b0283bc",
+    "schemas/oap/0.1.0/subscription.schema.json": "a39d03ff0e2b40dfb9a049f609344d51ad0174b9a1859bc968c5a178d9d9aa3d",
+    "schemas/preparation/agent-compatibility.schema.json": "31c5219b40939774c327150cbca44861f8751f2b1ff0da82c5cc7703b85d660c",
+    "scripts/README.md": "1f1a50e8be0922bed0a9ef0c84505eb552eec3b9bdd29d1bcd2d7c1c9754f25a",
+    "scripts/build-android.ps1": "0a3c3d99af2e9f2cf29f5c0a646e1cfb87cb5a9309d5d8814e4dba26ef15aaa6",
+    "scripts/check-agent-readiness.mjs": "3615c04d45b3a105c30cce9470144f5ad28401997abe0f2e4a9b69ef99c1fcd8",
+    "scripts/generate-representation-fixtures.mjs": "fd04b0b89180b15bbd70ae8c5d8379faabf91f9de31f933f5440b40ccaffbd80",
+    "scripts/package-linux-verification.mjs": "6ac65d2d4d9591e408e8399c1473fc5160547e7672c91b5d9427a6a86cd4f4ba",
+    "scripts/run-linux-verification.sh": "48a9b3d32f22c1d6ac7f9421738f8ceb3c49d73bf1326ad4a8bcc2dec6832cc4",
+    "scripts/setup-android-tools.ps1": "33a5ea267194eab2cddc033ef61a972d10fb1381e99631c9332b966805833ac2",
+    "scripts/test-android-core.ps1": "6e5ba9fead92f837b1d955842d959fc05c83f6f03fcb67f09b8b106c490b3f46",
+    "scripts/validate-spec.mjs": "4670f70b788368bc91ef4e717d9045f024e9f5e25d6cb7e48a733a842f6938d3",
+    "scripts/verify-android.ps1": "a01c1f3dbf4e326444b0362b5c817660d0a25ab6e8de5bdf9ae8cd4913b77117",
+    "scripts/verify-reference.mjs": "8ab6d69146e12c6375e5a4ab7404397497bfe92f8a493f40c3c4268da3b5f40e",
+    "skills/liveabit/SKILL.md": "2f49574b5ba0bee9675159a0cd89b501b16d01c67aff62773e661c46efc7c487",
+    "skills/liveabit/agents/openai.yaml": "5c95f36a8eed3e7c9dd52c1c4549c2931cfb6a899fa605d0ed524f136f1109d6",
+    "skills/liveabit/references/evaluation.md": "7b4594a647b89abb13b69b52ced3077405aac6834e5b3e57b5f93b542571f0d9",
+    "skills/liveabit/references/scenarios.json": "642e973785daea188c55765b4131735a99b02b87ac9322ff220e4eaa0cd54876",
+    "skills/liveabit/scripts/score-review.mjs": "2447576840cdd2935782c4e21349523f7e532c1f2abf854b91d4a6c010a17bc2",
+    "specs/acceptance-criteria.md": "c33a2489a2c3dd439b4314928407c1aa84abe4da0e746488ff9d1f83901a8c74",
+    "specs/android/local-inspector.md": "c7d9acf4c8be2a4099ef9dfd9026feb1e803de45b747d5865f6bb252bc17ee65",
+    "specs/privacy-security.md": "2c4d65cba7ec82b41397c4b23176bafbc30b79bb4b532fe35a4e017cdd45d6cc",
+    "specs/product-requirements.md": "01d3eb6775104fc548d3c37d9fb253b98f3679ab160ddea4005c2cce994f27e9",
+    "specs/protocol/authorization.md": "c93df8c434b1348baaa9782a61ebd22ad85a4cc3fe1d61405d3b812e971b1378",
+    "specs/protocol/conformance.md": "0b6ff2a29dbb92f8cfa166807d3bb4d0ef21602b5967f9f7d0ab3b3d9118872f",
+    "specs/protocol/delivery.md": "b2ffe8ef6b44cfaa5a791855d545199712309c82ecf5062b7b88a55271832a19",
+    "specs/protocol/errors.md": "9c7c92af164f3e2113012fd78d397cc9f4e09b9faed77d02e66afbee8d3b5932",
+    "specs/protocol/interfaces.ts": "c4d3174a6e2489c66194ff49ab56357536dc9132fd0c2a94a890f0c56ab6c555",
+    "specs/protocol/oap.md": "31ac7f65fbd2cb08dd05401a869c247c152c1d9c67778f0a2f6ec24e856f2ade",
+    "specs/protocol/profiles/conditional-mcp-events.md": "5648372f39273aa9b3ebf3f01da16fb6a7499b849ebfee1b6db21cf7e5352147",
+    "specs/protocol/profiles/direct-https.md": "9adf0719542d2225bd3aa1175ac74dce509cd276b1ca98a0f544d8d0f5a322f8",
+    "specs/requirements-traceability.md": "4363fecd5840f69fea63f37ecc10b1add6751af00b992e034b439fcde7eeb3ff",
+    "specs/system-architecture.md": "a279a95647dff99a5034e0b39222d711bffc04497d415302a4c6a4f2a0c19a29",
+    "src/agent-readiness.mjs": "bd56c817be56e3e5412576983fd0ffa7161e45479016c22a17498677d948d247",
+    "src/aggregation.mjs": "742f6424eaef571032afc8a4115d50e47dc886bb1e0639f241814a819d6a7923",
+    "src/android-observation-model.mjs": "f648823971bdeb99e49439d13ba37e3d6dc490dddf7b087543f00db37cc5aec8",
+    "src/clock.mjs": "30562400608ebd07ddce0d7eab9f7ddb4c55c7ddb83fbc7e5f1e135842560c50",
+    "src/control-records.mjs": "3277d6cbee0e788a04bed7fe8166f98e9804b8486f128b9e7161447e5560a9ff",
+    "src/demo.mjs": "d561d54efca4096b4e86d7755482c07915e32089b61c3f55e9a6d41c69cbb3ef",
+    "src/direct-adapter.mjs": "136146208b170e50faed6c02abff48b3076dc2607322c1b0feac004526a65134",
+    "src/mock-receiver-worker.mjs": "5baeea3a2547e1ea2181ee868fa0f3309e96dd2049dd3ca9ac67e91b3536e928",
+    "src/pairing.mjs": "87ae98cf6233dc5a26b645564fb3e0dfac0dad80214c677f5c678483320ca04c",
+    "src/protocol.mjs": "4ee59dd4bdc9cc81de100be0661b20c84547a29e231492acbf2ab943844c226e",
+    "src/publisher-cli.mjs": "fcceee4a00cadf6652c11bf4d54703830be7f3f5dd1d349402ca32e5fea6d382",
+    "src/publisher.mjs": "b67177d3412fdacc3446fc9f4b693bd69f70c940b3247bf0c45817d6c3be0330",
+    "src/receiver-cli.mjs": "efbf847238294230aa9638d213fa02c60e5605b5c321bb3cc7a1c42e8fc1dd1b",
+    "src/receiver.mjs": "766ec54c7a01dcebe1f2aff3263105b84a8a2755b0b8ce62a14d2929dfde4cd3",
+    "src/storage.mjs": "6408e988fccbccabb31759a881d92d47bdda24df3401ad025c3481465849c25e",
+    "test/agent-readiness.test.mjs": "f5d78b5a30867249fbe1ba4f7bdd1a5e2d18ea8545482caab9f0f78c856f48f6",
+    "test/android-observation-model.test.mjs": "2a00d9dcaa0da00bd8e9a8dcb73266a730dec7bc7db52d20d6ce076515b5a52a",
+    "test/process.test.mjs": "1a3adee1ad210973385fbfe33073cb737ad3e430374e18b64c4125cf6eebb69b",
+    "test/protocol.test.mjs": "2e325316529e64efcd05166f01ed7e0198aaeacbd89c65447406ca7c10d38de0",
+    "test/publisher.test.mjs": "c4a1598885728e741b918ad2be2d5aa927c3b76e5ff59a35a0780b04adf81111",
+    "test/receiver.test.mjs": "9c06566dc17a5aa4512b6e31bb0307e1f27b7d9d73ac7d219610a78dd9c3c707",
+    "test/skill-policy.test.mjs": "753ea37eb68ac2de5b513c1a98748101052e83aae23c8bb8149742fba4a5689b",
+    "test/storage-clock.test.mjs": "248531131b2729972fff15352b75edee1a7da2ac71bc905a3ba179f7db901ff3",
+    "test/transport.test.mjs": "96866c7718ce18972bb6cd61297b2d46a1cabc5c926fc0cddc00131516de6993"
+  }
+}

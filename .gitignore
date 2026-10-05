@@ -1,0 +1,10 @@
+node_modules/
+.pnpm-store/
+*.log
+.env
+.env.*
+!.env.example
+artifacts/
+android/.gradle/
+android/**/build/
+android/local.properties
