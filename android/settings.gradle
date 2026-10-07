@@ -6,4 +6,4 @@ dependencyResolutionManagement {
     repositories { google(); mavenCentral() }
 }
 rootProject.name = 'liveabit-local-inspector'
-include ':app', ':collector-core'
+include ':app', ':collector-core', ':fixture-core', ':fixture-app'

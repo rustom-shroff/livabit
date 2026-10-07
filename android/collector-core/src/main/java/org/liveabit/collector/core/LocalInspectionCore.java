@@ -218,6 +218,18 @@ public final class LocalInspectionCore {
 
     public synchronized Snapshot snapshot() { return new Snapshot(this); }
 
+    /**
+     * Pure timing fence for a captured active snapshot. Both the latest sample
+     * and original session anchors matter: small adjustments must not accumulate
+     * into an unbounded wall/elapsed disagreement. This attests no read authority
+     * or source completeness and never mutates the inspection state.
+     */
+    public static boolean isClockContinuous(Snapshot snapshot, ClockSample now) {
+        return snapshot != null && snapshot.active && now != null
+            && clockContinuous(now, snapshot.lastWallMillis, snapshot.lastElapsedMillis,
+                snapshot.sessionStartWallMillis, snapshot.sessionStartElapsedMillis);
+    }
+
     /** null means inactive, discontinuous clock, expired, empty interval, or an in-flight query. */
     public synchronized QueryTicket beginQuery(ClockSample now) {
         requireClock(now);
@@ -326,9 +338,8 @@ public final class LocalInspectionCore {
 
     private boolean maintain(ClockSample now) {
         if (!active) return false;
-        long wallDelta = now.wallMillis - lastWallMillis;
-        long elapsedDelta = now.elapsedMillis - lastElapsedMillis;
-        if (wallDelta < 0 || elapsedDelta < 0 || differenceExceeds(wallDelta, elapsedDelta, CLOCK_TOLERANCE_MILLIS)) {
+        if (!clockContinuous(now, lastWallMillis, lastElapsedMillis,
+                sessionStartWallMillis, sessionStartElapsedMillis)) {
             stop("clock_discontinuity_requires_explicit_start", now);
             return false;
         }
@@ -368,6 +379,16 @@ public final class LocalInspectionCore {
         return new CommitResult(accepted, reason, size, this);
     }
     private static void requireClock(ClockSample now) { if (now == null) throw invalid(); }
+    private static boolean clockContinuous(ClockSample now, long lastWall, long lastElapsed,
+            long sessionWall, long sessionElapsed) {
+        long wallDelta = now.wallMillis - lastWall;
+        long elapsedDelta = now.elapsedMillis - lastElapsed;
+        long wholeWallDelta = now.wallMillis - sessionWall;
+        long wholeElapsedDelta = now.elapsedMillis - sessionElapsed;
+        return wallDelta >= 0 && elapsedDelta >= 0 && wholeWallDelta >= 0 && wholeElapsedDelta >= 0
+            && !differenceExceeds(wallDelta, elapsedDelta, CLOCK_TOLERANCE_MILLIS)
+            && !differenceExceeds(wholeWallDelta, wholeElapsedDelta, CLOCK_TOLERANCE_MILLIS);
+    }
     private static boolean differenceExceeds(long left, long right, long limit) {
         // Both deltas are nonnegative here; subtraction cannot overflow.
         return left >= right ? left - right > limit : right - left > limit;

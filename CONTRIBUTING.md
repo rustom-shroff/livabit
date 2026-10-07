@@ -23,4 +23,37 @@ Use authoritative documentation for capability claims and record the verificatio
 
 Never claim a simulated receiver establishes real-host interoperability, a webhook acknowledgment establishes user notification, or an API login grants access to consumer assistant memories. Use deterministic consumers for protocol tests. Do not introduce real model calls, cloud deployments, telemetry services, or Android code during Phases 1 and 2.
 
-Open-source distribution is intended, but the software/specification licenses have not been selected. Do not add a guessed license or publish the project before that decision.
+## License and contribution terms
+
+The project uses the [MIT License](LICENSE) for project-authored software,
+specifications, schemas, examples, documentation and skill instructions, unless
+an individual file explicitly states otherwise. By submitting a contribution,
+you agree to license it under these terms and confirm you have the right to do
+so. You retain copyright in your contribution. No copyright assignment or
+separate contributor agreement is required by this project.
+
+Preserve existing copyright and license notices. Identify third-party material
+and its license, verify compatibility, and update
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) when dependencies or bundled
+material change. Do not copy code you lack permission to redistribute.
+
+## Getting started and submitting changes
+
+Use the [README](README.md), [reference instructions](docs/reference.md) and
+[Android build/trial guide](android/README.md) for the relevant setup. Pin and
+install dependencies using the documented lockfile workflow. Use synthetic
+activity for tests; never submit personal observations, credentials, signing
+keys, downloaded SDKs, dependency directories or generated build caches.
+
+Open issues with a clear expected/observed behavior, relevant version and safe
+reproduction steps. For pull requests, describe the problem, the resulting
+behavior, affected specifications and validation performed. Keep unrelated
+changes separate. Run the documented checks appropriate to your change;
+documentation-only changes do not require rebuilding APKs or rerunning the
+emulator suite. Follow the [community conduct policy](CODE_OF_CONDUCT.md) and
+report vulnerabilities through [SECURITY.md](SECURITY.md).
+
+For source or binary distribution, include LICENSE and applicable third-party
+notices. A public source license does not authorize publishing private test
+data, development signing keys, proprietary SDKs or a production app release.
+Publishing and deployment remain separate project decisions.

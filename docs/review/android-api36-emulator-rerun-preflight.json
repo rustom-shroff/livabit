@@ -1,0 +1,16 @@
+{
+  "result": "pass_reused_guest_readiness_only",
+  "generated_at": "2026-10-07T08:41:40.2595423Z",
+  "scope": "owned_api36_reused_guest_after_harness_recovery",
+  "serial": "emulator-5582",
+  "avd": "liveabit-api36-test",
+  "original_startup_sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+  "boot_completed": true,
+  "stock_launcher_focused": true,
+  "no_anr_since_boot": true,
+  "guest_reused_without_new_boot": true,
+  "workflow_suite_passed": false,
+  "apks_rebuilt": false,
+  "physical_device_accessed": false,
+  "prior_attempt_relabelled": false
+}

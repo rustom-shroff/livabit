@@ -1,0 +1,871 @@
+{
+  "result": "pass_owned_offline_replay",
+  "generated_at": "2026-10-07T07:03:16.193Z",
+  "scope": "normalized_owned_fixture_trace_with_synthetic_authorization_and_clock",
+  "device_accessed": false,
+  "network_accessed": false,
+  "apk_rebuilt": false,
+  "inference_policy_changed": false,
+  "production_accuracy_pass": false,
+  "recorded_native_baseline": "0.2.2",
+  "current_native_candidate_checked_separately": true,
+  "source_sha256": {
+    "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java": "6638ef3b839fc6fe464a48d3c6f1847144154b0997e9421cba15919acb3b1771",
+    "android/collector-core/src/main/java/org/liveabit/collector/core/FixtureComparison.java": "4b13f9653875fbd94273a8b9b0d999490f302a5a1b565c86c349c6ad223004ff",
+    "artifacts/android-inspection-replay/baseline-core/LocalInspectionCore.java": "2f583eead4639b53ab80f292037af6effec4137e399169e01ff118991f0c2838",
+    "artifacts/android-inspection-replay/baseline-core/FixtureComparison.java": "4b13f9653875fbd94273a8b9b0d999490f302a5a1b565c86c349c6ad223004ff",
+    "scripts/extract-android-inspection-replay.mjs": "aae59a11abfd34c93d83451bfbb5f17bebcd97fb6d18f5923e80092a79fdb7f7",
+    "scripts/replay-android-inspection.mjs": "5af029ae021b6981d4604342375d1fb264eb0db4aa89967d728db9b2e1d4aacd",
+    "tools/android-inspection-replay/InspectionReplay.java": "254b9c0070d7034c500370d5ef0c41819df1c38ef2cccc58e245ca608dc379de"
+  },
+  "compiler": "javac 17.0.20.1",
+  "compiler_executable_sha256": "9c71eee841aeebb723bfc2cceca7d72c6c1988fb679402f4123aa4d0e86aa549",
+  "runtime_executable_sha256": "1977f302375adbb920d41dac65c7e22eb9c2ed8e1e8d6258964154ff16f14406",
+  "derivation_path": "artifacts/android-inspection-replay/runs/12bb1823-eab6-4a1f-80fb-7f080084a585/derived/evidence.json",
+  "derivation_sha256": "5ec494adbb94a1321ea0b09aac6dda906c3fec9cfc9b3c195c691c6a9b6df131",
+  "display_mapping_assumption": {
+    "year": 2026,
+    "utc_offset": "-07:00",
+    "measured_guest_timezone": false,
+    "reason": "Archived UI omits year and timezone. This fixed mapping is an explicit derivation assumption for this archive."
+  },
+  "limitations": [
+    "Only already archived owned synthetic UI is read. No device, app inventory, personal activity, export feature or network is accessed.",
+    "Complete means all retained projected records shown in these UI blocks; it does not attest complete Android usage history.",
+    "Latest-first display order is preserved within equal-timestamp groups; source arrival order is not recovered.",
+    "Consent, query and elapsed-clock anchors are synthetic; this is not a replay of actual Android authorization or query timing.",
+    "Manually entered fixture values remain unauthenticated. Matching historical arithmetic is not measured production accuracy."
+  ],
+  "scenarios": [
+    {
+      "id": "idle",
+      "input_path": "artifacts/android-inspection-replay/runs/12bb1823-eab6-4a1f-80fb-7f080084a585/derived/idle.tsv",
+      "input_sha256": "5e33faee650c6a8dc032496c6260664793cd3d8f988e8febaad888748f2fe66e",
+      "output_path": "artifacts/android-inspection-replay/runs/12bb1823-eab6-4a1f-80fb-7f080084a585/idle-result.json",
+      "output_sha256": "f3e4778eaf49a6e2f08d673ef270860eecfa643ca7df2e599cad6c1a3d949807",
+      "archived_comparison_reproduced": true,
+      "candidate_native_replay_equal_to_baseline": true,
+      "interpretation": {
+        "retained_trace_status": "numerical_unverified",
+        "comparison_status": "known_unverified_estimate",
+        "estimates_discarded": false,
+        "accuracy_verified": false,
+        "source_completeness": "unknown"
+      },
+      "replay": {
+        "schema": "OAP_OWNED_REPLAY_RESULT_V1",
+        "replay_kind": "host_only_actual_native_core_with_synthetic_authority_and_clock",
+        "package_name": "org.liveabit.fixture",
+        "synthetic_clock": {
+          "wall_base_millis": 1000000,
+          "session_start_wall_millis": 999999,
+          "session_start_elapsed_millis": 1000,
+          "query_end_offset": 88202,
+          "clock_deltas_paired": true,
+          "actual_android_query_replayed": false
+        },
+        "input": {
+          "event_count": 2,
+          "events": [
+            {
+              "offset": 0,
+              "type": "RESUME"
+            },
+            {
+              "offset": 88201,
+              "type": "PAUSE"
+            }
+          ],
+          "comparison_start_offset": 6976,
+          "comparison_end_offset": 62027,
+          "fixture_duration_millis": 55051,
+          "fixture_value_verified": false
+        },
+        "result": {
+          "retained_event_count": 2,
+          "intervals": [
+            {
+              "start_offset_millis": 0,
+              "end_offset_millis": 88201,
+              "duration_millis": 88201
+            }
+          ],
+          "estimated_duration_millis": 88201,
+          "reasons": [
+            "unknown_initial_state",
+            "unverified_source_continuity"
+          ],
+          "coverage_unknown": true,
+          "physical_android_verified": false,
+          "oap_summary_eligible": false,
+          "duration_verified": false,
+          "comparison": {
+            "status": "KNOWN_ESTIMATE",
+            "reason": "COMPARISON_AVAILABLE",
+            "accepted": true,
+            "candidate_duration_millis": 55051,
+            "signed_difference_millis": 0,
+            "fixture_duration_millis": 55051,
+            "overlapping_closed_intervals": 1,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity"
+            ],
+            "coverage_unknown": true,
+            "physical_android_verified": false,
+            "physical_device_tested": false,
+            "oap_summary_eligible": false,
+            "fixture_value_verified": false,
+            "duration_verified": false
+          }
+        },
+        "prefix_steps": [
+          {
+            "group_offset": 0,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 0,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 1,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 88201,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 88201,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 2,
+            "action": "close_inferred_interval",
+            "explanation": "A returned pause closes the native package-level sequence; its duration remains an unverified diagnostic.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 88201,
+                "duration_millis": 88201
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 88201,
+                "duration_millis": 88201
+              }
+            ],
+            "retained_duration_millis": 88201,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          }
+        ],
+        "checks": {
+          "same_time_permutations": {
+            "passed": true,
+            "multi_record_groups": 0,
+            "mixed_pair_groups": 0,
+            "pair_group_combinations_checked": 1,
+            "all_mixed_pair_combinations_checked": true,
+            "pair_check_strategy": "all_combinations",
+            "exhaustive_pair_group_limit": 12,
+            "larger_groups": 0,
+            "larger_group_reversals_checked": 0,
+            "all_larger_group_permutations_checked": true,
+            "ordering_is_not_trusted": true
+          },
+          "complete_group_query_partition": {
+            "passed": true,
+            "complete_timestamp_groups": 2,
+            "strategies": [
+              {
+                "complete_groups_per_query": 1,
+                "queries": 2,
+                "passed": true
+              },
+              {
+                "complete_groups_per_query": 2,
+                "queries": 1,
+                "passed": true
+              },
+              {
+                "complete_groups_per_query": 3,
+                "queries": 1,
+                "passed": true
+              }
+            ],
+            "same_timestamp_group_never_split": true,
+            "report_and_comparison_equal": true,
+            "retained_event_count_equal": true,
+            "final_query_cursor_equal": true,
+            "actual_android_query_partition_verified": false
+          },
+          "genuine_pause_gap_no_fill": {
+            "passed": true,
+            "synthetic_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 10,
+                "duration_millis": 10
+              },
+              {
+                "start_offset_millis": 20,
+                "end_offset_millis": 30,
+                "duration_millis": 10
+              }
+            ],
+            "retained_duration_millis": 20,
+            "excluded_pause_gaps_millis": [
+              10
+            ],
+            "synthetic_check_only": true
+          }
+        },
+        "limitations": [
+          "Offsets and consent/query/clock anchors are synthetic replay inputs, not authenticated Android observations.",
+          "This runner does not read an Android device, establish source completeness, or validate an APK.",
+          "Retained durations remain unverified diagnostics; null is unknown rather than zero use.",
+          "Replay checks do not establish timing accuracy, current attention, lower bounds, or OAP eligibility."
+        ]
+      }
+    },
+    {
+      "id": "handoff",
+      "input_path": "artifacts/android-inspection-replay/runs/12bb1823-eab6-4a1f-80fb-7f080084a585/derived/handoff.tsv",
+      "input_sha256": "38878c15747579d206ebdcca0d2696dcc5a55d32929b1027ec92953b89a3a7c3",
+      "output_path": "artifacts/android-inspection-replay/runs/12bb1823-eab6-4a1f-80fb-7f080084a585/handoff-result.json",
+      "output_sha256": "92bc314a255935172e47deae43c67689bb415ea41cae248999c2445d584f1431",
+      "archived_comparison_reproduced": true,
+      "candidate_native_replay_equal_to_baseline": true,
+      "interpretation": {
+        "retained_trace_status": "partial_unverified",
+        "comparison_status": "known_partial_unverified_estimate",
+        "estimates_discarded": true,
+        "accuracy_verified": false,
+        "source_completeness": "unknown"
+      },
+      "replay": {
+        "schema": "OAP_OWNED_REPLAY_RESULT_V1",
+        "replay_kind": "host_only_actual_native_core_with_synthetic_authority_and_clock",
+        "package_name": "org.liveabit.fixture",
+        "synthetic_clock": {
+          "wall_base_millis": 1000000,
+          "session_start_wall_millis": 999999,
+          "session_start_elapsed_millis": 1000,
+          "query_end_offset": 84538,
+          "clock_deltas_paired": true,
+          "actual_android_query_replayed": false
+        },
+        "input": {
+          "event_count": 14,
+          "events": [
+            {
+              "offset": 0,
+              "type": "RESUME"
+            },
+            {
+              "offset": 33475,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 33490,
+              "type": "RESUME"
+            },
+            {
+              "offset": 37138,
+              "type": "RESUME"
+            },
+            {
+              "offset": 37138,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 40741,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 40748,
+              "type": "RESUME"
+            },
+            {
+              "offset": 44366,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 44372,
+              "type": "RESUME"
+            },
+            {
+              "offset": 47979,
+              "type": "RESUME"
+            },
+            {
+              "offset": 47979,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 51637,
+              "type": "PAUSE"
+            },
+            {
+              "offset": 51641,
+              "type": "RESUME"
+            },
+            {
+              "offset": 84537,
+              "type": "PAUSE"
+            }
+          ],
+          "comparison_start_offset": 7480,
+          "comparison_end_offset": 54844,
+          "fixture_duration_millis": 47064,
+          "fixture_value_verified": false
+        },
+        "result": {
+          "retained_event_count": 14,
+          "intervals": [
+            {
+              "start_offset_millis": 51641,
+              "end_offset_millis": 84537,
+              "duration_millis": 32896
+            }
+          ],
+          "estimated_duration_millis": 32896,
+          "reasons": [
+            "unknown_initial_state",
+            "unverified_source_continuity",
+            "ambiguous_same_timestamp_transitions",
+            "unmatched_pause_invalidates_prior_estimates"
+          ],
+          "coverage_unknown": true,
+          "physical_android_verified": false,
+          "oap_summary_eligible": false,
+          "duration_verified": false,
+          "comparison": {
+            "status": "KNOWN_ESTIMATE",
+            "reason": "COMPARISON_AVAILABLE",
+            "accepted": true,
+            "candidate_duration_millis": 3203,
+            "signed_difference_millis": -43861,
+            "fixture_duration_millis": 47064,
+            "overlapping_closed_intervals": 1,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "physical_android_verified": false,
+            "physical_device_tested": false,
+            "oap_summary_eligible": false,
+            "fixture_value_verified": false,
+            "duration_verified": false
+          }
+        },
+        "prefix_steps": [
+          {
+            "group_offset": 0,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 0,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 1,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 33475,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 33475,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 2,
+            "action": "close_inferred_interval",
+            "explanation": "A returned pause closes the native package-level sequence; its duration remains an unverified diagnostic.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 33475,
+                "duration_millis": 33475
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 33475,
+                "duration_millis": 33475
+              }
+            ],
+            "retained_duration_millis": 33475,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 33490,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 33490,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 3,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 33475,
+                "duration_millis": 33475
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": 33475,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 37138,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 37138,
+                "type": "RESUME"
+              },
+              {
+                "offset": 37138,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 5,
+            "action": "discard_and_reset_for_same_timestamp_group",
+            "explanation": "The native policy treats every multi-record timestamp group as ambiguous, clears earlier closed estimates and resets pairing state without ordering its records.",
+            "retained_intervals": [],
+            "discarded_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 33475,
+                "duration_millis": 33475
+              }
+            ],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 40741,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 40741,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 6,
+            "action": "discard_for_unmatched_pause",
+            "explanation": "The native policy has no matching open resume; a missing start can precede earlier phases, so earlier closed estimates are discarded.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 40748,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 40748,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 7,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 44366,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 44366,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 8,
+            "action": "close_inferred_interval",
+            "explanation": "A returned pause closes the native package-level sequence; its duration remains an unverified diagnostic.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 40748,
+                "end_offset_millis": 44366,
+                "duration_millis": 3618
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [
+              {
+                "start_offset_millis": 40748,
+                "end_offset_millis": 44366,
+                "duration_millis": 3618
+              }
+            ],
+            "retained_duration_millis": 3618,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 44372,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 44372,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 9,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 40748,
+                "end_offset_millis": 44366,
+                "duration_millis": 3618
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": 3618,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 47979,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 47979,
+                "type": "RESUME"
+              },
+              {
+                "offset": 47979,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 11,
+            "action": "discard_and_reset_for_same_timestamp_group",
+            "explanation": "The native policy treats every multi-record timestamp group as ambiguous, clears earlier closed estimates and resets pairing state without ordering its records.",
+            "retained_intervals": [],
+            "discarded_intervals": [
+              {
+                "start_offset_millis": 40748,
+                "end_offset_millis": 44366,
+                "duration_millis": 3618
+              }
+            ],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 51637,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 51637,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 12,
+            "action": "discard_for_unmatched_pause",
+            "explanation": "The native policy has no matching open resume; a missing start can precede earlier phases, so earlier closed estimates are discarded.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 51641,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 51641,
+                "type": "RESUME"
+              }
+            ],
+            "native_event_count": 13,
+            "action": "open_sequence",
+            "explanation": "The native policy records a resume; any package-level overlap remains ambiguous.",
+            "retained_intervals": [],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [],
+            "retained_duration_millis": null,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates",
+              "open_transition_sequence"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          },
+          {
+            "group_offset": 84537,
+            "group_complete": true,
+            "input": [
+              {
+                "offset": 84537,
+                "type": "PAUSE"
+              }
+            ],
+            "native_event_count": 14,
+            "action": "close_inferred_interval",
+            "explanation": "A returned pause closes the native package-level sequence; its duration remains an unverified diagnostic.",
+            "retained_intervals": [
+              {
+                "start_offset_millis": 51641,
+                "end_offset_millis": 84537,
+                "duration_millis": 32896
+              }
+            ],
+            "discarded_intervals": [],
+            "newly_retained_intervals": [
+              {
+                "start_offset_millis": 51641,
+                "end_offset_millis": 84537,
+                "duration_millis": 32896
+              }
+            ],
+            "retained_duration_millis": 32896,
+            "native_reasons": [
+              "unknown_initial_state",
+              "unverified_source_continuity",
+              "ambiguous_same_timestamp_transitions",
+              "unmatched_pause_invalidates_prior_estimates"
+            ],
+            "coverage_unknown": true,
+            "duration_verified": false
+          }
+        ],
+        "checks": {
+          "same_time_permutations": {
+            "passed": true,
+            "multi_record_groups": 2,
+            "mixed_pair_groups": 2,
+            "pair_group_combinations_checked": 4,
+            "all_mixed_pair_combinations_checked": true,
+            "pair_check_strategy": "all_combinations",
+            "exhaustive_pair_group_limit": 12,
+            "larger_groups": 0,
+            "larger_group_reversals_checked": 0,
+            "all_larger_group_permutations_checked": true,
+            "ordering_is_not_trusted": true
+          },
+          "complete_group_query_partition": {
+            "passed": true,
+            "complete_timestamp_groups": 12,
+            "strategies": [
+              {
+                "complete_groups_per_query": 1,
+                "queries": 12,
+                "passed": true
+              },
+              {
+                "complete_groups_per_query": 2,
+                "queries": 6,
+                "passed": true
+              },
+              {
+                "complete_groups_per_query": 3,
+                "queries": 4,
+                "passed": true
+              }
+            ],
+            "same_timestamp_group_never_split": true,
+            "report_and_comparison_equal": true,
+            "retained_event_count_equal": true,
+            "final_query_cursor_equal": true,
+            "actual_android_query_partition_verified": false
+          },
+          "genuine_pause_gap_no_fill": {
+            "passed": true,
+            "synthetic_intervals": [
+              {
+                "start_offset_millis": 0,
+                "end_offset_millis": 10,
+                "duration_millis": 10
+              },
+              {
+                "start_offset_millis": 20,
+                "end_offset_millis": 30,
+                "duration_millis": 10
+              }
+            ],
+            "retained_duration_millis": 20,
+            "excluded_pause_gaps_millis": [
+              10
+            ],
+            "synthetic_check_only": true
+          }
+        },
+        "limitations": [
+          "Offsets and consent/query/clock anchors are synthetic replay inputs, not authenticated Android observations.",
+          "This runner does not read an Android device, establish source completeness, or validate an APK.",
+          "Retained durations remain unverified diagnostics; null is unknown rather than zero use.",
+          "Replay checks do not establish timing accuracy, current attention, lower bounds, or OAP eligibility."
+        ]
+      }
+    }
+  ],
+  "extraction_checks": {
+    "passed": 13,
+    "scope": "host_only_extraction_rejections_and_equal_timestamp_order",
+    "android_runtime_verified": false
+  },
+  "input_rejections": [
+    {
+      "name": "wrong_format",
+      "rejected": true
+    },
+    {
+      "name": "unbounded_count",
+      "rejected": true
+    },
+    {
+      "name": "negative_time",
+      "rejected": true
+    },
+    {
+      "name": "unordered_time",
+      "rejected": true
+    },
+    {
+      "name": "unrecognized_type",
+      "rejected": true
+    },
+    {
+      "name": "fractional_time",
+      "rejected": true
+    },
+    {
+      "name": "extra_record",
+      "rejected": true
+    },
+    {
+      "name": "oversized_window",
+      "rejected": true
+    },
+    {
+      "name": "oversized_trace",
+      "rejected": true
+    },
+    {
+      "name": "missing_record",
+      "rejected": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Auto-selecting single ABI x86_64
+Error: Could not load devices from C:\Users\rustom\Documents\projects\livabit\artifacts\android-sdk\system-images\android-35\default\x86_64\devices.xml
+Error: C:\Users\rustom\Documents\projects\livabit\artifacts\android-sdk\system-images\android-35\default\x86_64\devices.xml
+Error: Could not load devices from C:\Users\rustom\Documents\projects\livabit\artifacts\android-sdk\system-images\android-36\default\x86_64\devices.xml
+Error: C:\Users\rustom\Documents\projects\livabit\artifacts\android-sdk\system-images\android-36\default\x86_64\devices.xml

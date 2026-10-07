@@ -14,8 +14,8 @@ android {
         applicationId = 'org.liveabit.inspect'
         minSdk = 35
         targetSdk = 37
-        versionCode = 1
-        versionName = '0.1.0-local'
+        versionCode = 6
+        versionName = '0.2.4-local'
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

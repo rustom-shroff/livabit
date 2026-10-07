@@ -1,0 +1,2517 @@
+{
+  "result": "pass_with_emulator_limits",
+  "generated_at": "2026-10-07T10:13:41.938Z",
+  "scope": "dedicated_owned_emulator_runtime_ui",
+  "environment": {
+    "serial": "emulator-5582",
+    "expected_avd": "liveabit-api36-test",
+    "actual_avd": "liveabit-api36-test",
+    "api": 36,
+    "android_release": "16",
+    "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:16/BE2A.250530.026.D1/13818094:userdebug/test-keys",
+    "abi": "x86_64",
+    "uptime_seconds_at_start": 7107.26,
+    "qemu_verified": true,
+    "account_free_verified": true,
+    "guest_time_zone_property": "America/Los_Angeles",
+    "guest_time_zone_property_source": "read_only_getprop_persist.sys.timezone",
+    "display": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "overall_timeout_millis": 5400000,
+  "cases": [
+    {
+      "name": "fresh_launch_and_permission_denial",
+      "started_at": "2026-10-07T10:13:43.671Z",
+      "result": "pass",
+      "details": {
+        "denied_start_stopped": true,
+        "empty_scope_rejected": true
+      },
+      "finished_at": "2026-10-07T10:17:07.728Z"
+    },
+    {
+      "name": "usage_settings_grant_is_not_session_consent",
+      "started_at": "2026-10-07T10:17:07.730Z",
+      "result": "pass",
+      "details": {
+        "settings_ui_grant": true,
+        "emulator_appops_fallback": false,
+        "grant_alone_keeps_stopped": true
+      },
+      "finished_at": "2026-10-07T10:18:30.997Z"
+    },
+    {
+      "name": "manual_scope_validation_and_system_picker",
+      "started_at": "2026-10-07T10:18:30.998Z",
+      "result": "pass",
+      "details": {
+        "exact_identifier_fallback_exercised": true,
+        "malformed_identifier_rejected": true,
+        "system_picker_opened": true,
+        "picker_selection_runtime_verified": true,
+        "picker_cancel_exercised": false
+      },
+      "finished_at": "2026-10-07T10:21:14.875Z"
+    },
+    {
+      "name": "no_preconsent_backfill_and_empty_is_unknown",
+      "started_at": "2026-10-07T10:21:14.876Z",
+      "result": "pass",
+      "details": {
+        "preconsent_record_count": 0,
+        "empty_read_reports_unknown": true
+      },
+      "finished_at": "2026-10-07T10:22:52.107Z"
+    },
+    {
+      "name": "controlled_idle_timing_and_scope",
+      "started_at": "2026-10-07T10:22:52.108Z",
+      "result": "pass",
+      "details": {
+        "scenario": "idle",
+        "start": 1791368601593,
+        "end": 1791368659057,
+        "duration": 57465,
+        "callbacks": 0,
+        "retained_transitions": 2,
+        "comparison_status": "known_unverified_estimate",
+        "estimates_discarded": false,
+        "partial_estimate_warning_verified": false,
+        "discarded_estimate_reasons": [],
+        "candidate_duration_millis": 57464,
+        "signed_difference_millis": -1,
+        "timing_context": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791368592974,
+          "session_start_elapsed_millis": 7678710,
+          "query_cursor_wall_millis_exclusive": 1791368691542,
+          "report_clock_wall_millis": 1791368881309,
+          "report_clock_elapsed_millis": 7967045,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791368687063,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791368593494,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791368593494,
+              "end_exclusive": 1791368687063
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0163-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0164-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0165-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0166-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0167-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0168-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0169-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0170-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0171-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0172-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0173-fixture-comparison.xml"
+          ]
+        },
+        "exact_context_clipped_comparison_matches": true,
+        "production_accuracy_pass": false,
+        "fixture_ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0115-controlled-idle-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0116-controlled-idle-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0117-controlled-idle-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0118-controlled-idle-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0119-controlled-idle-timing-and-scope.xml"
+        ],
+        "comparison_ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0163-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0164-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0165-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0166-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0167-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0168-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0169-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0170-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0171-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0172-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0173-fixture-comparison.xml"
+        ],
+        "repeated_query_retained_count_stable": true,
+        "repeated_context_records_and_session_stable": true,
+        "repeated_timing_context": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791368592974,
+          "session_start_elapsed_millis": 7678710,
+          "query_cursor_wall_millis_exclusive": 1791368948707,
+          "report_clock_wall_millis": 1791368948760,
+          "report_clock_elapsed_millis": 8034496,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791368687063,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791368593494,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791368593494,
+              "end_exclusive": 1791368687063
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0177-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0178-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0179-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0180-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0181-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0182-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0183-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0184-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0185-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0186-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0187-inspection-result.xml"
+          ]
+        }
+      },
+      "finished_at": "2026-10-07T10:30:00.176Z"
+    },
+    {
+      "name": "controlled_screen_handoffs_timing_and_scope",
+      "started_at": "2026-10-07T10:30:00.177Z",
+      "result": "pass",
+      "details": {
+        "scenario": "screen_handoffs",
+        "start": 1791369028489,
+        "end": 1791369077823,
+        "duration": 48841,
+        "callbacks": 12,
+        "retained_transitions": 14,
+        "comparison_status": "known_unverified_estimate",
+        "estimates_discarded": false,
+        "partial_estimate_warning_verified": false,
+        "discarded_estimate_reasons": [],
+        "candidate_duration_millis": 49263,
+        "signed_difference_millis": 422,
+        "timing_context": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791369019992,
+          "session_start_elapsed_millis": 8105730,
+          "query_cursor_wall_millis_exclusive": 1791369114443,
+          "report_clock_wall_millis": 1791369394042,
+          "report_clock_elapsed_millis": 8479778,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791369109914,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369074214,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369074202,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369070446,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369070422,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369066703,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369066702,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369062870,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369062863,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369059174,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369059171,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369055317,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369055293,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369020473,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791369074214,
+              "end_exclusive": 1791369109914
+            },
+            {
+              "start_inclusive": 1791369070446,
+              "end_exclusive": 1791369074202
+            },
+            {
+              "start_inclusive": 1791369066703,
+              "end_exclusive": 1791369070422
+            },
+            {
+              "start_inclusive": 1791369062870,
+              "end_exclusive": 1791369066702
+            },
+            {
+              "start_inclusive": 1791369059174,
+              "end_exclusive": 1791369062863
+            },
+            {
+              "start_inclusive": 1791369055317,
+              "end_exclusive": 1791369059171
+            },
+            {
+              "start_inclusive": 1791369020473,
+              "end_exclusive": 1791369055293
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0276-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0277-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0278-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0279-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0280-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0281-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0282-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0283-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0284-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0285-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0286-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0287-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0288-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0289-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0290-fixture-comparison.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0291-fixture-comparison.xml"
+          ]
+        },
+        "exact_context_clipped_comparison_matches": true,
+        "production_accuracy_pass": false,
+        "fixture_ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0205-controlled-screen-handoffs-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0206-controlled-screen-handoffs-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0207-controlled-screen-handoffs-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0208-controlled-screen-handoffs-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0209-controlled-screen-handoffs-timing-and-scope.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0210-controlled-screen-handoffs-timing-and-scope.xml"
+        ],
+        "comparison_ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0276-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0277-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0278-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0279-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0280-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0281-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0282-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0283-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0284-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0285-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0286-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0287-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0288-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0289-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0290-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0291-fixture-comparison.xml"
+        ],
+        "repeated_query_retained_count_stable": true,
+        "repeated_context_records_and_session_stable": true,
+        "repeated_timing_context": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791369019992,
+          "session_start_elapsed_millis": 8105730,
+          "query_cursor_wall_millis_exclusive": 1791369478807,
+          "report_clock_wall_millis": 1791369478901,
+          "report_clock_elapsed_millis": 8564637,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791369109914,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369074214,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369074202,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369070446,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369070422,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369066703,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369066702,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369062870,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369062863,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369059174,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369059171,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369055317,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369055293,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369020473,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791369074214,
+              "end_exclusive": 1791369109914
+            },
+            {
+              "start_inclusive": 1791369070446,
+              "end_exclusive": 1791369074202
+            },
+            {
+              "start_inclusive": 1791369066703,
+              "end_exclusive": 1791369070422
+            },
+            {
+              "start_inclusive": 1791369062870,
+              "end_exclusive": 1791369066702
+            },
+            {
+              "start_inclusive": 1791369059174,
+              "end_exclusive": 1791369062863
+            },
+            {
+              "start_inclusive": 1791369055317,
+              "end_exclusive": 1791369059171
+            },
+            {
+              "start_inclusive": 1791369020473,
+              "end_exclusive": 1791369055293
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0295-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0296-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0297-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0298-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0299-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0300-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0301-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0302-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0303-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0304-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0305-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0306-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0307-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0308-inspection-result.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0309-inspection-result.xml"
+          ]
+        }
+      },
+      "finished_at": "2026-10-07T10:39:05.114Z"
+    },
+    {
+      "name": "comparison_validation_and_input_erasure",
+      "started_at": "2026-10-07T10:39:05.116Z",
+      "result": "pass",
+      "details": {
+        "reversed_window_rejected": true,
+        "oversized_duration_rejected": true,
+        "outside_session_window_rejected": true,
+        "home_clears_inputs_and_result": true
+      },
+      "finished_at": "2026-10-07T10:49:14.215Z"
+    },
+    {
+      "name": "stop_fresh_horizon_and_restart",
+      "started_at": "2026-10-07T10:49:14.216Z",
+      "result": "pass",
+      "details": {
+        "stop_erases_observations": true,
+        "selection_preserved": true,
+        "fresh_horizon_no_backfill": true,
+        "inspector_process_restart_stopped": true,
+        "fixture_process_restart_empty": true,
+        "populated_timing_details_before_stop": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791369019992,
+          "session_start_elapsed_millis": 8105730,
+          "query_cursor_wall_millis_exclusive": 1791369478807,
+          "report_clock_wall_millis": 1791370156025,
+          "report_clock_elapsed_millis": 9241761,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791369109914,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369074214,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369074202,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369070446,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369070422,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369066703,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369066702,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369062870,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369062863,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369059174,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369059171,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369055317,
+              "type": "RESUME"
+            },
+            {
+              "timestamp_millis": 1791369055293,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791369020473,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791369074214,
+              "end_exclusive": 1791369109914
+            },
+            {
+              "start_inclusive": 1791369070446,
+              "end_exclusive": 1791369074202
+            },
+            {
+              "start_inclusive": 1791369066703,
+              "end_exclusive": 1791369070422
+            },
+            {
+              "start_inclusive": 1791369062870,
+              "end_exclusive": 1791369066702
+            },
+            {
+              "start_inclusive": 1791369059174,
+              "end_exclusive": 1791369062863
+            },
+            {
+              "start_inclusive": 1791369055317,
+              "end_exclusive": 1791369059171
+            },
+            {
+              "start_inclusive": 1791369020473,
+              "end_exclusive": 1791369055293
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0454-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0455-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0456-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0457-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0458-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0459-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0460-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0461-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0462-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0463-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0464-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0465-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0466-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0467-timing-context-before-stop.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0468-timing-context-before-stop.xml"
+          ]
+        },
+        "empty_fresh_session_timing_details_before_restart": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791370303618,
+          "session_start_elapsed_millis": 9389354,
+          "query_cursor_wall_millis_exclusive": 1791370306959,
+          "report_clock_wall_millis": 1791370377758,
+          "report_clock_elapsed_millis": 9463494,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [],
+          "closed_intervals": [],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0502-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0503-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0504-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0505-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0506-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0507-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0508-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0509-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0510-timing-context-before-process-restart.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0511-timing-context-before-process-restart.xml"
+          ]
+        },
+        "stop_and_restart_erase_timing_details": true
+      },
+      "finished_at": "2026-10-07T10:54:41.409Z"
+    },
+    {
+      "name": "permission_revocation_and_rapid_regrant",
+      "started_at": "2026-10-07T10:54:41.411Z",
+      "result": "pass",
+      "details": {
+        "revoke_erases_observations": true,
+        "grant_does_not_restart": true,
+        "rapid_regrant_does_not_preserve_session": true,
+        "populated_timing_details_before_revocation": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791370484212,
+          "session_start_elapsed_millis": 9569948,
+          "query_cursor_wall_millis_exclusive": 1791370489624,
+          "report_clock_wall_millis": 1791370571841,
+          "report_clock_elapsed_millis": 9657577,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791370486093,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791370484760,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791370484760,
+              "end_exclusive": 1791370486093
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0542-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0543-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0544-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0545-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0546-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0547-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0548-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0549-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0550-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0551-timing-context-before-revocation.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0552-timing-context-before-revocation.xml"
+          ]
+        },
+        "populated_timing_details_before_rapid_regrant": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791370719756,
+          "session_start_elapsed_millis": 9805492,
+          "query_cursor_wall_millis_exclusive": 1791370725907,
+          "report_clock_wall_millis": 1791370808242,
+          "report_clock_elapsed_millis": 9893978,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791370722348,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791370720234,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791370720234,
+              "end_exclusive": 1791370722348
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0593-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0594-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0595-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0596-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0597-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0598-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0599-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0600-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0601-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0602-timing-context-before-rapid-regrant.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0603-timing-context-before-rapid-regrant.xml"
+          ]
+        },
+        "revocation_and_rapid_regrant_erase_timing_details": true
+      },
+      "finished_at": "2026-10-07T11:02:01.770Z"
+    },
+    {
+      "name": "clear_selection_persists_and_fixture_clear",
+      "started_at": "2026-10-07T11:02:01.771Z",
+      "result": "pass",
+      "details": {
+        "inspector_clear_persisted_across_restart": true,
+        "fixture_clear_erased_values": true,
+        "populated_timing_details_before_clear": {
+          "format": "fixture_timing_details_v1",
+          "package_id": "org.liveabit.fixture",
+          "session_start_wall_millis": 1791370923582,
+          "session_start_elapsed_millis": 10009318,
+          "query_cursor_wall_millis_exclusive": 1791370929958,
+          "report_clock_wall_millis": 1791371012089,
+          "report_clock_elapsed_millis": 10097825,
+          "display_time_zone": "America/Los_Angeles",
+          "report_clock_utc_offset_millis": -25200000,
+          "events": [
+            {
+              "timestamp_millis": 1791370926430,
+              "type": "PAUSE"
+            },
+            {
+              "timestamp_millis": 1791370924119,
+              "type": "RESUME"
+            }
+          ],
+          "closed_intervals": [
+            {
+              "start_inclusive": 1791370924119,
+              "end_exclusive": 1791370926430
+            }
+          ],
+          "complete_displayed_fixture_records": true,
+          "owned_fixture_only": true,
+          "source_coverage_unknown": true,
+          "original_os_query_batch_clocks_attested": false,
+          "query_cursor_elapsed_clock_available": false,
+          "display_time_zone_at_report_only": true,
+          "synthetic_clock_envelope": false,
+          "physical_android_verified": false,
+          "production_accuracy_pass": false,
+          "ui": [
+            "artifacts/android-emulator-0.2.3-api36-final/0637-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0638-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0639-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0640-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0641-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0642-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0643-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0644-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0645-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0646-timing-context-before-clear.xml",
+            "artifacts/android-emulator-0.2.3-api36-final/0647-timing-context-before-clear.xml"
+          ]
+        },
+        "clear_erases_timing_details": true
+      },
+      "finished_at": "2026-10-07T11:06:23.586Z"
+    }
+  ],
+  "measurements": [
+    {
+      "scenario": "idle",
+      "start": 1791368601593,
+      "end": 1791368659057,
+      "duration": 57465,
+      "callbacks": 0,
+      "retained_transitions": 2,
+      "comparison_status": "known_unverified_estimate",
+      "estimates_discarded": false,
+      "partial_estimate_warning_verified": false,
+      "discarded_estimate_reasons": [],
+      "candidate_duration_millis": 57464,
+      "signed_difference_millis": -1,
+      "timing_context": {
+        "format": "fixture_timing_details_v1",
+        "package_id": "org.liveabit.fixture",
+        "session_start_wall_millis": 1791368592974,
+        "session_start_elapsed_millis": 7678710,
+        "query_cursor_wall_millis_exclusive": 1791368691542,
+        "report_clock_wall_millis": 1791368881309,
+        "report_clock_elapsed_millis": 7967045,
+        "display_time_zone": "America/Los_Angeles",
+        "report_clock_utc_offset_millis": -25200000,
+        "events": [
+          {
+            "timestamp_millis": 1791368687063,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791368593494,
+            "type": "RESUME"
+          }
+        ],
+        "closed_intervals": [
+          {
+            "start_inclusive": 1791368593494,
+            "end_exclusive": 1791368687063
+          }
+        ],
+        "complete_displayed_fixture_records": true,
+        "owned_fixture_only": true,
+        "source_coverage_unknown": true,
+        "original_os_query_batch_clocks_attested": false,
+        "query_cursor_elapsed_clock_available": false,
+        "display_time_zone_at_report_only": true,
+        "synthetic_clock_envelope": false,
+        "physical_android_verified": false,
+        "production_accuracy_pass": false,
+        "ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0163-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0164-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0165-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0166-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0167-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0168-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0169-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0170-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0171-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0172-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0173-fixture-comparison.xml"
+        ]
+      },
+      "exact_context_clipped_comparison_matches": true,
+      "production_accuracy_pass": false,
+      "fixture_ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0115-controlled-idle-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0116-controlled-idle-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0117-controlled-idle-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0118-controlled-idle-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0119-controlled-idle-timing-and-scope.xml"
+      ],
+      "comparison_ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0163-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0164-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0165-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0166-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0167-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0168-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0169-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0170-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0171-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0172-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0173-fixture-comparison.xml"
+      ]
+    },
+    {
+      "scenario": "screen_handoffs",
+      "start": 1791369028489,
+      "end": 1791369077823,
+      "duration": 48841,
+      "callbacks": 12,
+      "retained_transitions": 14,
+      "comparison_status": "known_unverified_estimate",
+      "estimates_discarded": false,
+      "partial_estimate_warning_verified": false,
+      "discarded_estimate_reasons": [],
+      "candidate_duration_millis": 49263,
+      "signed_difference_millis": 422,
+      "timing_context": {
+        "format": "fixture_timing_details_v1",
+        "package_id": "org.liveabit.fixture",
+        "session_start_wall_millis": 1791369019992,
+        "session_start_elapsed_millis": 8105730,
+        "query_cursor_wall_millis_exclusive": 1791369114443,
+        "report_clock_wall_millis": 1791369394042,
+        "report_clock_elapsed_millis": 8479778,
+        "display_time_zone": "America/Los_Angeles",
+        "report_clock_utc_offset_millis": -25200000,
+        "events": [
+          {
+            "timestamp_millis": 1791369109914,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369074214,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369074202,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369070446,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369070422,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369066703,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369066702,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369062870,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369062863,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369059174,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369059171,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369055317,
+            "type": "RESUME"
+          },
+          {
+            "timestamp_millis": 1791369055293,
+            "type": "PAUSE"
+          },
+          {
+            "timestamp_millis": 1791369020473,
+            "type": "RESUME"
+          }
+        ],
+        "closed_intervals": [
+          {
+            "start_inclusive": 1791369074214,
+            "end_exclusive": 1791369109914
+          },
+          {
+            "start_inclusive": 1791369070446,
+            "end_exclusive": 1791369074202
+          },
+          {
+            "start_inclusive": 1791369066703,
+            "end_exclusive": 1791369070422
+          },
+          {
+            "start_inclusive": 1791369062870,
+            "end_exclusive": 1791369066702
+          },
+          {
+            "start_inclusive": 1791369059174,
+            "end_exclusive": 1791369062863
+          },
+          {
+            "start_inclusive": 1791369055317,
+            "end_exclusive": 1791369059171
+          },
+          {
+            "start_inclusive": 1791369020473,
+            "end_exclusive": 1791369055293
+          }
+        ],
+        "complete_displayed_fixture_records": true,
+        "owned_fixture_only": true,
+        "source_coverage_unknown": true,
+        "original_os_query_batch_clocks_attested": false,
+        "query_cursor_elapsed_clock_available": false,
+        "display_time_zone_at_report_only": true,
+        "synthetic_clock_envelope": false,
+        "physical_android_verified": false,
+        "production_accuracy_pass": false,
+        "ui": [
+          "artifacts/android-emulator-0.2.3-api36-final/0276-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0277-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0278-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0279-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0280-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0281-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0282-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0283-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0284-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0285-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0286-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0287-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0288-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0289-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0290-fixture-comparison.xml",
+          "artifacts/android-emulator-0.2.3-api36-final/0291-fixture-comparison.xml"
+        ]
+      },
+      "exact_context_clipped_comparison_matches": true,
+      "production_accuracy_pass": false,
+      "fixture_ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0205-controlled-screen-handoffs-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0206-controlled-screen-handoffs-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0207-controlled-screen-handoffs-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0208-controlled-screen-handoffs-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0209-controlled-screen-handoffs-timing-and-scope.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0210-controlled-screen-handoffs-timing-and-scope.xml"
+      ],
+      "comparison_ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0276-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0277-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0278-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0279-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0280-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0281-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0282-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0283-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0284-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0285-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0286-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0287-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0288-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0289-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0290-fixture-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0291-fixture-comparison.xml"
+      ]
+    }
+  ],
+  "input_navigation": [
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture start time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture end time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture callback duration (milliseconds)",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture start time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture end time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture callback duration (milliseconds)",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture start time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture end time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture callback duration (milliseconds)",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture start time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture end time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture callback duration (milliseconds)",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture start time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture end time code",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "Fixture callback duration (milliseconds)",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    }
+  ],
+  "home_transitions": [
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0128-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0128-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0129-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0129-confirmed-inspector-return.viewport.json"
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0222-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0222-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0223-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0223-confirmed-inspector-return.viewport.json"
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0310-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0310-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0311-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0311-confirmed-inspector-return.viewport.json"
+    },
+    {
+      "reason": "comparison_input_and_result_erasure",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0352-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0352-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0353-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0353-confirmed-inspector-return.viewport.json"
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0378-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0378-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0379-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0379-confirmed-inspector-return.viewport.json"
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs",
+      "launcher_focus_verified": true,
+      "inspector_absent_from_home_hierarchy": true,
+      "launcher_ui": "artifacts/android-emulator-0.2.3-api36-final/0411-confirmed-home-transition.xml",
+      "launcher_viewport": "artifacts/android-emulator-0.2.3-api36-final/0411-confirmed-home-transition.viewport.json",
+      "owned_inspector_return_verified": true,
+      "returned_ui": "artifacts/android-emulator-0.2.3-api36-final/0412-confirmed-inspector-return.xml",
+      "returned_viewport": "artifacts/android-emulator-0.2.3-api36-final/0412-confirmed-inspector-return.viewport.json"
+    }
+  ],
+  "fixture_timing_context_resets": [
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0005-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0006-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0007-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0008-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0009-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0025-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0026-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0027-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0028-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0029-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0030-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "usage_settings_grant_is_not_session_consent_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0041-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0042-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0043-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0044-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0045-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0046-usage-settings-grant-is-not-session-consent.xml"
+      ]
+    },
+    {
+      "reason": "manual_scope_validation_and_system_picker_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0072-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0073-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0074-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0075-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0076-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0077-manual-scope-validation-and-system-picker.xml"
+      ]
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0129-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0223-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0311-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "comparison_input_and_result_erasure_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0353-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "reopened_comparison_after_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0355-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0356-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0357-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0358-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0359-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0360-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0361-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0362-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0363-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0364-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0365-comparison-inputs-after-home.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0366-comparison-inputs-after-home.xml"
+      ]
+    },
+    {
+      "reason": "outer_comparison_hidden",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0368-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0369-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0370-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0371-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0372-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0373-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0374-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0375-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0376-hidden-controlled-comparison.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0377-hidden-controlled-comparison.xml"
+      ]
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0379-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "fresh_owned_fixture_comparison_inputs_home",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0412-confirmed-inspector-return.xml"
+      ]
+    },
+    {
+      "reason": "stop_fresh_horizon_and_restart_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0472-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0473-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0474-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0475-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0476-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0477-stop-fresh-horizon-and-restart.xml"
+      ]
+    },
+    {
+      "reason": "stop_fresh_horizon_and_restart_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0512-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0513-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0514-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0515-stop-fresh-horizon-and-restart.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0516-stop-fresh-horizon-and-restart.xml"
+      ]
+    },
+    {
+      "reason": "permission_revocation_and_rapid_regrant_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0553-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0554-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0555-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0556-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0557-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0558-permission-revocation-and-rapid-regrant.xml"
+      ]
+    },
+    {
+      "reason": "permission_revocation_and_rapid_regrant_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0566-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0567-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0568-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0569-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0570-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0571-permission-revocation-and-rapid-regrant.xml"
+      ]
+    },
+    {
+      "reason": "permission_revocation_and_rapid_regrant_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0604-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0605-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0606-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0607-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0608-permission-revocation-and-rapid-regrant.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0609-permission-revocation-and-rapid-regrant.xml"
+      ]
+    },
+    {
+      "reason": "clear_selection_persists_and_fixture_clear_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0652-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0653-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0654-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0655-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0656-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0657-clear-selection-persists-and-fixture-clear.xml"
+      ]
+    },
+    {
+      "reason": "clear_selection_persists_and_fixture_clear_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-final/0659-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0660-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0661-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0662-clear-selection-persists-and-fixture-clear.xml",
+        "artifacts/android-emulator-0.2.3-api36-final/0663-clear-selection-persists-and-fixture-clear.xml"
+      ]
+    }
+  ],
+  "permission_controls": [
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Controlled denied-access baseline."
+    },
+    {
+      "control": "stock_android_usage_settings_ui",
+      "value": "allow"
+    },
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Revoke while a live session contains owned synthetic observations."
+    },
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "allow",
+      "reason": "Restore OS permission; explicit Start remains required."
+    },
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "rapid_ignore_then_allow",
+      "reason": "Require authority-boundary invalidation even when current permission is restored."
+    }
+  ],
+  "window_state_retries": [],
+  "launch_ime_recoveries": [
+    {
+      "id": 1,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "fresh_launch_and_permission_denial",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:14:11.490Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:14:11.493Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:14:11.897Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0001-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "532226f6bb89afb14ed1ff6e8a686634cb69a4eefc5b361fe25dcabbb30d8ecd",
+          "size_bytes": 19486
+        }
+      ],
+      "finished_at": "2026-10-07T10:14:11.901Z"
+    },
+    {
+      "id": 2,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "usage_settings_grant_is_not_session_consent",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:17:27.247Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:17:27.248Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:17:27.345Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0002-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "3e396b484d66a1691051776113aa587e274f5fea3b5360bbe3445410c637885b",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:17:27.347Z"
+    },
+    {
+      "id": 3,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "manual_scope_validation_and_system_picker",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:20:10.574Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:20:10.578Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:20:10.701Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0003-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "6dab981c0ac52544e720af5047c7b92f1634ad4dc7e03b1a4ecb21e340f4a4c7",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:20:10.703Z"
+    },
+    {
+      "id": 4,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "no_preconsent_backfill_and_empty_is_unknown",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "recovered",
+      "back_send_attempted": true,
+      "back_command_completed": true,
+      "preconditions_verified": true,
+      "same_focus_verified": true,
+      "ime_hidden_verified": true,
+      "hierarchy_verified": true,
+      "started_at": "2026-10-07T10:21:24.200Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:21:24.201Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:24.506Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "a2eb0d9e6d772efd27ec1f336517c59adc134ab77d6b398a863e6152ea84af39",
+          "size_bytes": 19530
+        },
+        {
+          "kind": "window_all",
+          "command": [
+            "dumpsys",
+            "window",
+            "-a"
+          ],
+          "capture_started_at": "2026-10-07T10:21:24.510Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:24.730Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-window-all.txt",
+          "sha256": "9ad330b61db3dfdb5e428c8b9f172cd784fee844c78fb42b4bca86b9e54a0293",
+          "size_bytes": 87148
+        },
+        {
+          "kind": "input_method",
+          "command": [
+            "dumpsys",
+            "input_method"
+          ],
+          "capture_started_at": "2026-10-07T10:21:24.732Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:24.830Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-input-method.txt",
+          "sha256": "6a6da94ce01addad2929cd5565eed32315aa072744fb08cf6e890ac9544ac0cd",
+          "size_bytes": 98455
+        },
+        {
+          "kind": "display_before_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:21:24.837Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:24.958Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-window-displays-before-back.txt",
+          "sha256": "7a9ee875639d5da6f704e9c8ba31674099b866e3c4f11793c9fc04376d76e4bd",
+          "size_bytes": 19531
+        },
+        {
+          "kind": "input_method_after_back",
+          "command": [
+            "dumpsys",
+            "input_method"
+          ],
+          "capture_started_at": "2026-10-07T10:21:25.330Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:25.654Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-input-method-after-back.txt",
+          "sha256": "de2eddfb1deb1cc719b4bd443c70e3bef8909609f66c2338955547910c85d1ae",
+          "size_bytes": 98635
+        },
+        {
+          "kind": "window_after_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "-a"
+          ],
+          "capture_started_at": "2026-10-07T10:21:28.209Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:28.336Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-window-all-after-back.txt",
+          "sha256": "daaa52bbc087b5ff8cd65ff0caa3aaf9f1fa6be6d1691706401dd937031af596",
+          "size_bytes": 86954
+        },
+        {
+          "kind": "display_after_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:21:28.339Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:21:28.437Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0004-launch-ime-dbd9e20a3a9e-window-displays-after-back.txt",
+          "sha256": "3431ae09b14d83d572d1e9aebc055a206d55bbddf8e5f7de42f42cd6eb49ce58",
+          "size_bytes": 19486
+        }
+      ],
+      "back_started_at": "2026-10-07T10:21:24.960Z",
+      "back_finished_at": "2026-10-07T10:21:25.066Z",
+      "post_launch_ui": "artifacts/android-emulator-0.2.3-api36-final/0087-inspector-launch-after-ime-dismissal.xml",
+      "post_launch_viewport": "artifacts/android-emulator-0.2.3-api36-final/0087-inspector-launch-after-ime-dismissal.viewport.json",
+      "finished_at": "2026-10-07T10:21:28.446Z"
+    },
+    {
+      "id": 5,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "controlled_idle_timing_and_scope",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:24:49.393Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:24:49.397Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:24:49.544Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0005-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "08c7f290e21bbd83b890b727a23dfa724df23356331dfb1ce1d1e3060c178f33",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:24:49.546Z"
+    },
+    {
+      "id": 6,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "controlled_idle_timing_and_scope",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:25:33.618Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:25:33.622Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:25:33.736Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0006-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "16dd6c3cf65efd25ad7e2e826db22c42e21c8cb8afa2bfc75fb32d3b675c47b1",
+          "size_bytes": 19486
+        }
+      ],
+      "finished_at": "2026-10-07T10:25:33.739Z"
+    },
+    {
+      "id": 7,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "controlled_screen_handoffs_timing_and_scope",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:31:52.335Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:31:52.337Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:31:52.443Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0007-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "cd865b40128294df56f9065e4eadee72174e65da69bec27cedc6adf541594518",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:31:52.446Z"
+    },
+    {
+      "id": 8,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "controlled_screen_handoffs_timing_and_scope",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:32:48.240Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:32:48.242Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:32:48.377Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0008-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "3cc55cfc92322f3c35f7da8e2cc598d0b418f40dc70ceec4a72855759240678a",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:32:48.380Z"
+    },
+    {
+      "id": 9,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "comparison_validation_and_input_erasure",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:39:10.425Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:39:10.426Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:39:10.669Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0009-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "d519402843c951fd2848a605aebd45ada8046375c06a614241603abff6be48df",
+          "size_bytes": 19487
+        }
+      ],
+      "finished_at": "2026-10-07T10:39:10.673Z"
+    },
+    {
+      "id": 10,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "comparison_validation_and_input_erasure",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:42:10.861Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:42:10.864Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:42:11.120Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0010-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "b9bb5a27b493b60c1c80d7df1645836751374606a413add10046d3d93f6ff1c6",
+          "size_bytes": 19488
+        }
+      ],
+      "finished_at": "2026-10-07T10:42:11.123Z"
+    },
+    {
+      "id": 11,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "comparison_validation_and_input_erasure",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:44:03.145Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:44:03.148Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:44:03.266Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0011-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "76437f25750d67991030efc99d8e91c7722cd08d8a91b70e20dacaee166e5b88",
+          "size_bytes": 19486
+        }
+      ],
+      "finished_at": "2026-10-07T10:44:03.273Z"
+    },
+    {
+      "id": 12,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "comparison_validation_and_input_erasure",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:46:21.078Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:46:21.083Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:46:21.232Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0012-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "3e66bda0ba91c08b1b8a86ec86a979803f135552571aedfd4d23191e895cc648",
+          "size_bytes": 19487
+        }
+      ],
+      "finished_at": "2026-10-07T10:46:21.235Z"
+    },
+    {
+      "id": 13,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "stop_fresh_horizon_and_restart",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:53:46.862Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:53:46.864Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:53:47.121Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0013-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "1896e9c175f2df2ba9c96a12679596771e27dc526accb0bce5ef5c57546122a6",
+          "size_bytes": 19484
+        }
+      ],
+      "finished_at": "2026-10-07T10:53:47.125Z"
+    },
+    {
+      "id": 14,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "permission_revocation_and_rapid_regrant",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:54:42.119Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:54:42.121Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:54:42.291Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0014-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "b1cfe4e80d203b383ace71b4dc552dd6f952477c4a7af8085eb10f764f554b02",
+          "size_bytes": 19484
+        }
+      ],
+      "finished_at": "2026-10-07T10:54:42.294Z"
+    },
+    {
+      "id": 15,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "permission_revocation_and_rapid_regrant",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:54:47.554Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:54:47.556Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:54:47.782Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0015-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "63a0952ae5e3280be100975b9f72b1dd933c2cf4280be1dd53a3be9621aef7f9",
+          "size_bytes": 19485
+        }
+      ],
+      "finished_at": "2026-10-07T10:54:47.784Z"
+    },
+    {
+      "id": 16,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "permission_revocation_and_rapid_regrant",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T10:58:43.887Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T10:58:43.889Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T10:58:44.064Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0016-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "42231548607328be38739f26ae45863c4ca5e26dc67a8629115d3a991d427a23",
+          "size_bytes": 19484
+        }
+      ],
+      "finished_at": "2026-10-07T10:58:44.066Z"
+    },
+    {
+      "id": 17,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "clear_selection_persists_and_fixture_clear",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T11:02:07.907Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T11:02:07.909Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T11:02:08.091Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0017-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "4fdb407a3b056d10afd2c26bbf579954a5e4a4059075efba41c57e336a57a918",
+          "size_bytes": 19483
+        }
+      ],
+      "finished_at": "2026-10-07T11:02:08.094Z"
+    },
+    {
+      "id": 18,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "clear_selection_persists_and_fixture_clear",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T11:05:19.150Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T11:05:19.152Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T11:05:19.394Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-final/0018-launch-ime-dbd9e20a3a9e-window-displays-before.txt",
+          "sha256": "79835e4c0813493d748ea7802c048f320e8d59aa52a0014c7548fee0a53dea06",
+          "size_bytes": 19490
+        }
+      ],
+      "finished_at": "2026-10-07T11:05:19.397Z"
+    }
+  ],
+  "unsupported": [
+    "Physical phone/OEM behavior, battery, background collection and direct agent delivery.",
+    "Credential-storage lock before first unlock; ordinary keyguard lock is a different state.",
+    "24-hour expiry, 4096-record overflow, unavailable-source injection and deterministic OS-query races.",
+    "Clock mutation, rotation and split-screen/multi-resume are not exercised by this initial UI harness.",
+    "FLAG_SECURE screenshots may be blank; saved UI hierarchy is the primary UI assertion source."
+  ],
+  "limitations": [
+    "Only owned synthetic fixture activity is inspected; usage source completeness remains unknown.",
+    "Comparison values entered by this harness remain unauthenticated manual values in the app.",
+    "Fixture timing details attest displayed current core anchors and projected records, not original OS-query batch clocks or source completeness.",
+    "The app time zone and UTC offset describe formatting at the report clock, not source time-zone metadata at event time.",
+    "Observed timing differences do not establish a production accuracy threshold or other-app accuracy.",
+    "Project-local AVD path is bound through a fresh startup record and actual AVD name; launcher/qemu PID is not independently attested."
+  ],
+  "physical_android_verified": false,
+  "measured_production_accuracy_verified": false,
+  "m2_verified": false,
+  "m3_verified": false,
+  "setup_provenance": {
+    "source": "docs/review/android-api36-emulator-setup.json",
+    "sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "result": "pass_image_setup_only",
+    "scope": "project_local_api36_image_setup_only",
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "setup_bytes_match_startup_hash": true,
+    "legacy_startup_setup_binding_absent": false,
+    "image_source_properties_sha256": "1a6e7c0b326c24c28ba501aa5ada247dd9fb0f087b662865f7bc649991fe74d1",
+    "image_registration_sha256": "ea57e6ab1cb5578de2666ba1beb0c6d2f7366809e69304bcf205d79814a5e74d",
+    "emulator_source_properties_sha256": "ba13085f647fb8389a4d06a1de0e4104ac4e841733e50f67223ac230e1ce685a",
+    "actual_small_sdk_identity_files_hashed": true,
+    "large_image_files_rehashed_by_ui_harness": false,
+    "runtime_verified_by_setup": false
+  },
+  "run_provenance": {
+    "source": "artifacts/android-emulator/run.json",
+    "sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+    "avd_path": "artifacts/android-emulator/avd/liveabit-api36-test.avd",
+    "created_at": "2026-10-07T08:15:05.1849512Z",
+    "startup_age_millis": 7116759,
+    "freshness_verified": true,
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "installed_tool_properties_match": true,
+    "launcher_pid_from_run_record": 23104,
+    "launcher_or_qemu_pid_independently_verified": false,
+    "setup_report": "docs/review/android-api36-emulator-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "startup_recorded_config_sha256": "221d5b43209e1a9cd98c0eac45a555e37c3ccdfc9cde89b7d659167acf294e4d",
+    "startup_recorded_avd_registration_sha256": "6d80825ac9720249d650c353e25b5022006e636d26aeb08ba5b6f867cb0ca4e0",
+    "recorded_writable_paths_match_owned_avd": true,
+    "live_config_independently_rehashed_by_ui_harness": false,
+    "acceleration_backend": "WHPX",
+    "memory_megabytes": 2048
+  },
+  "harness_sha256": "ddeb90d82704fcc570c7d6abeeb1716f3f1ac8453946a6a931523e6649997ca7",
+  "installed_apks": [
+    {
+      "package_id": "org.liveabit.inspect",
+      "version_name": "0.2.3-local",
+      "sha256": "4de00e2396f39ad3c6c648f35ee54020b01c9ed589301dbaeaced85b2767823d",
+      "exact_audited_bytes_verified": true
+    },
+    {
+      "package_id": "org.liveabit.fixture",
+      "version_name": "0.1.0-fixture",
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "exact_audited_bytes_verified": true
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "known_comparisons": 2,
+    "partial_comparisons": 0,
+    "physical_device_testing_required_before_production_claims": true
+  },
+  "finished_at": "2026-10-07T11:06:23.873Z",
+  "evidence_preservation": {
+    "archive_path": "artifacts/android-emulator-0.2.3-api36-final",
+    "raw_report_sha256": "64b7464504dfde971dbe41b2fde32d7201a3d8367bfe116f4ede6a51df23d147",
+    "original_runtime_claims_preserved": true,
+    "ui_paths_relocated_only": true,
+    "window_diagnostic_paths_relocated_only": true,
+    "setup_report": "artifacts/android-emulator-0.2.3-api36-final/image-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "launch_ime_diagnostic_paths_relocated_only": true
+  }
+}

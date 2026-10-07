@@ -1,0 +1,190 @@
+{
+  "result": "interrupted_at_user_request",
+  "generated_at": "2026-10-06T22:15:10.030Z",
+  "scope": "dedicated_owned_emulator_runtime_ui",
+  "environment": {
+    "serial": "emulator-5580",
+    "expected_avd": "liveabit-api35-test",
+    "actual_avd": "liveabit-api35-test",
+    "api": 35,
+    "android_release": "15",
+    "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys",
+    "abi": "x86_64",
+    "uptime_seconds_at_start": 8609.71,
+    "qemu_verified": true,
+    "account_free_verified": true,
+    "display": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "overall_timeout_millis": 2700000,
+  "cases": [
+    {
+      "name": "fresh_launch_and_permission_denial",
+      "started_at": "2026-10-06T22:15:11.608Z",
+      "result": "pass",
+      "details": {
+        "denied_start_stopped": true,
+        "empty_scope_rejected": true
+      },
+      "finished_at": "2026-10-06T22:18:32.665Z"
+    },
+    {
+      "name": "usage_settings_grant_is_not_session_consent",
+      "started_at": "2026-10-06T22:18:32.666Z",
+      "result": "pass",
+      "details": {
+        "settings_ui_grant": true,
+        "emulator_appops_fallback": false,
+        "grant_alone_keeps_stopped": true
+      },
+      "finished_at": "2026-10-06T22:19:54.460Z"
+    },
+    {
+      "name": "manual_scope_validation_and_system_picker",
+      "started_at": "2026-10-06T22:19:54.461Z",
+      "result": "interrupted",
+      "message": "Command failed: C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\platform-tools\\adb.exe -s emulator-5580 shell rm -f /sdcard/liveabit-owned-test-ui.xml\nadb.exe: device 'emulator-5580' not found\r\n",
+      "failure_ui": "unavailable",
+      "harness_result_before_interruption_annotation": "fail"
+    },
+    {
+      "name": "no_preconsent_backfill_and_empty_is_unknown",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "controlled_idle_timing_and_scope",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "controlled_screen_handoffs_timing_and_scope",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "comparison_validation_and_input_erasure",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "stop_fresh_horizon_and_restart",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "permission_revocation_and_rapid_regrant",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    },
+    {
+      "name": "clear_selection_persists_and_fixture_clear",
+      "result": "not_run",
+      "reason": "User requested wrap-up before this case."
+    }
+  ],
+  "measurements": [],
+  "input_navigation": [
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    }
+  ],
+  "home_transitions": [],
+  "permission_controls": [
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Controlled denied-access baseline."
+    },
+    {
+      "control": "stock_android_usage_settings_ui",
+      "value": "allow"
+    }
+  ],
+  "unsupported": [
+    "Physical phone/OEM behavior, battery, background collection and direct agent delivery.",
+    "Credential-storage lock before first unlock; ordinary keyguard lock is a different state.",
+    "24-hour expiry, 4096-record overflow, unavailable-source injection and deterministic OS-query races.",
+    "Clock mutation, rotation and split-screen/multi-resume are not exercised by this initial UI harness.",
+    "FLAG_SECURE screenshots may be blank; saved UI hierarchy is the primary UI assertion source."
+  ],
+  "limitations": [
+    "Only owned synthetic fixture activity is inspected; usage source completeness remains unknown.",
+    "Comparison values entered by this harness remain unauthenticated manual values in the app.",
+    "Observed timing differences do not establish a production accuracy threshold or other-app accuracy.",
+    "Project-local AVD path is bound through a fresh startup record and actual AVD name; launcher/qemu PID is not independently attested."
+  ],
+  "physical_android_verified": false,
+  "measured_production_accuracy_verified": false,
+  "m2_verified": false,
+  "m3_verified": false,
+  "run_provenance": {
+    "source": "artifacts/android-emulator/run.json",
+    "sha256": "9c68bf5730cf88c499413930eadbf53981f75ad749f6f08f8b8b042a23f47dcf",
+    "avd_path": "artifacts/android-emulator/avd/liveabit-api35-test.avd",
+    "created_at": "2026-10-06T19:51:21.5865220Z",
+    "startup_age_millis": 8628450,
+    "freshness_verified": true,
+    "api": 35,
+    "image": "system-images;android-35;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "installed_tool_properties_match": true,
+    "launcher_pid_from_run_record": 19172,
+    "launcher_or_qemu_pid_independently_verified": false
+  },
+  "harness_sha256": "94a03c46dd219ab12e260ef64aa368e921eb27a246a97c271d82c937db0076e5",
+  "installed_apks": [
+    {
+      "package_id": "org.liveabit.inspect",
+      "version_name": "0.2.2-local",
+      "sha256": "87fb356e1619f64a9b9ac418da455b0055d05c454a18a452d9d901044797cf40",
+      "exact_audited_bytes_verified": true
+    },
+    {
+      "package_id": "org.liveabit.fixture",
+      "version_name": "0.1.0-fixture",
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "exact_audited_bytes_verified": true
+    }
+  ],
+  "failed_stage": "manual_scope_validation_and_system_picker",
+  "failure": "The user requested wrap-up; the verified owned emulator was shut down during the third case. No app failure conclusion is drawn from the resulting device-not-found error.",
+  "summary": {
+    "passed": 2,
+    "failed": 0,
+    "interrupted": 1,
+    "not_run": 7,
+    "full_emulator_gate_satisfied": false
+  },
+  "cleanup_incomplete": true,
+  "finished_at": "2026-10-06T22:22:25.648Z",
+  "harness_result_before_interruption_annotation": "fail",
+  "harness_failure_caused_by_requested_emulator_shutdown": "Command failed: C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\platform-tools\\adb.exe -s emulator-5580 shell rm -f /sdcard/liveabit-owned-test-ui.xml\nadb.exe: device 'emulator-5580' not found\r\n",
+  "evidence_preservation": {
+    "raw_report": "artifacts/android-emulator-0.2.2-test/raw-validation.json",
+    "raw_report_sha256": "f3380bfb5a9b772db25917f8238bc62f9b039d2b726d39492259eac3619a95b1",
+    "relocation": "Only UI snapshot paths relocated to the exact run archive. Interruption annotations are explicit; raw harness bytes retained unchanged.",
+    "archive_index": "artifacts/android-emulator-0.2.2-test/archive-index.json"
+  },
+  "cleanup": {
+    "owned_emulator_shutdown_requested": true,
+    "owned_emulator_identity_verified_before_shutdown": true,
+    "owned_launcher_and_qemu_pids_no_longer_running": true,
+    "unrelated_devices_targeted": false,
+    "crash_buffer_not_collected": true
+  }
+}

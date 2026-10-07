@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-10-07T12:19:24.5549955Z",
+  "scope": "owned_api35_fresh_boot_install_readiness_only",
+  "serial": "emulator-5580",
+  "avd": "liveabit-api35-test",
+  "api": 35,
+  "boot_completed": "1",
+  "uptime": "139.60 310.66",
+  "reused_boot": false,
+  "workflow_tested": false,
+  "processes": [
+    {
+      "ProcessId": 1160,
+      "Name": "emulator.exe",
+      "ExecutablePath": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\emulator.exe",
+      "CommandLine": "\"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\emulator.exe\" -avd liveabit-api35-test -port 5580 -no-window -no-audio -no-boot-anim -no-snapshot -wipe-data -camera-back none -camera-front none -gpu software -accel on -memory 2048 "
+    },
+    {
+      "ProcessId": 18984,
+      "Name": "qemu-system-x86_64-headless.exe",
+      "ExecutablePath": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\qemu\\windows-x86_64\\qemu-system-x86_64-headless.exe",
+      "CommandLine": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\qemu\\windows-x86_64\\qemu-system-x86_64-headless.exe -avd liveabit-api35-test -port 5580 -no-window -no-audio -no-boot-anim -no-snapshot -wipe-data -camera-back none -camera-front none -gpu software -accel on -memory 2048"
+    }
+  ],
+  "native_audit_sha256": "995e4ac7332e7793027f9469347cd7a32c3566f3652ef55bef2c9a640200885c",
+  "local_audited_apk_hashes_verified": true,
+  "installs": [
+    {
+      "sha256": "df5ae7d7aad1c53818d9ce9812f49a3213c8b02e47caf2f2807f7abc130e6d6c",
+      "path": "artifacts/android-local-inspector/liveabit-local-inspector-0.2.4.apk",
+      "output": [
+        "Performing Streamed Install",
+        "Success"
+      ],
+      "exit_code": 0
+    },
+    {
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "path": "artifacts/android-local-inspector/liveabit-lifecycle-fixture-0.1.0.apk",
+      "output": [
+        "Performing Streamed Install",
+        "Success"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "installed_bytes_harness_verification_pending": true,
+  "crash_buffer": []
+}

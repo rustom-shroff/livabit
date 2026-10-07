@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-10-07T08:17:09.707Z",
+  "scope": "transcribed_observed_tool_output",
+  "source": "scripts/start-android-api36-emulator.ps1 console output",
+  "startup_command_exit_code": 0,
+  "text_path": "docs/review/android-api36-avdmanager-diagnostics.txt",
+  "vendor_error_messages_preserved": true,
+  "cause_verified": false,
+  "android_runtime_verified": false,
+  "workflow_suite_passed": false
+}

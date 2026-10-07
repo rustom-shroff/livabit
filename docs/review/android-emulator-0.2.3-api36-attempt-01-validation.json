@@ -1,0 +1,240 @@
+{
+  "result": "fail",
+  "generated_at": "2026-10-07T08:19:06.266Z",
+  "scope": "dedicated_owned_emulator_runtime_ui",
+  "environment": {
+    "serial": "emulator-5582",
+    "expected_avd": "liveabit-api36-test",
+    "actual_avd": "liveabit-api36-test",
+    "api": 36,
+    "android_release": "16",
+    "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:16/BE2A.250530.026.D1/13818094:userdebug/test-keys",
+    "abi": "x86_64",
+    "uptime_seconds_at_start": 231.57,
+    "qemu_verified": true,
+    "account_free_verified": true,
+    "guest_time_zone_property": "America/Los_Angeles",
+    "guest_time_zone_property_source": "read_only_getprop_persist.sys.timezone",
+    "display": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "overall_timeout_millis": 5400000,
+  "cases": [
+    {
+      "name": "fresh_launch_and_permission_denial",
+      "started_at": "2026-10-07T08:19:07.906Z",
+      "result": "pass",
+      "details": {
+        "denied_start_stopped": true,
+        "empty_scope_rejected": true
+      },
+      "finished_at": "2026-10-07T08:22:29.813Z"
+    },
+    {
+      "name": "usage_settings_grant_is_not_session_consent",
+      "started_at": "2026-10-07T08:22:29.814Z",
+      "result": "pass",
+      "details": {
+        "settings_ui_grant": true,
+        "emulator_appops_fallback": false,
+        "grant_alone_keeps_stopped": true
+      },
+      "finished_at": "2026-10-07T08:23:53.098Z"
+    },
+    {
+      "name": "manual_scope_validation_and_system_picker",
+      "started_at": "2026-10-07T08:23:53.099Z",
+      "result": "pass",
+      "details": {
+        "exact_identifier_fallback_exercised": true,
+        "malformed_identifier_rejected": true,
+        "system_picker_opened": true,
+        "picker_selection_runtime_verified": true,
+        "picker_cancel_exercised": false
+      },
+      "finished_at": "2026-10-07T08:26:32.758Z"
+    },
+    {
+      "name": "no_preconsent_backfill_and_empty_is_unknown",
+      "started_at": "2026-10-07T08:26:32.759Z",
+      "result": "fail",
+      "message": "A visible occluding inset has invalid or empty bounds.",
+      "failure_ui": "unavailable"
+    }
+  ],
+  "measurements": [],
+  "input_navigation": [
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    }
+  ],
+  "home_transitions": [],
+  "fixture_timing_context_resets": [
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0005-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0006-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0007-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0008-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0009-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0010-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0026-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0027-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0028-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0029-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0030-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0031-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "usage_settings_grant_is_not_session_consent_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0042-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0043-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0044-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0045-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0046-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0047-usage-settings-grant-is-not-session-consent.xml"
+      ]
+    },
+    {
+      "reason": "manual_scope_validation_and_system_picker_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0073-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0074-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0075-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0076-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0077-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-01/0078-manual-scope-validation-and-system-picker.xml"
+      ]
+    }
+  ],
+  "permission_controls": [
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Controlled denied-access baseline."
+    },
+    {
+      "control": "stock_android_usage_settings_ui",
+      "value": "allow"
+    }
+  ],
+  "unsupported": [
+    "Physical phone/OEM behavior, battery, background collection and direct agent delivery.",
+    "Credential-storage lock before first unlock; ordinary keyguard lock is a different state.",
+    "24-hour expiry, 4096-record overflow, unavailable-source injection and deterministic OS-query races.",
+    "Clock mutation, rotation and split-screen/multi-resume are not exercised by this initial UI harness.",
+    "FLAG_SECURE screenshots may be blank; saved UI hierarchy is the primary UI assertion source."
+  ],
+  "limitations": [
+    "Only owned synthetic fixture activity is inspected; usage source completeness remains unknown.",
+    "Comparison values entered by this harness remain unauthenticated manual values in the app.",
+    "Fixture timing details attest displayed current core anchors and projected records, not original OS-query batch clocks or source completeness.",
+    "The app time zone and UTC offset describe formatting at the report clock, not source time-zone metadata at event time.",
+    "Observed timing differences do not establish a production accuracy threshold or other-app accuracy.",
+    "Project-local AVD path is bound through a fresh startup record and actual AVD name; launcher/qemu PID is not independently attested."
+  ],
+  "physical_android_verified": false,
+  "measured_production_accuracy_verified": false,
+  "m2_verified": false,
+  "m3_verified": false,
+  "setup_provenance": {
+    "source": "docs/review/android-api36-emulator-setup.json",
+    "sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "result": "pass_image_setup_only",
+    "scope": "project_local_api36_image_setup_only",
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "setup_bytes_match_startup_hash": true,
+    "legacy_startup_setup_binding_absent": false,
+    "image_source_properties_sha256": "1a6e7c0b326c24c28ba501aa5ada247dd9fb0f087b662865f7bc649991fe74d1",
+    "image_registration_sha256": "ea57e6ab1cb5578de2666ba1beb0c6d2f7366809e69304bcf205d79814a5e74d",
+    "emulator_source_properties_sha256": "ba13085f647fb8389a4d06a1de0e4104ac4e841733e50f67223ac230e1ce685a",
+    "actual_small_sdk_identity_files_hashed": true,
+    "large_image_files_rehashed_by_ui_harness": false,
+    "runtime_verified_by_setup": false
+  },
+  "run_provenance": {
+    "source": "artifacts/android-emulator/run.json",
+    "sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+    "avd_path": "artifacts/android-emulator/avd/liveabit-api36-test.avd",
+    "created_at": "2026-10-07T08:15:05.1849512Z",
+    "startup_age_millis": 241089,
+    "freshness_verified": true,
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "installed_tool_properties_match": true,
+    "launcher_pid_from_run_record": 23104,
+    "launcher_or_qemu_pid_independently_verified": false,
+    "setup_report": "docs/review/android-api36-emulator-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "startup_recorded_config_sha256": "221d5b43209e1a9cd98c0eac45a555e37c3ccdfc9cde89b7d659167acf294e4d",
+    "startup_recorded_avd_registration_sha256": "6d80825ac9720249d650c353e25b5022006e636d26aeb08ba5b6f867cb0ca4e0",
+    "recorded_writable_paths_match_owned_avd": true,
+    "live_config_independently_rehashed_by_ui_harness": false,
+    "acceleration_backend": "WHPX",
+    "memory_megabytes": 2048
+  },
+  "harness_sha256": "b588cc6b09615fcb606e3c12eb0ef2529ce30eda39e78abcec19f8cfa0182971",
+  "installed_apks": [
+    {
+      "package_id": "org.liveabit.inspect",
+      "version_name": "0.2.3-local",
+      "sha256": "4de00e2396f39ad3c6c648f35ee54020b01c9ed589301dbaeaced85b2767823d",
+      "exact_audited_bytes_verified": true
+    },
+    {
+      "package_id": "org.liveabit.fixture",
+      "version_name": "0.1.0-fixture",
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "exact_audited_bytes_verified": true
+    }
+  ],
+  "failed_stage": "no_preconsent_backfill_and_empty_is_unknown",
+  "failure": "A visible occluding inset has invalid or empty bounds.",
+  "summary": {
+    "passed": 3,
+    "failed": 1
+  },
+  "finished_at": "2026-10-07T08:26:48.279Z",
+  "evidence_preservation": {
+    "archive_path": "artifacts/android-emulator-0.2.3-api36-attempt-01",
+    "raw_report_sha256": "0d7a5ae7ac01bd532099c80a1b6588c4c26cfb9177d4166767b3477231e18e50",
+    "original_runtime_claims_preserved": true,
+    "ui_paths_relocated_only": true,
+    "setup_report": "artifacts/android-emulator-0.2.3-api36-attempt-01/image-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74"
+  }
+}

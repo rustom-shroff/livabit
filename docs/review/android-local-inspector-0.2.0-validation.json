@@ -1,0 +1,133 @@
+{
+  "result": "pass_with_device_limits",
+  "generated_at": "2026-10-06T04:16:23.6990089Z",
+  "scope": "native_local_only_build_and_jvm_fixtures",
+  "decision": "docs/decisions/0009-android-local-inspection-first.md",
+  "sdk_terms_accepted_by_user": "2026-10-05",
+  "environment": {
+    "jdk": "Temurin 17.0.20.1+1",
+    "platform": "Windows",
+    "gradle": "9.4.1",
+    "build_tools": "36.0.0",
+    "agp": "9.2.1",
+    "sdk_platform": "android-37.0 revision 2",
+    "version_provenance": "pinned_build_configuration_and_checksum_verified_tool_archives"
+  },
+  "jvm_fixtures": {
+    "android_runtime_verified": false,
+    "passed": 30
+  },
+  "owned_fixture_jvm": {
+    "android_runtime_verified": false,
+    "passed": 25
+  },
+  "apk": {
+    "path": "artifacts/android-local-inspector/liveabit-local-inspector-0.2.0.apk",
+    "package_id": "org.liveabit.inspect",
+    "version_name": "0.2.0-local",
+    "sha256": "3033c78a20b1e6761c7a656a66732b005642b7e6b4652f30854d35912176ec4a",
+    "size_bytes": 115060,
+    "signature_verified": true,
+    "signing": "local_debug_only",
+    "min_sdk": 35,
+    "target_sdk": 37,
+    "permissions": [
+      "android.permission.PACKAGE_USAGE_STATS"
+    ],
+    "internet_permission": false,
+    "lint": {
+      "performed_by_this_run": true,
+      "warnings": 0,
+      "report": "android/app/build/reports/lint-results-debug.xml",
+      "errors": 0
+    }
+  },
+  "fixture_apk": {
+    "path": "artifacts/android-local-inspector/liveabit-lifecycle-fixture-0.1.0.apk",
+    "package_id": "org.liveabit.fixture",
+    "version_name": "0.1.0-fixture",
+    "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+    "size_bytes": 66627,
+    "signature_verified": true,
+    "signing": "local_debug_only",
+    "min_sdk": 35,
+    "target_sdk": 37,
+    "permissions": [],
+    "internet_permission": false,
+    "lint": {
+      "performed_by_this_run": true,
+      "warnings": 0,
+      "report": "android/fixture-app/build/reports/lint-results-debug.xml",
+      "errors": 0
+    }
+  },
+  "lint": {
+    "performed_by_this_run": true,
+    "warnings": 0,
+    "report": "android/app/build/reports/lint-results-debug.xml",
+    "errors": 0
+  },
+  "topology": {
+    "fixture_storage": "own_callbacks_in_process_ram_only",
+    "agent_endpoint": "absent",
+    "persistent_storage": "inspector_local_control_preferences_only",
+    "observation_storage": "process_ram",
+    "background_collection": false,
+    "activity_delivery": "absent"
+  },
+  "input_drift": [],
+  "source_sha256": {
+    "android/app/build.gradle": "8ede40a6efa25b146da4ec8a1fbf2336f4cebeb3e5061ec6b7a4eae2eec8b215",
+    "android/app/src/main/AndroidManifest.xml": "56241db9f59ed28ee70995fef89597199da9ee50c7741c20eb91bf6474ca5e98",
+    "android/app/src/main/java/org/liveabit/inspect/AndroidUsageSource.java": "10ec25b95b2a9b18aa99b4c37ec65ba7f5fe1728e28527fd00d61c409d11dfcb",
+    "android/app/src/main/java/org/liveabit/inspect/InspectionStore.java": "be04d50065532243eab11719f1e73b0dfd6bab09b8df284c7286fcf5612b465e",
+    "android/app/src/main/java/org/liveabit/inspect/LocalInspectionApplication.java": "79a4890936dcafc1834b5d577c6baabca6db413a4b104b6867f7e698087035a9",
+    "android/app/src/main/java/org/liveabit/inspect/MainActivity.java": "804885e7cb247afeb631dcb864d31f48efdc493e13fc90db92f0d46c5f565e0c",
+    "android/app/src/main/res/drawable/ic_liveabit.xml": "0aea955f4b000157ffcfcfe41bb76e27b4d0ec060b6d13b97ee38221619481d9",
+    "android/app/src/main/res/values/strings.xml": "f391ecdbbb2e0b0327090c312899180daf385c8507af1068f6688a16b1977c58",
+    "android/app/src/main/res/values/styles.xml": "44ad4b808f414288bbffb7307c19454bd1fcfa2c73bb8fa4c5e9cdc76ebcf3fc",
+    "android/app/src/main/res/xml/backup_rules.xml": "2c5c697984f4c52b526337ab61113f5843e0bfc6af4722374916ffe6da38dd9a",
+    "android/app/src/main/res/xml/data_extraction_rules.xml": "8b55ff5489071bb19a4e89967b604a16c0e4d1e87a2df3c73c64417314a59f22",
+    "android/build.gradle": "390d81e8fd209e0f2ab34f6c21f9a74ad10557991f50113134f754f087207276",
+    "android/collector-core/build.gradle": "4502d822ebbb6032a9bc7f7812bba03cd0edac5f37df732920363dd39547b9f3",
+    "android/collector-core/src/main/java/org/liveabit/collector/core/FixtureComparison.java": "4b13f9653875fbd94273a8b9b0d999490f302a5a1b565c86c349c6ad223004ff",
+    "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java": "2f583eead4639b53ab80f292037af6effec4137e399169e01ff118991f0c2838",
+    "android/collector-core/src/test/java/org/liveabit/collector/core/LocalInspectionCoreTest.java": "12dd010fc863f5b621e6be876888afea8dc99fdeaf7814d676b4f15c956bda44",
+    "android/fixture-app/build.gradle": "6fce6c2a4d0b6ac9d596c023dd1b34d940936f8c6c92c46ae2b0d01c57195375",
+    "android/fixture-app/src/main/AndroidManifest.xml": "6c858f9cf57c1d4e4e5a43fb0a5837fd52cc1dd116e18bcc6f9b46b68da3f359",
+    "android/fixture-app/src/main/java/org/liveabit/fixture/BaseFixtureActivity.java": "e56c7002ef9818ac330ef67146e8f68657adbaca159200bf4dc978b7f91ccf9a",
+    "android/fixture-app/src/main/java/org/liveabit/fixture/FixtureApplication.java": "ffc5f9668e2b985b0bcf87d41ca4364a7ef130dd163ed37cad76ae1708378689",
+    "android/fixture-app/src/main/java/org/liveabit/fixture/MainActivity.java": "f4315f62c724ffefb8d804d28450114bd6e77180e320caf14d52f2d51f217d27",
+    "android/fixture-app/src/main/java/org/liveabit/fixture/SecondActivity.java": "7a717d542ae403e8d65b5891c7322f736dadaa6792f9446e4217981b350bfd86",
+    "android/fixture-app/src/main/res/drawable/ic_fixture.xml": "7bf5fad0fe878abd857c3ecc10ba5b919fc00e57b939103e0954fb10bcc21683",
+    "android/fixture-app/src/main/res/values/strings.xml": "03a198c6a0222e19996ecf4b5619390208ffb774ad34edb15855eabf58c739b4",
+    "android/fixture-app/src/main/res/values/styles.xml": "64d46f973a8307f9ae5cb6816b394d22879e1cbbe61ca5c77f4aff62a364fc57",
+    "android/fixture-app/src/main/res/xml/backup_rules.xml": "2c5c697984f4c52b526337ab61113f5843e0bfc6af4722374916ffe6da38dd9a",
+    "android/fixture-app/src/main/res/xml/data_extraction_rules.xml": "8b55ff5489071bb19a4e89967b604a16c0e4d1e87a2df3c73c64417314a59f22",
+    "android/fixture-core/build.gradle": "59e5af283bd3625a57a343ebb9fdb5229fd686cb55bd6c943d5b5798cedbda6a",
+    "android/fixture-core/src/main/java/org/liveabit/fixture/core/LifecycleFixtureCore.java": "0e32a9e348dc65cf9e2b816e82f05327f550662f8179146937d49347a57ebb08",
+    "android/fixture-core/src/test/java/org/liveabit/fixture/core/LifecycleFixtureCoreTest.java": "18ccb11eb7e5e4b2dbd68f4e27c6391951e57ebec878f4b323ed3e74a9f9af58",
+    "android/gradle.properties": "8d775c690778103d35686bd5148013bbf5c10dfd2049787b69f3a5d352099976",
+    "android/settings.gradle": "8a24b9c1752dc707fb4a6c38c416a771702ef5f44b033c388023c620ac47c69f",
+    "docs/decisions/0009-android-local-inspection-first.md": "ae2033452d234707372389a491e742caf911562dbf2692aea1ed5cf436e2b928",
+    "scripts/build-android.ps1": "8a690143467daf8ec9cb8666834965f230a6bd9469a56badbd9bcbeaf430d9a3",
+    "scripts/setup-android-tools.ps1": "33a5ea267194eab2cddc033ef61a972d10fb1381e99631c9332b966805833ac2",
+    "scripts/test-android-core.ps1": "6e5ba9fead92f837b1d955842d959fc05c83f6f03fcb67f09b8b106c490b3f46",
+    "scripts/test-android-fixture.ps1": "cdd98f6439ae178de59870f53df4d692f9fa797e7299c1a52b9b362c851d60bb",
+    "scripts/verify-android.ps1": "48006adadc7574bb83ac769e4540635fa18f5abb0552d6f326f8522c25806933",
+    "specs/android/lifecycle-fixture.md": "584b965bcea6619d803d2184873264888034b7b0d232d1d48a674c411caea06a",
+    "specs/android/local-inspector.md": "07842feecac63a1c4e11cf872308b74d3da0dd46c7c05dd50a2ac3da82fc6859"
+  },
+  "physical_device_tested_by_this_run": false,
+  "emulator_tested": false,
+  "m2_proven": false,
+  "m3_proven": false,
+  "earlier_qualitative_phone_report": "docs/review/android-phone-feedback-2026-10-05.md",
+  "limits": [
+    "Build, APK permission/signature audits and JVM fixtures only; neither new APK was exercised on Android by this run.",
+    "Earlier user-reported 0.1.0 phone behavior is qualitative and separate from this evidence.",
+    "Fixture values are manually entered and are neither authenticated attestations nor complete production coverage.",
+    "All collector estimates remain unverified diagnostics; initial state and source completeness stay unknown.",
+    "No production publication, existing-agent integration, background timing, battery or measured accuracy quality claim."
+  ]
+}

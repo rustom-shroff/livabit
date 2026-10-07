@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">liveabit Local</string>
+    <string name="no_observations">No observations retained. Start a fresh local session to inspect.</string>
+    <string name="no_observations_short">No observations retained.</string>
+    <string name="retained_interval_sum">Sum of retained inferred intervals: %1$.3f seconds (unverified)</string>
+    <string name="discarded_estimates_warning">Some estimates were discarded; this sum may omit parts of the window.</string>
+    <string name="fixture_retained_interval_sum">Sum of retained inferred intervals in this window: %1$d ms</string>
+    <string name="show_fixture_comparison">Compare a controlled test (optional)</string>
+    <string name="hide_fixture_comparison">Hide controlled-test comparison</string>
+    <string name="show_fixture_timing_details">Show fixture timing details</string>
+    <string name="hide_fixture_timing_details">Hide fixture timing details</string>
+    <string name="fixture_start_hint">Fixture start time code</string>
+    <string name="fixture_end_hint">Fixture end time code</string>
+    <string name="fixture_duration_hint">Fixture callback duration (milliseconds)</string>
+    <string name="compare_fixture_records">Compare retained records</string>
+    <string name="fixture_not_compared">No comparison yet. Enter the fixture values after Inspect now.</string>
+    <string name="fixture_invalid_numbers">Enter all three numeric values shown by the finished fixture test.</string>
+    <string name="fixture_unknown">Unknown: no retained closed interval overlaps this window. No zero is inferred. Manual values are unverified and source coverage remains unknown. This is not an accuracy pass.</string>
+    <string name="local_read_finishing_status">%1$s\nAn earlier read is still finishing. Inspect will be available when it ends.</string>
 </resources>

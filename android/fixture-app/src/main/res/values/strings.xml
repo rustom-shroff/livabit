@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">liveabit Lifecycle fixture</string>
+    <string name="first_screen">Lifecycle fixture · first screen</string>
+    <string name="second_screen">Lifecycle fixture · second screen</string>
+    <string name="boundary_notice">This separate test app observes only its own lifecycle callbacks. It has no permissions, storage or connection. The trace exists only in memory.</string>
+    <string name="trial_instructions">Choose org.liveabit.fixture in a fresh Local inspection session first. Tap Begin here, then wait about 30 seconds, either idle or switching screens several times. Tap Finish, return to the inspector and tap Inspect now. Return here for the finished comparison codes.</string>
+    <string name="begin">Begin</string>
+    <string name="switch_screen">Switch screen</string>
+    <string name="finish">Finish</string>
+    <string name="clear">Clear</string>
+    <string name="refresh">Update report</string>
+    <string name="state_idle">Stopped · no measurement</string>
+    <string name="state_active">Measurement active · values provisional</string>
+    <string name="state_finished">Finished · controlled comparison available</string>
+    <string name="state_invalid">Measurement invalid · trace and values erased</string>
+    <string name="reason_empty">Begin a measurement explicitly.</string>
+    <string name="reason_running">Begin/Finish define an interior window. Real pause gaps remain excluded.</string>
+    <string name="reason_finished">The values below are frozen for this finished window.</string>
+    <string name="reason_cleared">Measurement cleared. Begin starts a new window.</string>
+    <string name="reason_sample">A clock sample or callback was invalid. Begin a fresh measurement.</string>
+    <string name="reason_caller">Begin/Finish requires this screen to be resumed.</string>
+    <string name="reason_duplicate">A duplicate owned resume made the measurement unusable.</string>
+    <string name="reason_unmatched">An unmatched owned pause made the measurement unusable.</string>
+    <string name="reason_limit">The 128-callback limit was reached. Begin a fresh measurement.</string>
+    <string name="reason_expired">The ten-minute measurement limit was reached.</string>
+    <string name="reason_clock">A clock discontinuity made the measurement unusable.</string>
+    <string name="callback_count">Retained callbacks: %1$d of 128</string>
+    <string name="provisional_union">Provisional own resumed union: %1$s ms</string>
+    <string name="finished_union">Finished own resumed union: %1$s ms</string>
+    <string name="active_marker">Interior start time code: %1$s</string>
+    <string name="comparison_instructions">Enter these start/end time codes and the finished own resumed union into the inspector\u2019s controlled-test panel. Both totals use this same interior window; setup and return time are excluded.</string>
+    <string name="begin_code">Start time code: %1$s</string>
+    <string name="finish_code">End time code: %1$s</string>
+    <string name="begin_elapsed">Start elapsed clock: %1$s ms</string>
+    <string name="finish_elapsed">End elapsed clock: %1$s ms</string>
+    <string name="coverage_notice">This is ground truth only for our own instrumented callback window. It does not attest Android usage-history completeness, current attention, other apps, OAP summaries or production accuracy. No automatic pass threshold is assigned. Clear or process restart removes this measurement.</string>
+    <string name="callback_heading">Owned callback trace</string>
+    <string name="resume">resume</string>
+    <string name="pause">pause</string>
+    <string name="callback_row">%1$s · wall %2$s · elapsed %3$s ms</string>
+    <string name="no_callbacks">No callbacks retained inside this measurement window. Begin/Finish markers are separate from callback records.</string>
+</resources>

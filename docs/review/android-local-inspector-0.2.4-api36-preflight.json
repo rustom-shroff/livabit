@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-10-07T11:13:06.3253561Z",
+  "scope": "owned_api36_reused_boot_readiness_only",
+  "serial": "emulator-5582",
+  "avd": "liveabit-api36-test",
+  "api": 36,
+  "boot_completed": "1",
+  "uptime": "10671.06 35229.97",
+  "reused_boot": true,
+  "workflow_tested": false,
+  "crash_buffer": [],
+  "processes": [
+    {
+      "ProcessId": 23104,
+      "Name": "emulator.exe",
+      "ExecutablePath": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\emulator.exe",
+      "CommandLine": "\"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\emulator.exe\" -avd liveabit-api36-test -port 5582 -no-window -no-audio -no-boot-anim -no-snapshot -datadir \"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\" -data \"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\userdata-qemu.img\" -cache \"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\cache.img\" -sdcard \"C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\sdcard.img\" -wipe-data -camera-back none -camera-front none -gpu software -accel on -memory 2048"
+    },
+    {
+      "ProcessId": 27700,
+      "Name": "qemu-system-x86_64-headless.exe",
+      "ExecutablePath": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\qemu\\windows-x86_64\\qemu-system-x86_64-headless.exe",
+      "CommandLine": "C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-sdk\\emulator\\qemu\\windows-x86_64\\qemu-system-x86_64-headless.exe -avd liveabit-api36-test -port 5582 -no-window -no-audio -no-boot-anim -no-snapshot -datadir C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd -data C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\userdata-qemu.img -cache C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\cache.img -sdcard C:\\Users\\rustom\\Documents\\projects\\livabit\\artifacts\\android-emulator\\avd\\liveabit-api36-test.avd\\sdcard.img -wipe-data -camera-back none -camera-front none -gpu software -accel on -memory 2048"
+    }
+  ]
+}

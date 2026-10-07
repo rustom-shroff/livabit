@@ -1,0 +1,74 @@
+{
+  "result": "pass",
+  "generated_at": "2026-10-06T22:14:42.548Z",
+  "scope": "owned_emulator_inactive_permission_display_only",
+  "cases": [
+    {
+      "mode": "ignore",
+      "result": "pass",
+      "permission_label": "Android usage access: off or unavailable",
+      "remained_stopped": true,
+      "no_start_or_inspection_action": true,
+      "inspect_control_not_in_this_viewport": true,
+      "ui_snapshot": "artifacts/android-permission-refresh-0.2.2-test/1-ignore.xml"
+    },
+    {
+      "mode": "allow",
+      "result": "pass",
+      "permission_label": "Android usage access: allowed",
+      "remained_stopped": true,
+      "no_start_or_inspection_action": true,
+      "inspect_control_not_in_this_viewport": true,
+      "ui_snapshot": "artifacts/android-permission-refresh-0.2.2-test/2-allow.xml"
+    },
+    {
+      "mode": "ignore",
+      "result": "pass",
+      "permission_label": "Android usage access: off or unavailable",
+      "remained_stopped": true,
+      "no_start_or_inspection_action": true,
+      "inspect_control_not_in_this_viewport": true,
+      "ui_snapshot": "artifacts/android-permission-refresh-0.2.2-test/3-ignore.xml"
+    },
+    {
+      "mode": "allow",
+      "result": "pass",
+      "permission_label": "Android usage access: allowed",
+      "remained_stopped": true,
+      "no_start_or_inspection_action": true,
+      "inspect_control_not_in_this_viewport": true,
+      "ui_snapshot": "artifacts/android-permission-refresh-0.2.2-test/4-allow.xml"
+    }
+  ],
+  "full_emulator_gate": false,
+  "physical_device_tested": false,
+  "apk": {
+    "path": "artifacts/android-local-inspector/liveabit-local-inspector-0.2.2.apk",
+    "package_id": "org.liveabit.inspect",
+    "version_name": "0.2.2-local",
+    "sha256": "87fb356e1619f64a9b9ac418da455b0055d05c454a18a452d9d901044797cf40",
+    "size_bytes": 116284,
+    "signature_verified": true,
+    "signing": "local_debug_only",
+    "min_sdk": 35,
+    "target_sdk": 37,
+    "permissions": [
+      "android.permission.PACKAGE_USAGE_STATS"
+    ],
+    "internet_permission": false,
+    "lint": {
+      "report": "android/app/build/reports/lint-results-debug.xml",
+      "performed_by_this_run": true,
+      "warnings": 0,
+      "errors": 0
+    }
+  },
+  "environment": {
+    "serial": "emulator-5580",
+    "avd": "liveabit-api35-test",
+    "api": 35,
+    "fingerprint": "Android/sdk_phone64_x86_64/emu64x:15/AE3A.240806.019/12368160:userdebug/test-keys"
+  },
+  "owned_app_force_stopped": true,
+  "finished_at": "2026-10-06T22:14:57.091Z"
+}

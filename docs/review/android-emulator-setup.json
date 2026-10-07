@@ -1,0 +1,139 @@
+{
+  "result": "pass_tool_setup_only",
+  "generated_at": "2026-10-06T19:50:18.4585330Z",
+  "scope": "project_local_android_emulator_tool_setup_only",
+  "method": "registration_and_verified_cli_staging_for_existing_extraction",
+  "pin_metadata_reviewed_on": "2026-10-06",
+  "sdk_terms_accepted_by_user": "2026-10-05",
+  "existing_sdk_license_required": true,
+  "license_file_created_or_modified": false,
+  "download_timeout_seconds": 1800,
+  "packages": [
+    {
+      "package_id": "emulator",
+      "revision": "37.2.12",
+      "channel": "channel-0",
+      "metadata_url": "https://dl.google.com/android/repository/repository2-3.xml",
+      "archive_url": "https://dl.google.com/android/repository/emulator-windows_x64-16428233.zip",
+      "archive_name": "emulator-windows_x64-16428233.zip",
+      "expected_size_bytes": 455342868,
+      "official_sha1": "488ed747e82de7e9bb5247becd1ac043c7e5e85d",
+      "license_id": "android-sdk-license",
+      "archive": {
+        "path": "artifacts/android-tools/downloads/emulator-windows_x64-16428233.zip",
+        "verified_size_bytes": 455342868,
+        "verified_sha1": "488ed747e82de7e9bb5247becd1ac043c7e5e85d",
+        "sha256": "3b524b6e0f1f5506d3d81af62ec9ce15b2a6f80f467e99574e167514ca181401",
+        "reused_verified_archive": true,
+        "resumed_from_bytes": 0,
+        "quarantined_previous_file": null
+      },
+      "layout": {
+        "final_directory": "artifacts/android-sdk/emulator",
+        "extracted_by_this_run": false,
+        "source_properties_sha256": "ba13085f647fb8389a4d06a1de0e4104ac4e841733e50f67223ac230e1ce685a",
+        "parsed_source_properties": {
+          "Pkg.Desc": "Android Emulator",
+          "Pkg.UserSrc": "false",
+          "Pkg.BuildId": "16428233",
+          "Pkg.Path": "emulator",
+          "Pkg.Revision": "37.2.12"
+        },
+        "registration": {
+          "path": "artifacts/android-sdk/emulator/package.xml",
+          "exists": true,
+          "origin": "manual_local_registration_derived_from_exact_official_remote_package_metadata",
+          "sha256": "002f6368d36db8bfcf91b220f8b951d4ecdf89cfeb8bd25b18dd82571fa2b88f",
+          "metadata_path": "artifacts/android-tools/downloads/repository2-3-emulator-registration.xml",
+          "metadata_sha256": "fbe1cbda0bb8fd0f260e3f647483995eac3b57e2d7cb58640e2dbe5185f35eeb",
+          "metadata_url": "https://dl.google.com/android/repository/repository2-3.xml",
+          "retrieved_at": "2026-10-06T19:51:02.4420356Z",
+          "official_revision_archive_size_and_sha1_revalidated": true,
+          "acceptance_file_modified": false
+        }
+      }
+    },
+    {
+      "package_id": "system-images;android-35;default;x86_64",
+      "revision": "2",
+      "channel": "channel-0",
+      "metadata_url": "https://dl.google.com/android/repository/sys-img/android/sys-img2-3.xml",
+      "archive_url": "https://dl.google.com/android/repository/sys-img/android/x86_64-35_r02.zip",
+      "archive_name": "x86_64-35_r02.zip",
+      "expected_size_bytes": 782404023,
+      "official_sha1": "2d857d170c0d1b827149565da34b3383e5306f7f",
+      "license_id": "android-sdk-license",
+      "api": 35,
+      "abi": "x86_64",
+      "tag": "default",
+      "extension_level": 13,
+      "base_extension": true,
+      "archive": {
+        "path": "artifacts/android-tools/downloads/x86_64-35_r02.zip",
+        "verified_size_bytes": 782404023,
+        "verified_sha1": "2d857d170c0d1b827149565da34b3383e5306f7f",
+        "sha256": "6dd7de33e63ef105cf2fabea6badda1dbe7665c96d8908e5f6e1407e63ff4556",
+        "reused_verified_archive": true,
+        "resumed_from_bytes": 0,
+        "quarantined_previous_file": null
+      },
+      "layout": {
+        "final_directory": "artifacts/android-sdk/system-images/android-35/default/x86_64",
+        "extracted_by_this_run": false,
+        "source_properties_sha256": "98d57aac1a56bdff21e948a44332774d7f2127dc28fa413a85ad96bfb81cb7cb",
+        "parsed_source_properties": {
+          "Pkg.UserSrc": "false",
+          "AndroidVersion.ApiLevel": "35",
+          "SystemImage.Abi": "x86_64",
+          "SystemImage.GpuSupport": "true",
+          "Pkg.Desc": "Android SDK System Image",
+          "Pkg.Dependencies": "emulator#29.1.11",
+          "SystemImage.TagId": "default",
+          "AndroidVersion.ExtensionLevel": "13",
+          "AndroidVersion.IsBaseSdk": "true",
+          "SystemImage.TagDisplay": "Default Android System Image",
+          "Pkg.Revision": "2"
+        },
+        "registration": {
+          "path": "artifacts/android-sdk/system-images/android-35/default/x86_64/package.xml",
+          "exists": true,
+          "origin": "sdk_legacy_loader_generated_from_checksum_verified_source_properties",
+          "sha256": "5cf51f7beeeb6d48a94761ded8c609a6188d7e87f11d7a329dbab02f6163e90d",
+          "generated_during_this_run": false
+        }
+      }
+    }
+  ],
+  "os_settings_changed": false,
+  "sdk_tools_executed": true,
+  "avd_created": false,
+  "emulator_started": false,
+  "user_apks_modified": false,
+  "registration_only": true,
+  "existing_sdk_license": {
+    "id": "android-sdk-license",
+    "path": "artifacts/android-sdk/licenses/android-sdk-license",
+    "exists": true,
+    "sha256_before": "70fd2713ca385fd6b14c1d5577ce8349996699186a3a216e9643a09098c26dca",
+    "sha256_after": "70fd2713ca385fd6b14c1d5577ce8349996699186a3a216e9643a09098c26dca"
+  },
+  "command_line_tools": {
+    "revision": "22.0",
+    "path": "artifacts/android-sdk/cmdline-tools/22.0",
+    "method": "exact_file_verification_or_copy_from_pinned_official_cli_archive",
+    "archive_path": "artifacts/android-tools/downloads/commandlinetools-win-15859902.zip",
+    "archive_sha256": "90ae805d20434428bffcb699c290860f19bb5f66a67e6b330067e3de801fb04a",
+    "files_verified_against_archive": 141,
+    "files_copied_by_this_run": 0,
+    "source_properties_sha256": "166bcdfe54f73296b09e5e6aa6d96b9a752b78b418c56e9f3f3a13c15fac74e5"
+  },
+  "sdk_registration_verified": {
+    "command": "project_sdk_cmdline_tools_22.0_sdkmanager --sdk_root=<project_sdk> --list_installed",
+    "emulator_revision": "37.2.12",
+    "image_revision": "2",
+    "both_recognized": true,
+    "package_installation_performed": false
+  },
+  "registration_note": "CLI files were verified/copied from the pinned official archive. Emulator package.xml was manually derived from exact official metadata; the image uses SDK legacy-loader registration. SDK listing verifies recognition, not package installation. No acceptance file was created or modified.",
+  "finished_at": "2026-10-06T19:51:03.9328528Z"
+}

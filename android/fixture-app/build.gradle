@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace = 'org.liveabit.fixture'
+    compileSdk {
+        version = release(37) { minorApiLevel = 0 }
+    }
+    buildToolsVersion = '36.0.0'
+    enableKotlin = false
+    signingConfigs {
+        debug { storeFile = rootProject.file('../artifacts/android-debug.keystore') }
+    }
+    defaultConfig {
+        applicationId = 'org.liveabit.fixture'
+        minSdk = 35
+        targetSdk = 37
+        versionCode = 1
+        versionName = '0.1.0-fixture'
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+dependencies { implementation project(':fixture-core') }

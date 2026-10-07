@@ -1,6 +1,6 @@
 # Android local inspector build review
 
-Date: **2026-10-05**. Status: **APK built and audited; phone trial pending**. The [local-inspection-first decision](../decisions/0009-android-local-inspection-first.md) governs this work. The user accepted Google's SDK terms and identified their Android 15+ phone as the first trial environment. Agent selection and Linux portability remain deferred.
+Date: **2026-10-05**. Historical build: **0.1.0**. Status at build: **APK built and audited; phone trial pending**. Later [qualitative phone feedback](android-phone-feedback-2026-10-05.md) is recorded separately and does not retrospectively change the build evidence. The [local-inspection-first decision](../decisions/0009-android-local-inspection-first.md) governs this work. The user accepted Google's SDK terms and identified their Android 15+ phone as the first trial environment. Agent selection and Linux portability remain deferred.
 
 ## Delivered scope
 
@@ -12,7 +12,7 @@ The source review tightened query generation/lifecycle fencing, permission-chang
 
 ## Recorded checks
 
-The [native evidence manifest](android-local-inspector-validation.json) records exact source hashes, tool pins, outcomes and limits. The audited APK is 96,307 bytes with SHA-256 `93ade977b624ff1ecc94de6fbff4ef9f7cf5119b91a346bd8f6dba2ba28d479c`, signed with a local development key.
+The [versioned native evidence manifest](android-local-inspector-0.1.0-validation.json) records exact source hashes, tool pins, outcomes and limits for this historical build. The audited APK is 96,307 bytes with SHA-256 `93ade977b624ff1ecc94de6fbff4ef9f7cf5119b91a346bd8f6dba2ba28d479c`, signed with a local development key.
 
 | Check | Result |
 | --- | --- |

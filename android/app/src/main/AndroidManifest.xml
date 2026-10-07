@@ -10,6 +10,7 @@
     <application
         android:name=".LocalInspectionApplication"
         android:label="@string/app_name"
+        android:icon="@drawable/ic_liveabit"
         android:theme="@style/AppTheme"
         android:allowBackup="false"
         android:fullBackupContent="@xml/backup_rules"

@@ -1,0 +1,30 @@
+# Android local inspection 0.2.1 build review
+
+Date: **2026-10-06**. Historical scope: **inspector 0.2.1 build and emulator attempt, with unchanged owned fixture 0.1.0**. Its [preserved runtime report](../../artifacts/android-emulator-attempt7-test/validation.json) records **eight passing cases and one failing case**. The full runtime gate did not pass. The [archive index](../../artifacts/android-emulator-attempt7-test/archive-index.json) identifies the preserved UI/viewport snapshots; paths inside the raw report refer to the original working directory. The corrected successor is [0.2.2](android-local-development-0.2.2.md), which requires its own complete emulator run before another phone trial.
+
+The failing permission-revocation/regrant case exposed a real UI defect. Revocation stopped inspection and cleared observations correctly. After a rapid regrant, Android AppOps was allowed and the session remained stopped and empty, but its visible permission label could remain stale. The coordinator refreshed the observer when a live session stopped, but omitted that refresh when the next change arrived while already inactive. This was a status-display defect; regranting did not restart collection or restore observations. Final selection-clear checks were not reached in that attempt.
+
+The [historical 0.2.0 emulator review](android-emulator-0.2.0.md) recorded six passing functional cases before an input-navigation automation failure left the remaining workflows untested. It also exposed a presentation issue: the screen-handoff comparison showed a retained inferred sum without making the reasons for discarded earlier estimates explicit in that panel. The old run was incomplete and did not establish measured accuracy.
+
+The [0.2.1 inspector APK](../../artifacts/android-local-inspector/liveabit-local-inspector-0.2.1.apk) makes that uncertainty visible. The main summary and controlled-test comparison now identify their numbers as sums of **retained inferred intervals**. The comparison carries the report's existing plain-language ambiguity reasons into both numerical and unknown results. Where same-timestamp transitions or an unmatched pause invalidate prior estimates, it also displays: “Some estimates were discarded; this sum may omit parts of the window.” The signed comparison delta is labelled against the retained sum. The [local specification](../../specs/android/local-inspector.md) retains these requirements.
+
+This is a minimal UI clarification. Reconstruction remains deliberately conservative: conflicting or missing observations can discard estimates, and the app does not invent intervals to bring its number closer to a manually entered fixture value. A remaining sum is neither a complete app-session duration nor a lower bound on actual use. The update does not claim a numerical accuracy fix.
+
+The source hashes in the [preserved 0.2.1 native audit](android-local-inspector-0.2.1-validation.json) and [preserved 0.2.0 native audit](android-local-inspector-0.2.0-validation.json) confirm that the collector core, fixed-package comparator, Android usage source, storage code, manifests and fixture sources were unchanged in this version. Collection, query filtering, consent horizons and privacy boundaries were unchanged. The inspector performs a manual foreground read of explicitly selected apps. Activity and comparison inputs remain in process memory; only local selection/control preferences persist. There is no Internet permission, background collection, agent endpoint or activity delivery. The [fixture APK](../../artifacts/android-local-inspector/liveabit-lifecycle-fixture-0.1.0.apk) remains byte-identical to the audited 0.2.0 companion build.
+
+## Native verification
+
+The [preserved native audit](android-local-inspector-0.2.1-validation.json), generated at **2026-10-06T20:32:24.7645715Z**, records `pass_with_device_limits` for native build and JVM preparation. That result does not include Android runtime validation.
+
+| Audited binary | Package / version | Bytes | SHA-256 |
+| --- | --- | ---: | --- |
+| Inspector | `org.liveabit.inspect` / `0.2.1-local` | 116272 | `013c6bde4e1b53d13e16cf15738017429f68556a18eb9ae33ed885a8b3e7106e` |
+| Owned fixture | `org.liveabit.fixture` / `0.1.0-fixture` | 66627 | `28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46` |
+
+- **30 collector/comparison JVM cases** and **25 independent owned-fixture JVM cases** passed. Neither harness runs the Android UI or OS usage-history source.
+- Both APKs were rebuilt and linted in the recorded native run. Each has **zero lint errors and zero warnings**, a verified local development signature, minimum SDK 35 and target SDK 37. There was no recorded input drift.
+- Actual binary audits found only `android.permission.PACKAGE_USAGE_STATS` in the inspector and zero permissions in the fixture; neither APK has Internet permission.
+
+The native audit explicitly records `emulator_tested: false` and `physical_device_tested_by_this_run: false` because that build procedure exercises neither device environment. Actual emulator observations belong in the [preserved runtime report](../../artifacts/android-emulator-attempt7-test/validation.json) under the [emulator plan](android-emulator-plan-2026-10-06.md). That attempt passed startup, permission denial/grant, scope/picker, no-backfill, both controlled timing scenarios, comparison/input erasure and Stop/restart cases before failing the status-label assertion. The screen-handoff comparison retained discarded-estimate warnings; it was not a production timing-accuracy pass. Setup, boot, compilation and JVM checks do not satisfy the user's emulator-first gate by themselves. The [phone guide](../../android/README.md) preserves that gate.
+
+Source completeness, initial state, fixture input authenticity and collector accuracy remain unverified. Emulator evidence cannot establish physical-phone behavior, OEM differences or battery performance. Production signing/distribution, agent integration, Linux portability and M2/M3 remain deferred or unproven; these local diagnostics are not validated Open Activity Protocol (OAP) summaries.

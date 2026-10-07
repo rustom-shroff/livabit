@@ -1,0 +1,20 @@
+{
+  "result": "pass_boot_readiness_only",
+  "generated_at": "2026-10-07T08:18:55.5011193Z",
+  "scope": "owned_api36_boot_health_before_apk_install",
+  "serial": "emulator-5582",
+  "avd": "liveabit-api36-test",
+  "launcher_pid": 23104,
+  "startup_path": "artifacts/android-emulator/run.json",
+  "startup_sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+  "api": 36,
+  "abi": "x86_64",
+  "extension_level": 17,
+  "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:16/BE2A.250530.026.D1/13818094:userdebug/test-keys",
+  "boot_completed": true,
+  "stock_launcher_focused": true,
+  "no_anr_since_boot": true,
+  "workflow_suite_passed": false,
+  "physical_device_accessed": false,
+  "creation_diagnostics_cause_verified": false
+}

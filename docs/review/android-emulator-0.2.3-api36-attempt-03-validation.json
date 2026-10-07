@@ -1,0 +1,694 @@
+{
+  "result": "fail",
+  "generated_at": "2026-10-07T09:13:32.391Z",
+  "scope": "dedicated_owned_emulator_runtime_ui",
+  "environment": {
+    "serial": "emulator-5582",
+    "expected_avd": "liveabit-api36-test",
+    "actual_avd": "liveabit-api36-test",
+    "api": 36,
+    "android_release": "16",
+    "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:16/BE2A.250530.026.D1/13818094:userdebug/test-keys",
+    "abi": "x86_64",
+    "uptime_seconds_at_start": 3497.7,
+    "qemu_verified": true,
+    "account_free_verified": true,
+    "guest_time_zone_property": "America/Los_Angeles",
+    "guest_time_zone_property_source": "read_only_getprop_persist.sys.timezone",
+    "display": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "overall_timeout_millis": 5400000,
+  "cases": [
+    {
+      "name": "fresh_launch_and_permission_denial",
+      "started_at": "2026-10-07T09:13:34.112Z",
+      "result": "pass",
+      "details": {
+        "denied_start_stopped": true,
+        "empty_scope_rejected": true
+      },
+      "finished_at": "2026-10-07T09:16:52.300Z"
+    },
+    {
+      "name": "usage_settings_grant_is_not_session_consent",
+      "started_at": "2026-10-07T09:16:52.301Z",
+      "result": "pass",
+      "details": {
+        "settings_ui_grant": true,
+        "emulator_appops_fallback": false,
+        "grant_alone_keeps_stopped": true
+      },
+      "finished_at": "2026-10-07T09:18:17.096Z"
+    },
+    {
+      "name": "manual_scope_validation_and_system_picker",
+      "started_at": "2026-10-07T09:18:17.097Z",
+      "result": "pass",
+      "details": {
+        "exact_identifier_fallback_exercised": true,
+        "malformed_identifier_rejected": true,
+        "system_picker_opened": true,
+        "picker_selection_runtime_verified": true,
+        "picker_cancel_exercised": false
+      },
+      "finished_at": "2026-10-07T09:20:57.127Z"
+    },
+    {
+      "name": "no_preconsent_backfill_and_empty_is_unknown",
+      "started_at": "2026-10-07T09:20:57.128Z",
+      "result": "fail",
+      "message": "Window state rejected after 3 read-only attempts: A visible occluding inset has invalid or empty bounds.",
+      "failure_ui": "unavailable"
+    }
+  ],
+  "measurements": [],
+  "input_navigation": [
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    }
+  ],
+  "home_transitions": [],
+  "fixture_timing_context_resets": [
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0005-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0006-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0007-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0008-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0009-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0025-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0026-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0027-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0028-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0029-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0030-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "usage_settings_grant_is_not_session_consent_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0041-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0042-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0043-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0044-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0045-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0046-usage-settings-grant-is-not-session-consent.xml"
+      ]
+    },
+    {
+      "reason": "manual_scope_validation_and_system_picker_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0072-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0073-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0074-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0075-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0076-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-03/0077-manual-scope-validation-and-system-picker.xml"
+      ]
+    }
+  ],
+  "permission_controls": [
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Controlled denied-access baseline."
+    },
+    {
+      "control": "stock_android_usage_settings_ui",
+      "value": "allow"
+    }
+  ],
+  "window_state_retries": [
+    {
+      "id": 262,
+      "stage": "no_preconsent_backfill_and_empty_is_unknown",
+      "require_permitted_focus": false,
+      "attempt_limit": 3,
+      "retry_delay_millis": 250,
+      "attempts": [
+        {
+          "attempt": 1,
+          "observed_at": "2026-10-07T09:21:09.340Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-1.window-displays.txt",
+          "sha256": "0201f44cf26c27c4a33147a0ba2be78cfc92cf7096512988fefe5c9e90aa19e0",
+          "size_bytes": 19530,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "0201f44cf26c27c4a33147a0ba2be78cfc92cf7096512988fefe5c9e90aa19e0",
+            "trigger_observed_at": "2026-10-07T09:21:09.340Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:09.345Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:09.458Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-1.window-all.txt",
+                "sha256": "fb991935de66362bafa06350cf1191442b562feb03b130d59345bb35c34db152",
+                "size_bytes": 87143
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:09.460Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:09.556Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-1.input-method.txt",
+                "sha256": "2b6da0bf0152e34ff525df53d7791453975441379100e0a8c1c94514644e1bcb",
+                "size_bytes": 96918
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:09.558Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:09.648Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-1.window-displays-after.txt",
+                "sha256": "168cbee3fad5a53216e1016cd4dd5dd0c4fc8c58916e1a7c1d9101795484aad0",
+                "size_bytes": 19530
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "observed_at": "2026-10-07T09:21:10.015Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-2.window-displays.txt",
+          "sha256": "1b030363f51f2cb749e0ee09655d0ca6fe8799a8827a01c96f1f8d1a8eb09569",
+          "size_bytes": 19530,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "1b030363f51f2cb749e0ee09655d0ca6fe8799a8827a01c96f1f8d1a8eb09569",
+            "trigger_observed_at": "2026-10-07T09:21:10.015Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.022Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:10.158Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-2.window-all.txt",
+                "sha256": "00257e12111d9278563fb565a4e4d6e7a12624f0debf42c91d93e662dd6950b6",
+                "size_bytes": 87145
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.160Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:10.264Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-2.input-method.txt",
+                "sha256": "5a5d308410410f92df7369ca1995096a9d20b01167746915268d3c0bbc11a9a9",
+                "size_bytes": 97590
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.267Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:10.362Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-2.window-displays-after.txt",
+                "sha256": "04f7479a2e8d9b36ab2db97edaac66c10d97ea0aabc26e59aedbf2ff44019a94",
+                "size_bytes": 19528
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 3,
+          "observed_at": "2026-10-07T09:21:10.717Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-3.window-displays.txt",
+          "sha256": "99e783c5c39bd3c18f2dc1e13c0d6fe464666ee721a2283385da87788855f7e7",
+          "size_bytes": 19530,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "99e783c5c39bd3c18f2dc1e13c0d6fe464666ee721a2283385da87788855f7e7",
+            "trigger_observed_at": "2026-10-07T09:21:10.717Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.725Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:10.857Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-3.window-all.txt",
+                "sha256": "867623fcc7628c83d32c84288ffc9561d77271ecb8e8fdf0634840c9be8b63f9",
+                "size_bytes": 87145
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.861Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:10.994Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-3.input-method.txt",
+                "sha256": "376c5ee43b56b142bf1d908e9b2b9e91f91e7185e55cd904cac9ed1738126cf8",
+                "size_bytes": 98225
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:10.998Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:11.102Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0262-window-state-6da1d7a92658-attempt-3.window-displays-after.txt",
+                "sha256": "ee88ae30a105291ee84893c482db043c1cc2bea28c3d6b7ef7dc111ab10603a7",
+                "size_bytes": 19530
+              }
+            ]
+          }
+        }
+      ],
+      "result": "exhausted"
+    },
+    {
+      "id": 263,
+      "stage": "no_preconsent_backfill_and_empty_is_unknown",
+      "require_permitted_focus": false,
+      "attempt_limit": 3,
+      "retry_delay_millis": 250,
+      "attempts": [
+        {
+          "attempt": 1,
+          "observed_at": "2026-10-07T09:21:13.627Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-1.window-displays.txt",
+          "sha256": "48eee4d6fc5df99ba30b5c9550426679abf80c13850a5dbf760f6f8004bf7fe4",
+          "size_bytes": 19530,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "48eee4d6fc5df99ba30b5c9550426679abf80c13850a5dbf760f6f8004bf7fe4",
+            "trigger_observed_at": "2026-10-07T09:21:13.627Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:13.634Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:13.754Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-1.window-all.txt",
+                "sha256": "e125083f0f0dd0e136fcea2c175b188f2a80b111a8473cc66f089ea05edc51b4",
+                "size_bytes": 87145
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:13.756Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:13.855Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-1.input-method.txt",
+                "sha256": "78e698c2ac6456f3463c879cc1cdebb650a2a5fd10543798322af09820563d4a",
+                "size_bytes": 98898
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:13.858Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:13.947Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-1.window-displays-after.txt",
+                "sha256": "774c9be7e417c79d28a43ae03d11e72dbab7595d7f2d119e47ba7dd64a893dcd",
+                "size_bytes": 19530
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "observed_at": "2026-10-07T09:21:14.298Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-2.window-displays.txt",
+          "sha256": "d7ff8cd007165a1d30452a4ca2f02e5f0fcab77aa45a139588216a2fa639c912",
+          "size_bytes": 19529,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "d7ff8cd007165a1d30452a4ca2f02e5f0fcab77aa45a139588216a2fa639c912",
+            "trigger_observed_at": "2026-10-07T09:21:14.298Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:14.302Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:14.414Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-2.window-all.txt",
+                "sha256": "88c32d6055b440adecef2fd217284fd97fb7eb95ca55b2c9a5a41f9958b065ac",
+                "size_bytes": 87144
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:14.417Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:14.517Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-2.input-method.txt",
+                "sha256": "c9c3d55c542d6196d4f8ae1062043845864163bd2a9b249804317ac0796bbe0d",
+                "size_bytes": 99569
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:14.519Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:14.618Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-2.window-displays-after.txt",
+                "sha256": "8ecb92bcffbc16b01389db8c1f6d342baacfd47f5a503e9bcba59db24e2dab9a",
+                "size_bytes": 19530
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 3,
+          "observed_at": "2026-10-07T09:21:14.970Z",
+          "result": "rejected",
+          "raw_dump_available": true,
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-3.window-displays.txt",
+          "sha256": "a6b997181956ce1d000d0cc4d80db18b1e7dfb1aebb0cd3cde055e079fe1af66",
+          "size_bytes": 19530,
+          "reason": "A visible occluding inset has invalid or empty bounds.",
+          "ime_supplemental_evidence": {
+            "scope": "diagnostic_only_visible_bottom_zero_ime",
+            "trigger_window_displays_sha256": "a6b997181956ce1d000d0cc4d80db18b1e7dfb1aebb0cd3cde055e079fe1af66",
+            "trigger_observed_at": "2026-10-07T09:21:14.970Z",
+            "device": {
+              "serial": "emulator-5582",
+              "api": 36,
+              "avd": "liveabit-api36-test"
+            },
+            "source_read_limit": 3,
+            "sequential_after_trigger": true,
+            "simultaneous_with_trigger": false,
+            "before_cleanup": true,
+            "geometry_accepted": false,
+            "gestures_sent_by_capture": 0,
+            "capture_complete": true,
+            "sampled_consistency_not_atomic_attestation": true,
+            "sampled_consistency": "consistent_observed_geometry_and_focus",
+            "sources": [
+              {
+                "kind": "window_all",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "-a"
+                ],
+                "capture_started_at": "2026-10-07T09:21:14.973Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:15.090Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-3.window-all.txt",
+                "sha256": "d0f1ffa5589acd19e0577e602aac410c31b8b9d3a5d6e6355d54845692b6da9b",
+                "size_bytes": 87146
+              },
+              {
+                "kind": "input_method",
+                "command": [
+                  "dumpsys",
+                  "input_method"
+                ],
+                "capture_started_at": "2026-10-07T09:21:15.093Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:15.192Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-3.input-method.txt",
+                "sha256": "afa6423b25f62292806e084d33bbb65b17f42cfbd6c29d8c9c4dbff2aa916ded",
+                "size_bytes": 100241
+              },
+              {
+                "kind": "display_after",
+                "command": [
+                  "dumpsys",
+                  "window",
+                  "displays"
+                ],
+                "capture_started_at": "2026-10-07T09:21:15.194Z",
+                "raw_dump_available": true,
+                "capture_finished_at": "2026-10-07T09:21:15.283Z",
+                "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-03/0263-window-state-6da1d7a92658-attempt-3.window-displays-after.txt",
+                "sha256": "f4d127da03a0e446035599d8fdfe98d1f272a6069304ae2b49b9660b6fab50ce",
+                "size_bytes": 19530
+              }
+            ]
+          }
+        }
+      ],
+      "result": "exhausted"
+    }
+  ],
+  "unsupported": [
+    "Physical phone/OEM behavior, battery, background collection and direct agent delivery.",
+    "Credential-storage lock before first unlock; ordinary keyguard lock is a different state.",
+    "24-hour expiry, 4096-record overflow, unavailable-source injection and deterministic OS-query races.",
+    "Clock mutation, rotation and split-screen/multi-resume are not exercised by this initial UI harness.",
+    "FLAG_SECURE screenshots may be blank; saved UI hierarchy is the primary UI assertion source."
+  ],
+  "limitations": [
+    "Only owned synthetic fixture activity is inspected; usage source completeness remains unknown.",
+    "Comparison values entered by this harness remain unauthenticated manual values in the app.",
+    "Fixture timing details attest displayed current core anchors and projected records, not original OS-query batch clocks or source completeness.",
+    "The app time zone and UTC offset describe formatting at the report clock, not source time-zone metadata at event time.",
+    "Observed timing differences do not establish a production accuracy threshold or other-app accuracy.",
+    "Project-local AVD path is bound through a fresh startup record and actual AVD name; launcher/qemu PID is not independently attested."
+  ],
+  "physical_android_verified": false,
+  "measured_production_accuracy_verified": false,
+  "m2_verified": false,
+  "m3_verified": false,
+  "setup_provenance": {
+    "source": "docs/review/android-api36-emulator-setup.json",
+    "sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "result": "pass_image_setup_only",
+    "scope": "project_local_api36_image_setup_only",
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "setup_bytes_match_startup_hash": true,
+    "legacy_startup_setup_binding_absent": false,
+    "image_source_properties_sha256": "1a6e7c0b326c24c28ba501aa5ada247dd9fb0f087b662865f7bc649991fe74d1",
+    "image_registration_sha256": "ea57e6ab1cb5578de2666ba1beb0c6d2f7366809e69304bcf205d79814a5e74d",
+    "emulator_source_properties_sha256": "ba13085f647fb8389a4d06a1de0e4104ac4e841733e50f67223ac230e1ce685a",
+    "actual_small_sdk_identity_files_hashed": true,
+    "large_image_files_rehashed_by_ui_harness": false,
+    "runtime_verified_by_setup": false
+  },
+  "run_provenance": {
+    "source": "artifacts/android-emulator/run.json",
+    "sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+    "avd_path": "artifacts/android-emulator/avd/liveabit-api36-test.avd",
+    "created_at": "2026-10-07T08:15:05.1849512Z",
+    "startup_age_millis": 3507211,
+    "freshness_verified": true,
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "installed_tool_properties_match": true,
+    "launcher_pid_from_run_record": 23104,
+    "launcher_or_qemu_pid_independently_verified": false,
+    "setup_report": "docs/review/android-api36-emulator-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "startup_recorded_config_sha256": "221d5b43209e1a9cd98c0eac45a555e37c3ccdfc9cde89b7d659167acf294e4d",
+    "startup_recorded_avd_registration_sha256": "6d80825ac9720249d650c353e25b5022006e636d26aeb08ba5b6f867cb0ca4e0",
+    "recorded_writable_paths_match_owned_avd": true,
+    "live_config_independently_rehashed_by_ui_harness": false,
+    "acceleration_backend": "WHPX",
+    "memory_megabytes": 2048
+  },
+  "harness_sha256": "da927310764d76f79bcc5dca56396d368af3c067b2c7f9f6e724c81a63acc421",
+  "installed_apks": [
+    {
+      "package_id": "org.liveabit.inspect",
+      "version_name": "0.2.3-local",
+      "sha256": "4de00e2396f39ad3c6c648f35ee54020b01c9ed589301dbaeaced85b2767823d",
+      "exact_audited_bytes_verified": true
+    },
+    {
+      "package_id": "org.liveabit.fixture",
+      "version_name": "0.1.0-fixture",
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "exact_audited_bytes_verified": true
+    }
+  ],
+  "failed_stage": "no_preconsent_backfill_and_empty_is_unknown",
+  "failure": "Window state rejected after 3 read-only attempts: A visible occluding inset has invalid or empty bounds.",
+  "summary": {
+    "passed": 3,
+    "failed": 1
+  },
+  "finished_at": "2026-10-07T09:21:15.907Z",
+  "evidence_preservation": {
+    "archive_path": "artifacts/android-emulator-0.2.3-api36-attempt-03",
+    "raw_report_sha256": "c5bd74192ef39a03d5093ec2a60ecc21c3be44c9e3b4ed9797321b8e60d40c40",
+    "original_runtime_claims_preserved": true,
+    "ui_paths_relocated_only": true,
+    "window_diagnostic_paths_relocated_only": true,
+    "setup_report": "artifacts/android-emulator-0.2.3-api36-attempt-03/image-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74"
+  }
+}

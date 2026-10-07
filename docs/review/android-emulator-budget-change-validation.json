@@ -1,0 +1,25 @@
+{
+  "result": "pass",
+  "scope": "budget_change_integrity_and_cli_guards_only",
+  "generated_at": "2026-10-07T05:32:33.481Z",
+  "old_harness_sha256": "94a03c46dd219ab12e260ef64aa368e921eb27a246a97c271d82c937db0076e5",
+  "new_harness_sha256": "20158933f677c4f5b6f627669e8cbe0c67e8a7434e9c5dbc1e9d20c2f3c9e4f2",
+  "default_overall_minutes": 90,
+  "allowed_overall_minutes": [
+    45,
+    120
+  ],
+  "individual_command_limit_seconds": 45,
+  "cleanup_limit_seconds": 15,
+  "only_budget_option_help_validation_and_overall_constant_changed": true,
+  "assertions_and_device_guards_unchanged": true,
+  "invalid_cli_budgets_rejected": [
+    "44",
+    "121",
+    "90.5",
+    "abc"
+  ],
+  "physical_target_rejected_before_mutation": true,
+  "apks_unchanged": true,
+  "full_runtime_pass_not_established_by_this_check": true
+}

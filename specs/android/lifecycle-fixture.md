@@ -1,0 +1,21 @@
+# Owned Android lifecycle fixture
+
+Revision: 0.1, 2026-10-05. Task: TASK-P6-F03. This implements the controlled owned-app stage already planned in the [Android measurement plan](../../docs/android-feasibility-plan.md), following the user's instruction to continue after [phone feedback](../../docs/review/android-phone-feedback-2026-10-05.md). It is a development test instrument, not a collector, agent, publisher or source of production coverage attestations.
+
+## Boundary and flow
+
+Build a separate debug APK with fixed package `org.liveabit.fixture`, Android API 35 minimum / 37 target and the existing pinned toolchain. It has two authored screens implemented as Activities. Only the launcher is exported. No permissions, network, usage-access query, app inventory, storage, provider, service, analytics or export. Disable backup/transfer and Direct Boot. The fixture records its own callbacks only, in bounded process memory; restart returns empty and stopped.
+
+Both screens offer Begin, Switch screen, Finish and Clear. Begin is explicit and establishes an interior measurement window now using paired wall-clock/elapsed samples and the currently resumed owned Activity as a known baseline. A later Begin replaces prior data. Finish closes the measurement window using the fixture's independently known current owned resumed state; Clear erases everything. Begin/Finish while the fixture is not resumed must fail closed. This owned baseline/closing marker is never supplied to the production collector as a trusted starting state or continuity fact.
+
+Maintain opaque in-memory tokens solely to pair this fixture's own Activity callbacks. Never inspect, serialize or display Activity/class names, instance IDs, labels, content or interaction details. Retained/displayed callback records contain only resume/pause type plus wall/elapsed timestamps. Internal handoffs may have genuine gaps; retain them. Overlapping owned callbacks contribute to a union once, with no debounce or arbitrary gap filling. The two screens remain in the same package.
+
+Limit a run to 128 callback records and ten minutes. Validate callback order, matching own tokens, monotonic elapsed/wall samples and wall/elapsed drift with a finite two-second tolerance. Duplicate resumes, unmatched pauses, overflow, invalid samples or discontinuity invalidate the entire run and erase the trace/estimate, retaining only a safe reason. Sample time on callbacks, controls and report reads; no background timer or wakeup guarantee. Process death loses the run. Reports identify whether a run is active, finished or invalid and show measurement boundaries, callback count and union duration; only a finished valid run supplies comparison time codes/value.
+
+## Comparison and evidence
+
+Select only `org.liveabit.fixture` in a fresh inspector session before a fixture trial. Idle and repeated screen-switch scenarios exercise different lifecycle patterns. Use the fixture's Begin/Finish time codes with the inspector's optional controlled-test panel after Inspect now. Both totals are clipped to the same interior window, so setup and return-to-inspector time are excluded. The inspector can use only already authorized retained closed estimates; absent or ambiguous evidence remains unknown.
+
+The fixture callback union is ground truth only for its own instrumented callback window, subject to clock and implementation limits. Android usage-history emission/delivery is a different source. User-entered values are unverified, no automatic accuracy threshold is assigned, and the comparison must not mark source coverage complete or a production test passed. Any actual device comparison must retain the exact APK/API/OEM, safe controlled timeline, omissions and signed error separately.
+
+Verify the independent ledger on the JVM: interior Begin/Finish markers, fragmented handoffs/genuine gaps, overlap union, open intervals during report, malformed order, capacity/expiry, clock changes, Clear/fresh Begin and process reset. Audit the built fixture APK for zero permissions, minimum/target API and debug signature. Compilation, fixture outcomes and APK audits leave physical behavior, measured accuracy, battery, M2 and M3 unproven.

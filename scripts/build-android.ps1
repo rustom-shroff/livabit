@@ -20,7 +20,7 @@ try {
         & (Join-Path $taskJdk 'bin\keytool.exe') -genkeypair -keystore $taskDebugKey -storepass android -keypass android -alias androiddebugkey -dname 'CN=liveabit Local Development' -keyalg RSA -keysize 2048 -validity 10000
         if ($LASTEXITCODE -ne 0) { throw 'Local development signing key generation failed.' }
     }
-    & $taskGradle -p (Join-Path $taskRoot 'android') --no-daemon --console=plain ':collector-core:coreFixtures' ':app:assembleDebug' ':app:lintDebug'
+    & $taskGradle -p (Join-Path $taskRoot 'android') --no-daemon --console=plain ':collector-core:coreFixtures' ':fixture-core:coreFixtures' ':app:assembleDebug' ':app:lintDebug' ':fixture-app:assembleDebug' ':fixture-app:lintDebug'
     if ($LASTEXITCODE -ne 0) { throw 'Android build/checks failed.' }
 } finally {
     $env:JAVA_HOME = $taskPrevious.JAVA_HOME

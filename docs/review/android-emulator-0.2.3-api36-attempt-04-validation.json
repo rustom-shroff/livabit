@@ -1,0 +1,505 @@
+{
+  "result": "fail",
+  "generated_at": "2026-10-07T09:47:23.595Z",
+  "scope": "dedicated_owned_emulator_runtime_ui",
+  "environment": {
+    "serial": "emulator-5582",
+    "expected_avd": "liveabit-api36-test",
+    "actual_avd": "liveabit-api36-test",
+    "api": 36,
+    "android_release": "16",
+    "build_fingerprint": "Android/sdk_phone64_x86_64/emu64x:16/BE2A.250530.026.D1/13818094:userdebug/test-keys",
+    "abi": "x86_64",
+    "uptime_seconds_at_start": 5528.92,
+    "qemu_verified": true,
+    "account_free_verified": true,
+    "guest_time_zone_property": "America/Los_Angeles",
+    "guest_time_zone_property_source": "read_only_getprop_persist.sys.timezone",
+    "display": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "overall_timeout_millis": 5400000,
+  "cases": [
+    {
+      "name": "fresh_launch_and_permission_denial",
+      "started_at": "2026-10-07T09:47:25.329Z",
+      "result": "pass",
+      "details": {
+        "denied_start_stopped": true,
+        "empty_scope_rejected": true
+      },
+      "finished_at": "2026-10-07T09:50:42.710Z"
+    },
+    {
+      "name": "usage_settings_grant_is_not_session_consent",
+      "started_at": "2026-10-07T09:50:42.711Z",
+      "result": "pass",
+      "details": {
+        "settings_ui_grant": true,
+        "emulator_appops_fallback": false,
+        "grant_alone_keeps_stopped": true
+      },
+      "finished_at": "2026-10-07T09:52:05.987Z"
+    },
+    {
+      "name": "manual_scope_validation_and_system_picker",
+      "started_at": "2026-10-07T09:52:05.988Z",
+      "result": "pass",
+      "details": {
+        "exact_identifier_fallback_exercised": true,
+        "malformed_identifier_rejected": true,
+        "system_picker_opened": true,
+        "picker_selection_runtime_verified": true,
+        "picker_cancel_exercised": false
+      },
+      "finished_at": "2026-10-07T09:54:46.235Z"
+    },
+    {
+      "name": "no_preconsent_backfill_and_empty_is_unknown",
+      "started_at": "2026-10-07T09:54:46.236Z",
+      "result": "fail",
+      "message": "Launch IME recovery did not confirm the keyboard hidden across current window/manager/service/source observations.",
+      "failure_ui": "artifacts/android-emulator-0.2.3-api36-attempt-04/0087-no-preconsent-backfill-and-empty-is-unknown-failure.xml"
+    }
+  ],
+  "measurements": [],
+  "input_navigation": [
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    },
+    {
+      "field": "App identifiers, for example com.example.fixture",
+      "ime_shown_before_back": true,
+      "observation_basis": "current_input_method_manager_mInputShown",
+      "back_sent": true
+    }
+  ],
+  "home_transitions": [],
+  "fixture_timing_context_resets": [
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0005-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0006-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0007-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0008-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0009-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "fresh_launch_and_permission_denial_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0025-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0026-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0027-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0028-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0029-fresh-launch-and-permission-denial.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0030-fresh-launch-and-permission-denial.xml"
+      ]
+    },
+    {
+      "reason": "usage_settings_grant_is_not_session_consent_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0041-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0042-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0043-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0044-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0045-usage-settings-grant-is-not-session-consent.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0046-usage-settings-grant-is-not-session-consent.xml"
+      ]
+    },
+    {
+      "reason": "manual_scope_validation_and_system_picker_stopped",
+      "detail_disclosure_absent": true,
+      "numeric_timing_fields_absent": true,
+      "ui": [
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0072-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0073-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0074-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0075-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0076-manual-scope-validation-and-system-picker.xml",
+        "artifacts/android-emulator-0.2.3-api36-attempt-04/0077-manual-scope-validation-and-system-picker.xml"
+      ]
+    }
+  ],
+  "permission_controls": [
+    {
+      "control": "emulator_only_shell_appops",
+      "value": "ignore",
+      "reason": "Controlled denied-access baseline."
+    },
+    {
+      "control": "stock_android_usage_settings_ui",
+      "value": "allow"
+    }
+  ],
+  "window_state_retries": [],
+  "launch_ime_recoveries": [
+    {
+      "id": 1,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "fresh_launch_and_permission_denial",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T09:47:52.824Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:47:52.831Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:47:53.079Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0001-launch-ime-e6c55a4c242b-window-displays-before.txt",
+          "sha256": "5f00d167b161455782343347bfe4298a3174cfd9f7b5d860402fc9a0c08b1998",
+          "size_bytes": 19472
+        }
+      ],
+      "finished_at": "2026-10-07T09:47:53.083Z"
+    },
+    {
+      "id": 2,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "usage_settings_grant_is_not_session_consent",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T09:51:02.795Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:51:02.799Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:51:02.945Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0002-launch-ime-e6c55a4c242b-window-displays-before.txt",
+          "sha256": "ab290db0d5620e3061abef67c2c24190ead4744610efe5a6a972aa3b517cba38",
+          "size_bytes": 19484
+        }
+      ],
+      "finished_at": "2026-10-07T09:51:02.947Z"
+    },
+    {
+      "id": 3,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "manual_scope_validation_and_system_picker",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "not_required",
+      "back_send_attempted": false,
+      "back_command_completed": false,
+      "preconditions_verified": false,
+      "same_focus_verified": false,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T09:53:42.697Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:53:42.699Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:53:42.809Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0003-launch-ime-e6c55a4c242b-window-displays-before.txt",
+          "sha256": "3cf35b366679f5d6b8223e6a5fdaef4717b5eaa36a1bee1ae6f27e47b1e837a4",
+          "size_bytes": 19567
+        }
+      ],
+      "finished_at": "2026-10-07T09:53:42.812Z"
+    },
+    {
+      "id": 4,
+      "scope": "owned_api36_inspector_launch_ime_dismissal",
+      "device": {
+        "serial": "emulator-5582",
+        "api": 36,
+        "avd": "liveabit-api36-test"
+      },
+      "launched_package": "org.liveabit.inspect",
+      "stage": "no_preconsent_backfill_and_empty_is_unknown",
+      "attempt_limit": 1,
+      "back_command": [
+        "input",
+        "keyevent",
+        "4"
+      ],
+      "geometry_accepted": false,
+      "cached_ui_invalidated": true,
+      "result": "rejected_after_back",
+      "back_send_attempted": true,
+      "back_command_completed": true,
+      "preconditions_verified": true,
+      "same_focus_verified": true,
+      "ime_hidden_verified": false,
+      "hierarchy_verified": false,
+      "started_at": "2026-10-07T09:54:56.510Z",
+      "sources": [
+        {
+          "kind": "display_before",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:54:56.512Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:56.758Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-window-displays-before.txt",
+          "sha256": "e9e0c22a5483426fd035f4023f1278e3cbf75e5c9d4bd02318884516c6c3fe67",
+          "size_bytes": 19529
+        },
+        {
+          "kind": "window_all",
+          "command": [
+            "dumpsys",
+            "window",
+            "-a"
+          ],
+          "capture_started_at": "2026-10-07T09:54:56.763Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:57.099Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-window-all.txt",
+          "sha256": "2ec6ffbeddde4105258eb4be1ac58026c75de3e0395e06ef3c2a3fc6abd6e84e",
+          "size_bytes": 87141
+        },
+        {
+          "kind": "input_method",
+          "command": [
+            "dumpsys",
+            "input_method"
+          ],
+          "capture_started_at": "2026-10-07T09:54:57.102Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:57.275Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-input-method.txt",
+          "sha256": "1ba08aa5b954fc9fbd9c9b61c96ab7916f969dfa53265320f5f49b25181b27e2",
+          "size_bytes": 98216
+        },
+        {
+          "kind": "display_before_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:54:57.282Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:57.375Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-window-displays-before-back.txt",
+          "sha256": "db4342a2a2c5b3e39ea74c9cd8edb3659eb9991333e9a498efa0f96402f041a8",
+          "size_bytes": 19528
+        },
+        {
+          "kind": "window_after_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "-a"
+          ],
+          "capture_started_at": "2026-10-07T09:54:57.745Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:58.031Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-window-all-after-back.txt",
+          "sha256": "3578f709f19403ef3d833f8f6d82f64240dec2f4ced4d3e1c712522c0f9931c2",
+          "size_bytes": 87112
+        },
+        {
+          "kind": "input_method_after_back",
+          "command": [
+            "dumpsys",
+            "input_method"
+          ],
+          "capture_started_at": "2026-10-07T09:54:58.033Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:54:58.136Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-input-method-after-back.txt",
+          "sha256": "5e460919f07e27d854b3c36c97d05c7c2c4f749728d8f1662af1dbcfdb1c3384",
+          "size_bytes": 98706
+        },
+        {
+          "kind": "display_after_back",
+          "command": [
+            "dumpsys",
+            "window",
+            "displays"
+          ],
+          "capture_started_at": "2026-10-07T09:55:00.776Z",
+          "raw_dump_available": true,
+          "capture_finished_at": "2026-10-07T09:55:00.876Z",
+          "artifact": "artifacts/android-emulator-0.2.3-api36-attempt-04/0004-launch-ime-e6c55a4c242b-window-displays-after-back.txt",
+          "sha256": "55a3ea8dc78f1ca388c3f2a807bac376c39754c21a8cfbe293d449e1e8aab9ac",
+          "size_bytes": 19484
+        }
+      ],
+      "back_started_at": "2026-10-07T09:54:57.377Z",
+      "back_finished_at": "2026-10-07T09:54:57.484Z",
+      "finished_at": "2026-10-07T09:55:00.881Z",
+      "reason": "Launch IME recovery did not confirm the keyboard hidden across current window/manager/service/source observations."
+    }
+  ],
+  "unsupported": [
+    "Physical phone/OEM behavior, battery, background collection and direct agent delivery.",
+    "Credential-storage lock before first unlock; ordinary keyguard lock is a different state.",
+    "24-hour expiry, 4096-record overflow, unavailable-source injection and deterministic OS-query races.",
+    "Clock mutation, rotation and split-screen/multi-resume are not exercised by this initial UI harness.",
+    "FLAG_SECURE screenshots may be blank; saved UI hierarchy is the primary UI assertion source."
+  ],
+  "limitations": [
+    "Only owned synthetic fixture activity is inspected; usage source completeness remains unknown.",
+    "Comparison values entered by this harness remain unauthenticated manual values in the app.",
+    "Fixture timing details attest displayed current core anchors and projected records, not original OS-query batch clocks or source completeness.",
+    "The app time zone and UTC offset describe formatting at the report clock, not source time-zone metadata at event time.",
+    "Observed timing differences do not establish a production accuracy threshold or other-app accuracy.",
+    "Project-local AVD path is bound through a fresh startup record and actual AVD name; launcher/qemu PID is not independently attested."
+  ],
+  "physical_android_verified": false,
+  "measured_production_accuracy_verified": false,
+  "m2_verified": false,
+  "m3_verified": false,
+  "setup_provenance": {
+    "source": "docs/review/android-api36-emulator-setup.json",
+    "sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "result": "pass_image_setup_only",
+    "scope": "project_local_api36_image_setup_only",
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "setup_bytes_match_startup_hash": true,
+    "legacy_startup_setup_binding_absent": false,
+    "image_source_properties_sha256": "1a6e7c0b326c24c28ba501aa5ada247dd9fb0f087b662865f7bc649991fe74d1",
+    "image_registration_sha256": "ea57e6ab1cb5578de2666ba1beb0c6d2f7366809e69304bcf205d79814a5e74d",
+    "emulator_source_properties_sha256": "ba13085f647fb8389a4d06a1de0e4104ac4e841733e50f67223ac230e1ce685a",
+    "actual_small_sdk_identity_files_hashed": true,
+    "large_image_files_rehashed_by_ui_harness": false,
+    "runtime_verified_by_setup": false
+  },
+  "run_provenance": {
+    "source": "artifacts/android-emulator/run.json",
+    "sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+    "avd_path": "artifacts/android-emulator/avd/liveabit-api36-test.avd",
+    "created_at": "2026-10-07T08:15:05.1849512Z",
+    "startup_age_millis": 5538415,
+    "freshness_verified": true,
+    "api": 36,
+    "image": "system-images;android-36;default;x86_64",
+    "image_revision": 2,
+    "emulator_version": "37.2.12",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "installed_tool_properties_match": true,
+    "launcher_pid_from_run_record": 23104,
+    "launcher_or_qemu_pid_independently_verified": false,
+    "setup_report": "docs/review/android-api36-emulator-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "startup_recorded_config_sha256": "221d5b43209e1a9cd98c0eac45a555e37c3ccdfc9cde89b7d659167acf294e4d",
+    "startup_recorded_avd_registration_sha256": "6d80825ac9720249d650c353e25b5022006e636d26aeb08ba5b6f867cb0ca4e0",
+    "recorded_writable_paths_match_owned_avd": true,
+    "live_config_independently_rehashed_by_ui_harness": false,
+    "acceleration_backend": "WHPX",
+    "memory_megabytes": 2048
+  },
+  "harness_sha256": "9519618044459fefba4de5c8c3c88b524936773b7d2d220b068008d1a1b30406",
+  "installed_apks": [
+    {
+      "package_id": "org.liveabit.inspect",
+      "version_name": "0.2.3-local",
+      "sha256": "4de00e2396f39ad3c6c648f35ee54020b01c9ed589301dbaeaced85b2767823d",
+      "exact_audited_bytes_verified": true
+    },
+    {
+      "package_id": "org.liveabit.fixture",
+      "version_name": "0.1.0-fixture",
+      "sha256": "28ea22850e7224a5a959c9d614af07f0b76674655db51b96bc0d94ee79e04b46",
+      "exact_audited_bytes_verified": true
+    }
+  ],
+  "failed_stage": "no_preconsent_backfill_and_empty_is_unknown",
+  "failure": "Launch IME recovery did not confirm the keyboard hidden across current window/manager/service/source observations.",
+  "summary": {
+    "passed": 3,
+    "failed": 1
+  },
+  "finished_at": "2026-10-07T09:55:04.009Z",
+  "evidence_preservation": {
+    "archive_path": "artifacts/android-emulator-0.2.3-api36-attempt-04",
+    "raw_report_sha256": "acdb6a7d723e9303a5289c8302f94b24d09f2663b07784b9eed4576945242caf",
+    "original_runtime_claims_preserved": true,
+    "ui_paths_relocated_only": true,
+    "window_diagnostic_paths_relocated_only": true,
+    "setup_report": "artifacts/android-emulator-0.2.3-api36-attempt-04/image-setup.json",
+    "setup_report_sha256": "353ae5b97a2abfc2dd297bb275b808eb3f425a27da0d416b8611c87aefc2bf74",
+    "launch_ime_diagnostic_paths_relocated_only": true
+  }
+}

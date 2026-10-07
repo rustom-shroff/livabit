@@ -1,0 +1,19 @@
+{
+  "result": "pass_reused_guest_readiness_only",
+  "generated_at": "2026-10-07T09:44:20.547Z",
+  "scope": "owned_api36_guest_before_reviewed_launch_recovery_run",
+  "serial": "emulator-5582",
+  "avd": "liveabit-api36-test",
+  "original_startup_sha256": "c70a0cf8afa8d222b633eb6fb69cd1baa949840c500ddd2f430226128b3981dd",
+  "boot_completed": true,
+  "api_verified": 36,
+  "no_anr_since_boot": true,
+  "launcher_pid": 23104,
+  "qemu_pid": 27700,
+  "owned_executable_and_avd_command_lines_independently_verified": true,
+  "guest_reused_without_new_boot": true,
+  "workflow_suite_passed": false,
+  "apks_rebuilt": false,
+  "physical_device_accessed": false,
+  "prior_attempt_relabelled": false
+}
