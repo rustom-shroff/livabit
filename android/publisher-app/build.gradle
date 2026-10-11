@@ -1,0 +1,21 @@
+plugins { id 'com.android.application' }
+android {
+    namespace = 'org.liveabit.publish'
+    compileSdk { version = release(37) { minorApiLevel = 0 } }
+    buildToolsVersion = '36.0.0'
+    enableKotlin = false
+    signingConfigs { debug { storeFile = rootProject.file('../artifacts/android-debug.keystore') } }
+    defaultConfig {
+        applicationId = 'org.liveabit.publish'
+        minSdk = 35
+        targetSdk = 37
+        versionCode = 5
+        versionName = '0.4.0-poc'
+        testInstrumentationRunner = 'org.liveabit.publish.PublisherInstrumentation'
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+dependencies { implementation project(':collector-core') }

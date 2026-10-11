@@ -1,0 +1,5 @@
+<resources>
+    <item name="receiver_address" type="id" />
+    <item name="connection_key" type="id" />
+    <item name="warning_minutes" type="id" />
+</resources>

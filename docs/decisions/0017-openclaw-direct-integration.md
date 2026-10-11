@@ -1,0 +1,19 @@
+# ADR-0017: Target the installed OpenClaw agent directly
+
+Date: **2026-10-10**. Status: **authorized POC development**.
+
+The user selected their installed OpenClaw as the first agent integration and asked development to continue without interruption unless their input is needed. This supersedes Grok as the active target. Retain earlier Grok, Muse and ChatGPT research, code and evidence as history. The accepted Android collector and deferred accuracy work remain unchanged.
+
+Implement the receiving path directly in the native Android sender: **Android -> the user's OpenClaw webhook -> a dedicated `liveabit` agent**. The installed OpenClaw runtime is the final recipient; the desktop test receiver remains an independent display consumer and does not forward events. No project backend, broker, tunnel or forwarding bridge is added.
+
+For the verified OpenClaw 2026.9.9 implementation and its [versioned hook documentation](https://github.com/openclaw/openclaw/blob/v2026.9.9/docs/gateway/config-hooks.md), use `POST /hooks/agent` with a dedicated hook bearer token, distinct from gateway administration authentication. Route only to the configured `liveabit` agent, use `wakeMode: "now"` and `deliver: false`, and carry the original canonical `activity.observation` draft JSON in `message`. Send the original event ID as `Idempotency-Key`. The HTTP `200` / `ok: true` / `runId` response means a run was admitted, not that the agent interpreted the event or notified the user. The observed native idempotency cache is held in memory for five minutes; duplicates remain possible after expiry or restart. Preserve this distinction in Android status and retry behavior.
+
+Give the dedicated agent its own workspace and instructions, preserving unknown coverage, nullable estimates and original event time. Inherit the user's configured model; do not choose a new provider or subscription. Deny the ordinary host tool catalog and disable hook channel delivery and heartbeat for this activity POC. OpenClaw's built-in CodeMode still exposes JavaScript `exec`/`wait` and `skills.read`; this is not a zero-tool or no-execution guarantee. Agent output remains inside OpenClaw for inspection. Application names and event data cannot change the agent's instructions or request device actions.
+
+The Windows packaged installation runs under an isolated account. Configure and inspect it through its supported local control interface, and derive the actual gateway port and local addresses from the installation. Do not assume port 18789. Generate private Android connection files locally, keep tokens out of Git and chat, and keep the existing test-receiver connection format available. Native OpenClaw setup uses `liveabit.openclaw.connection.v1` and fixed `agent_id: "liveabit"`.
+
+Build and exercise the intended 0.4.0 POC APK on the owned emulator before offering a phone trial. Record native OpenClaw admission and actual agent output separately. No validation result from sender 0.3.3 transfers to changed APK bytes. This work advances TASK-P5-001/002 and TASK-P6-F04 without changing the agreed OAP 0.1.0 summaries, stable requirement IDs or production M2/M3 evidence.
+
+Implementation update, **2026-10-11**: the exact 0.4.0 APK passed 31 native Android checks, including admission by the installed gateway. Separate agent history verified interpretation preserving uncertainty and used the Skill read. User-approved LAN setup is applied and private Wi-Fi connection files are ready. Physical-phone delivery remains untested. See the [POC review](../review/openclaw-poc-2026-10-11.md).
+
+See the [direct setup and delivery guide](../integration-drafts/openclaw-direct.md). Work uses a `codex/` feature branch, focused commits and a reviewable pull request; private setup, activity data, SDKs and build caches stay outside Git.

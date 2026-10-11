@@ -1,0 +1,147 @@
+{
+  "result": "native_android_sender_verified",
+  "date": "2026-10-09",
+  "version": "0.3.2-test",
+  "apk": "artifacts/android-publisher/liveabit-sender-0.3.2-test.apk",
+  "apk_sha256": "077dd025fa08a69ad9232d4569ffa2cf67fda6ebad6785104defebe0ff246c6e",
+  "apk_bytes": 119556,
+  "native_report": "artifacts/android-publisher/run-193fdb48-a0dc-4af0-9a56-88ce627c2470/validation.json",
+  "android_native_checks": 22,
+  "instrumentation_apk_sha256": "00eb46f9ae1ca512a85f1f8dbaee55812687b566e824119d94dec2b34c96fdc2",
+  "native_wifi_usb_guides_tested": true,
+  "configured_connection_description_tested": true,
+  "repeated_start_preserves_session_pending_and_failure_timer": true,
+  "native_setup_change_cancel_and_confirm_tested": true,
+  "receiver_isolated": true,
+  "receiver_stopped": true,
+  "user_receiver_controlled": false,
+  "windows_powershell_5_1_suite_passed": true,
+  "powershell_scripts_ascii_and_legacy_parse_passed": true,
+  "actual_one_minute_notification_tested": true,
+  "default_warning_minutes": 60,
+  "build_log": "artifacts/android-publisher-build-0.3.2.txt",
+  "lint_errors": 0,
+  "lint_warnings": 9,
+  "lint_warning_scope": "Seven English UI localization warnings; two .ps1 extension spelling false positives",
+  "previous_inspector_apk_unchanged": true,
+  "previous_inspector_apk_sha256": "df5ae7d7aad1c53818d9ce9812f49a3213c8b02e47caf2f2807f7abc130e6d6c",
+  "javascript_sender_prototype_created": false,
+  "javascript_reference_suite_run": false,
+  "grok_account_used": false,
+  "intermediary_created": false,
+  "receiver_forwards_nothing": true,
+  "physical_phone_tested": false,
+  "source_bindings": [
+    {
+      "path": "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java",
+      "sha256": "6638ef3b839fc6fe464a48d3c6f1847144154b0997e9421cba15919acb3b1771"
+    },
+    {
+      "path": "android/publisher-app/build.gradle",
+      "sha256": "3e9dab5bd7054234d7010781738a84e4df1fb8346ad4a595e996e9cc08bb3f60"
+    },
+    {
+      "path": "android/publisher-app/README.md",
+      "sha256": "87ffd4c56c6e9c4dc45aca6eb3ccf8e1722e73e49454206eb26fa13b7ca724d2"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+      "sha256": "e8de445085c41172fe49afeb4af151e5b2ecd3d6b65c77641ae110fad8e3b65a"
+    },
+    {
+      "path": "android/publisher-app/src/main/AndroidManifest.xml",
+      "sha256": "9434ae4a3e54a59d991ac14a44d92f816e7d1d9dd341c6434db811b706563836"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionSetup.java",
+      "sha256": "bfdc0380cbc6ce3ba6aea08699f0061f3ede71f947a57dd0329ad4c1960ecd1c"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java",
+      "sha256": "d68b90656a068f6358865f3d0d3a517694ea6472070877b1fec42404ddbd122a"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryJobService.java",
+      "sha256": "eef299fcad00da2ee33084014db3852f9dd79de7f3e64c3c535052caf0b06bfa"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/LocalSecret.java",
+      "sha256": "87fec65a297236f4099a43c8732aac259923849dae3c2efecedd2ce67ae7d221"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java",
+      "sha256": "8c14738e0b72edb28b19496e49611f311137755211303cdc35ce93369a4463c8"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherApplication.java",
+      "sha256": "2ec7fc25e595e30d46d1e24e839a54db3d287255def08dfda2ca63ad4fb673ef"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherStore.java",
+      "sha256": "c65813cbb992be5da222062f58ff5f9066fab4e5c7eb78938ecc21cbd0e7b769"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/UsageCollector.java",
+      "sha256": "046e1c80dd69cc2686834b1cd6855ddcc8a516237029eedd1ef59e5faa3702b4"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/ids.xml",
+      "sha256": "8684c86785efa68bae4f5ab496801c037c5861f9d9fdae30dd8fc1f10f0f3be3"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/strings.xml",
+      "sha256": "a01cf5700452103556d0a0ff28cf44972e2b37bec8e651f6317fccb18900b24e"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "16105c150c33ed66c2f719d3aa7ac893e66c5b8c2f3c8fffaf921db9cce65dcd"
+    },
+    {
+      "path": "docs/agent-integration-plan.md",
+      "sha256": "0ca605ccb0161f05a85f569cfaf71a94bf68ca64268aeb93af579ebf1d4b0f03"
+    },
+    {
+      "path": "docs/project-roadmap.md",
+      "sha256": "18a5bab9616ce5994ff1ff7344a89c0684abfb22e5e640d1f69b73bcb5f59432"
+    },
+    {
+      "path": "README.md",
+      "sha256": "13aff09bcf06af8ae8ae1e124c465febc11f8a9ac3d8c7a45f2d22b453431f4c"
+    },
+    {
+      "path": "scripts/build-android-publisher.ps1",
+      "sha256": "a7eee10c6801b62364a18d9b677a30a40f9b97ba21c24eb001727f214b824761"
+    },
+    {
+      "path": "scripts/run-android-test-receiver.mjs",
+      "sha256": "205b390e4bf95bebec062b5adaa890d7826de71a9bb404d6f0b1c67f09fb70b0"
+    },
+    {
+      "path": "scripts/start-activity-receiver.ps1",
+      "sha256": "646963278c3b0be3414f910930b87c4ef7bc60c5985a71304da9fe05563bab36"
+    },
+    {
+      "path": "scripts/test-android-publisher.ps1",
+      "sha256": "37085295181dd3b9821d112d170f29e42e10cadaafdf6734de17ed63cf7a5d82"
+    },
+    {
+      "path": "specs/android/test-publisher.md",
+      "sha256": "228e64de3c397113c605ca1ce1519cf4f6a963403e120c18e149e5a4e52f7729"
+    },
+    {
+      "path": "tools/activity-receiver/server.mjs",
+      "sha256": "545182cbd5d7b0cfb3a2391560771c84d015048b2058bb0ff8719c3096c71564"
+    }
+  ],
+  "contract_validation": {
+    "acceptance_mappings": 29,
+    "groups": 8,
+    "result": "pass",
+    "schemas": 9,
+    "local_links": 1325,
+    "runtime_milestones_proven": false,
+    "fixtures": 86,
+    "requirements": 33
+  },
+  "emulator_cleanup_report": "artifacts/android-publisher/run-193fdb48-a0dc-4af0-9a56-88ce627c2470/emulator-cleanup.json"
+}

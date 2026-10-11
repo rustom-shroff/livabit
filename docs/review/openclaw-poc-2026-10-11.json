@@ -1,0 +1,216 @@
+{
+  "result": "native_android_direct_openclaw_poc_verified",
+  "date": "2026-10-11",
+  "version": "0.4.0-poc",
+  "protocol_version": "0.2.0-draft.1",
+  "event_name": "activity.observation",
+  "protocol_status": "experimental_record_draft",
+  "apk": "artifacts/android-publisher/liveabit-sender-0.4.0-poc.apk",
+  "apk_sha256": "43650faaef9f304a2a2f4d7522f43be6a78255df77bfc242c2b70623b5e78273",
+  "apk_bytes": 128460,
+  "native_report": "artifacts/android-publisher/run-ea7f57fe-4d14-4b9d-aed9-c6d1828b16c3/validation.json",
+  "android_native_checks": 31,
+  "installed_openclaw_version": "2026.9.9",
+  "installed_package_version": "2026.9.900.0",
+  "installed_gateway_admission_tested": true,
+  "native_gateway_run_id": "97595969-b36c-47df-bc32-e344344f9ec8",
+  "native_lan_admission_tested": true,
+  "native_lan_run_id": "89a3454e-c661-41fa-b8ff-769a3c70b643",
+  "native_lan_report": "artifacts/openclaw/android-lan-admission.json",
+  "actual_agent_reply_verified": true,
+  "agent_reply_admission_run_id": "3be105d4-3e85-42de-8b36-076c03b756f2",
+  "agent_reply_event_id": "2c78704b-ddad-48a7-9948-59782405a0e0",
+  "agent_reply_preserves_unknown_coverage": true,
+  "agent_reply_preserves_unverified_estimate": true,
+  "agent_reply_report": "artifacts/openclaw/agent-history.json",
+  "agent_ordinary_tool_catalog_count": 0,
+  "agent_visible_runtime_controllers": [
+    "exec",
+    "wait"
+  ],
+  "observed_runtime_call": "skills.read(liveabit)",
+  "agent_external_delivery_configured": false,
+  "agent_heartbeat_disabled": true,
+  "wifi_exposure_explicitly_approved": true,
+  "router_or_firewall_changed": false,
+  "default_warning_minutes": 60,
+  "actual_one_minute_notification_tested": true,
+  "physical_phone_tested": false,
+  "exact_background_timing_tested": false,
+  "receiver_isolated": true,
+  "user_receiver_controlled": false,
+  "owned_emulator_stopped": true,
+  "openclaw_left_running": true,
+  "lint_errors": 0,
+  "lint_warnings": 9,
+  "build_log": "artifacts/android-publisher-build-0.4.0.txt",
+  "test_only_repair_build_log": "artifacts/android-publisher-build-0.4.0-test-repair.txt",
+  "javascript_sender_prototype_created": false,
+  "dependency_added": false,
+  "intermediary_created": false,
+  "oap_0_1_0_contract_replaced": false,
+  "source_bindings": [
+    {
+      "path": "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java",
+      "sha256": "6638ef3b839fc6fe464a48d3c6f1847144154b0997e9421cba15919acb3b1771"
+    },
+    {
+      "path": "android/publisher-app/build.gradle",
+      "sha256": "9b8e5a300dd4cb3fa4a29c8e3fed7280200d06981ef211c73f3c626c26ffb0db"
+    },
+    {
+      "path": "android/publisher-app/README.md",
+      "sha256": "facabeb05beec39b37f464c4c7339f558ff0d7c7a24cddb5535a1bb3ce82e062"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/OpenClawContractCases.java",
+      "sha256": "c0bc4553554cf0dc3864a224e828978f726729b4bf8a89d5ba5921f57f4569c2"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+      "sha256": "d4a56ee07f646129363a06f55328e0e59ac1356dac637be5d059f451ac191b5a"
+    },
+    {
+      "path": "android/publisher-app/src/main/AndroidManifest.xml",
+      "sha256": "9434ae4a3e54a59d991ac14a44d92f816e7d1d9dd341c6434db811b706563836"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionSetup.java",
+      "sha256": "5a62d5758b3dd54fc73cdac6c01b3c091955db5f7b0094479ac62ca72f4cdd99"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java",
+      "sha256": "752e54b330b3e8a278df0c17f2b502368191076a16f41ad0281f68910bd9bd40"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryJobService.java",
+      "sha256": "eef299fcad00da2ee33084014db3852f9dd79de7f3e64c3c535052caf0b06bfa"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/LocalSecret.java",
+      "sha256": "87fec65a297236f4099a43c8732aac259923849dae3c2efecedd2ce67ae7d221"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java",
+      "sha256": "ff4829315246348fbe1ec287a36de316d61319ed61af47922e529dc9eb509370"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OapObservation.java",
+      "sha256": "fcf146dc2fd6784434ebd85276a3513ac3c82282cf4ef6a5c61a42c22dc92b00"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OpenClawWebhook.java",
+      "sha256": "16e14d9d8d8f24728a8a2e607e4b4732f24ab8d5e07e170f3f19cbbb35ddef15"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherApplication.java",
+      "sha256": "2ec7fc25e595e30d46d1e24e839a54db3d287255def08dfda2ca63ad4fb673ef"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherStore.java",
+      "sha256": "e36b9b9f8273cf39de92261ccca758f6ad53f4e4ed4b6a6b8bfe24067557c0b9"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/UsageCollector.java",
+      "sha256": "55008898cdb9c2429e7b2aee02d219df61364b926865a29597c26eb660892ed8"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/ids.xml",
+      "sha256": "8684c86785efa68bae4f5ab496801c037c5861f9d9fdae30dd8fc1f10f0f3be3"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/strings.xml",
+      "sha256": "282bb4e88e95313a86717a111753d9df9052765a9ba26028de2a5c12aa42239c"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "16105c150c33ed66c2f719d3aa7ac893e66c5b8c2f3c8fffaf921db9cce65dcd"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "2829b99ce1abc06dc1faa0480e9a8e9c75076d319a96fad95f205c16d31ebcb6"
+    },
+    {
+      "path": "docs/agent-integration-plan.md",
+      "sha256": "eba957374ecb8e5d2a1da31260ce7c0bddc89f45fb45ac41e7d9aee1f2c1bc08"
+    },
+    {
+      "path": "docs/decisions/0017-openclaw-direct-integration.md",
+      "sha256": "7bb631ecbe64a127559135c7327db80bf99cedbeea1ab2c91db0fa436b5d86bf"
+    },
+    {
+      "path": "docs/integration-drafts/openclaw-direct.md",
+      "sha256": "58f165e895175f16df52b34f092a334bce8cf82aecfaaeefc38abbb632d24450"
+    },
+    {
+      "path": "docs/project-roadmap.md",
+      "sha256": "9523a5e165ecfcee56fdc24ccb8cf3770900a60b2d786e92c3a6b03d8362f73c"
+    },
+    {
+      "path": "integrations/openclaw/activity-agent.md",
+      "sha256": "54ddb79366079a4622338980491d20868e45ce79e73e565ab911798b93edcfbf"
+    },
+    {
+      "path": "integrations/openclaw/skills/liveabit/SKILL.md",
+      "sha256": "1874e2d6fea21ef5374625f8ac5e8ed35d96b53410d7fdc00e2263a23914d75b"
+    },
+    {
+      "path": "README.md",
+      "sha256": "fb210fe181f323aa793c64d162395fe798fe677cabbc1f47d0d8287a2c5c8e53"
+    },
+    {
+      "path": "schemas/oap/0.2.0-draft.1/activity-observation.schema.json",
+      "sha256": "4bbae4f3c46d179281926729eac16d22133db41da4c30a7732c5612158c45ff5"
+    },
+    {
+      "path": "scripts/build-android-publisher.ps1",
+      "sha256": "8d0e40932c59d268d4acaf7da81699fabcc949af7f0effb1de1a35680c24fbeb"
+    },
+    {
+      "path": "scripts/configure-openclaw.ps1",
+      "sha256": "3946db5c1ed4143e9bb4f9c0de8064c37d8e723fa0320e24d0d12c7383ccc9e9"
+    },
+    {
+      "path": "scripts/run-android-test-receiver.mjs",
+      "sha256": "205b390e4bf95bebec062b5adaa890d7826de71a9bb404d6f0b1c67f09fb70b0"
+    },
+    {
+      "path": "scripts/start-activity-receiver.ps1",
+      "sha256": "646963278c3b0be3414f910930b87c4ef7bc60c5985a71304da9fe05563bab36"
+    },
+    {
+      "path": "scripts/test-android-publisher.ps1",
+      "sha256": "547aa373b7f2e8abd7cc91e3d440ccde57c021acaf07595e99d8f7a11ce0f4df"
+    },
+    {
+      "path": "specs/android/test-publisher.md",
+      "sha256": "993a8d25252065fee3b36d00d59d8c9ef0d9cd555ab29cca07c3e839cf17e4f8"
+    },
+    {
+      "path": "specs/protocol/activity-observation.md",
+      "sha256": "4dfcfd5d28afe2c2a7b3eed4cb55ead97f69e41b5805d1a2d5830049a8983de0"
+    },
+    {
+      "path": "specs/requirements-traceability.md",
+      "sha256": "3276e40f9365a4cc1f65cf231992a0a11556a88f65823967dde17961b52fb7a0"
+    },
+    {
+      "path": "tools/activity-receiver/dashboard.js",
+      "sha256": "9c8e6c72275cf4a1f3ec4ef1497b8a91db100db8d77d423d5db946ddc457da9c"
+    },
+    {
+      "path": "tools/activity-receiver/oap-observation.mjs",
+      "sha256": "b8e779ab1d38a5481d73bce4e774cc179ab2e7ee3a4077945dda8fe5b4c413f7"
+    },
+    {
+      "path": "tools/activity-receiver/server.mjs",
+      "sha256": "63401e4044ba090510a0572c59c8f291c6d1c87e9b3a5466951f302193fb8f0f"
+    }
+  ],
+  "contract_validation_report": "artifacts/openclaw/spec-validation-0.4.0.json",
+  "emulator_cleanup_report": "artifacts/android-publisher/run-ea7f57fe-4d14-4b9d-aed9-c6d1828b16c3/emulator-cleanup.json",
+  "reference_test_report": "artifacts/openclaw/reference-suite-unsandboxed.txt",
+  "reference_tests_passed": 369,
+  "reference_tests_intentionally_skipped": 1,
+  "contract_validation_scope": "Existing OAP 0.1.0 fixtures and local document links; new observation contract exercised by native HTTP suite"
+}
