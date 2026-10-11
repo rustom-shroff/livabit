@@ -10,6 +10,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -189,7 +190,22 @@ final class DeliveryEngine {
             try (var output = request.getOutputStream()) { output.write(body); }
             int code = request.getResponseCode();
             if (code == 401 || code == 403) return new Receipt(Outcome.BAD_KEY);
-            if (code >= 500) return new Receipt(Outcome.UNAVAILABLE);
+            if (code >= 500) {
+                try {
+                    if ((context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+                        // Capture a bounded private server response for this POC failure; omit all request fields.
+                        try (InputStream error = request.getErrorStream()) {
+                            byte[] detail = error == null ? new byte[0] : error.readNBytes(1024);
+                            JSONObject diagnostic = new JSONObject().put("status_code", code)
+                                .put("error_response", new String(detail, StandardCharsets.UTF_8));
+                            try (var output = context.openFileOutput("receiver-http-error.json", Context.MODE_PRIVATE)) {
+                                output.write(diagnostic.toString().getBytes(StandardCharsets.UTF_8));
+                            }
+                        }
+                    }
+                } catch (Exception ignored) { }
+                return new Receipt(Outcome.UNAVAILABLE);
+            }
             if (code != 200) return new Receipt(Outcome.REJECTED);
             byte[] response;
             try (InputStream input = request.getInputStream()) { response = input.readNBytes(4097); }

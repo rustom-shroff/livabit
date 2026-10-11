@@ -40,7 +40,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.5.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.6.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null

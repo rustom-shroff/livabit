@@ -244,12 +244,23 @@ final class OpenClawContractCases {
 
     static void live(Context context, DeliveryEngine engine, String endpoint, String token, String agentId, List<String> passed) throws Exception {
         check(OpenClawWebhook.isEndpoint(endpoint), "Live check must target an OpenClaw webhook");
+        context.deleteFile("openclaw-failed-request.json");
         engine.stop();
         try {
             engine.configure(endpoint, token, "org.liveabit.fixture", 60, agentId);
             context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
             cycle(context, engine, true);
             JSONObject state = engine.snapshot();
+            if (state.getJSONArray("pending").length() > 0) {
+                // Retain only this synthetic request for replay; never export the key or full sender state.
+                JSONObject pending = state.getJSONArray("pending").getJSONObject(0);
+                JSONObject diagnostic = new JSONObject().put("endpoint", state.getString("url"))
+                    .put("agent_id", state.getString("agent_id")).put("event_id", pending.getString("event_id"))
+                    .put("body", pending.getString("body"));
+                try (var output = context.openFileOutput("openclaw-failed-request.json", Context.MODE_PRIVATE)) {
+                    output.write(diagnostic.toString().getBytes(StandardCharsets.UTF_8));
+                }
+            }
             check(state.getString("agent_id").equals(agentId) && state.getLong("last_ack") > 0 && state.getJSONArray("pending").length() == 0
                 && !state.optString("last_run_id").isEmpty()
                 && "OpenClaw accepted activity for processing".equals(state.getString("status")),

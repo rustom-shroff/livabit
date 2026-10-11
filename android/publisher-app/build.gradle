@@ -9,8 +9,8 @@ android {
         applicationId = 'org.liveabit.publish'
         minSdk = 35
         targetSdk = 37
-        versionCode = 7
-        versionName = '0.5.0-poc'
+        versionCode = 8
+        versionName = '0.6.0-poc'
         testInstrumentationRunner = 'org.liveabit.publish.PublisherInstrumentation'
     }
     compileOptions {
