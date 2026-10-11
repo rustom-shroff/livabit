@@ -152,15 +152,50 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(found, "Receiver did not retain older-format event"); engine.stop();
         passed.add("native_legacy_storage_migration_preserves_and_delivers_original_bytes");
     }
+    private void openClawSetupGuides(Context context, DeliveryEngine engine) throws Exception {
+        engine.stop();
+        int port = 62283;
+        String endpoint = "http://127.0.0.1:" + port + "/hooks/liveabit", token = "g".repeat(43);
+        String setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", endpoint)
+            .put("key", token).put("agent_id", "main").put("warning_minutes", 60).toString();
+        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        try {
+            runOnMainSync(() -> {
+                activity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("OpenClaw setup", setup));
+                findButton(activity.getWindow().getDecorView(), "Paste receiver setup").performClick();
+            });
+            check(((EditText) activity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint)
+                && ((EditText) activity.findViewById(R.id.connection_key)).getText().toString().equals(token)
+                && ((EditText) activity.findViewById(R.id.openclaw_agent)).getText().toString().equals("main"),
+                "OpenClaw paste did not fill the imported destination");
+            check(!engine.snapshot().getBoolean("enabled") && engine.snapshot().getJSONArray("pending").length() == 0,
+                "OpenClaw setup import started sharing");
+            for (int[] guide : new int[][] {
+                {R.string.wifi_help_button, R.string.openclaw_wifi_help},
+                {R.string.usb_help_button, R.string.openclaw_usb_help}
+            }) {
+                String expected = context.getString(guide[1], port);
+                check(expected.contains("OpenClaw") && expected.contains(Integer.toString(port))
+                    && !expected.contains("start-activity-receiver.ps1"), "OpenClaw guide gives test receiver instructions");
+                runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), context.getString(guide[0])).performClick());
+                check(awaitNode(expected, 5000, "org.liveabit.publish") != null,
+                    "Imported OpenClaw endpoint did not select its guide and actual port");
+                clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
+            }
+            passed.add("native_openclaw_paste_without_sharing_and_dynamic_wifi_usb_guides");
+        } finally { runOnMainSync(activity::finish); }
+    }
     private void runCases() throws Exception {
         waitForIdleSync(); // Wait for the target Application.onCreate before reading its native engine.
         Context context = getTargetContext(); DeliveryEngine engine = ((PublisherApplication) context.getApplicationContext()).engine();
         String endpoint = arguments.getString("endpoint"), token = arguments.getString("key");
         if ("openclaw_contract".equals(arguments.getString("phase"))) {
+            openClawSetupGuides(context, engine);
             OpenClawContractCases.run(context, engine, passed); return;
         }
         if ("openclaw_live".equals(arguments.getString("phase"))) {
-            OpenClawContractCases.live(context, engine, endpoint, token, passed); return;
+            OpenClawContractCases.live(context, engine, endpoint, token,
+                arguments.getString("agent", OpenClawWebhook.AGENT_ID), passed); return;
         }
         if ("warnings_blocked".equals(arguments.getString("phase"))) {
             check(!engine.warningsEnabled(), "Warnings shown as enabled without notification permission");

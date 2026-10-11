@@ -2,4 +2,5 @@
     <item name="receiver_address" type="id" />
     <item name="connection_key" type="id" />
     <item name="warning_minutes" type="id" />
+    <item name="openclaw_agent" type="id" />
 </resources>

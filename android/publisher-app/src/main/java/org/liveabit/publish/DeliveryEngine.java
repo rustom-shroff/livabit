@@ -37,13 +37,18 @@ final class DeliveryEngine {
 
     synchronized JSONObject snapshot() throws Exception { return store.read(); }
     synchronized void configure(String url, String token, String selection, int minutes) throws Exception {
-        Set<String> packages = validateConfiguration(url, token, selection, minutes);
+        configure(url, token, selection, minutes, OpenClawWebhook.AGENT_ID);
+    }
+    synchronized void configure(String url, String token, String selection, int minutes, String agentId) throws Exception {
+        Set<String> packages = validateConfiguration(url, token, selection, minutes, agentId);
+        String selectedAgent = OpenClawWebhook.isEndpoint(url) ? agentId : OpenClawWebhook.AGENT_ID;
         JSONObject previous = store.read();
-        if (matchesConfiguration(previous, url, token, packages)) {
+        if (matchesConfiguration(previous, url, token, packages, selectedAgent)) {
             previous.put("alert_minutes", minutes); store.write(previous);
             restoreScheduling(); return;
         }
         JSONObject state = PublisherStore.empty().put("enabled", true).put("url", url)
+            .put("agent_id", selectedAgent)
             .put("key", LocalSecret.seal(token)).put("packages", new JSONArray(packages))
             .put("alert_minutes", minutes).put("cursor", System.currentTimeMillis() - 900_000)
             .put("status", OpenClawWebhook.isEndpoint(url)
@@ -52,18 +57,24 @@ final class DeliveryEngine {
         store.write(state); disconnect(); cancelAlert(); schedulePeriodic();
     }
     synchronized int pendingToClear(String url, String token, String selection, int minutes) throws Exception {
-        Set<String> packages = validateConfiguration(url, token, selection, minutes);
-        JSONObject state = store.read();
-        return matchesConfiguration(state, url, token, packages) ? 0 : prune(state.getJSONArray("pending")).length();
+        return pendingToClear(url, token, selection, minutes, OpenClawWebhook.AGENT_ID);
     }
-    private static Set<String> validateConfiguration(String url, String token, String selection, int minutes) {
+    synchronized int pendingToClear(String url, String token, String selection, int minutes, String agentId) throws Exception {
+        Set<String> packages = validateConfiguration(url, token, selection, minutes, agentId);
+        String selectedAgent = OpenClawWebhook.isEndpoint(url) ? agentId : OpenClawWebhook.AGENT_ID;
+        JSONObject state = store.read();
+        return matchesConfiguration(state, url, token, packages, selectedAgent) ? 0 : prune(state.getJSONArray("pending")).length();
+    }
+    private static Set<String> validateConfiguration(String url, String token, String selection, int minutes, String agentId) {
         validateEndpoint(url);
+        if (OpenClawWebhook.isEndpoint(url)) OpenClawWebhook.validateAgentForEndpoint(url, agentId);
         if (token == null || !token.matches("[A-Za-z0-9_-]{32,256}")) throw new IllegalArgumentException("Paste the receiver connection key.");
         if (minutes < 1 || minutes > 1440) throw new IllegalArgumentException("Choose between 1 and 1440 minutes.");
         return LocalInspectionCore.parsePackages(selection);
     }
-    private static boolean matchesConfiguration(JSONObject state, String url, String token, Set<String> packages) throws Exception {
+    private static boolean matchesConfiguration(JSONObject state, String url, String token, Set<String> packages, String agentId) throws Exception {
         return state.getBoolean("enabled") && url.equals(state.getString("url"))
+            && (!OpenClawWebhook.isEndpoint(url) || agentId.equals(state.optString("agent_id", OpenClawWebhook.AGENT_ID)))
             && packages.equals(LocalInspectionCore.parsePackages(UsageCollector.join(state.getJSONArray("packages"))))
             && token.equals(LocalSecret.open(state.getString("key")));
     }
@@ -95,7 +106,7 @@ final class DeliveryEngine {
                     if (event != null && pending.length() < 64) {
                         String observation = OapObservation.encode(event);
                         String body = OpenClawWebhook.isEndpoint(state.getString("url"))
-                            ? OpenClawWebhook.wrap(observation) : observation;
+                            ? OpenClawWebhook.wrap(observation, state.getString("agent_id")) : observation;
                         pending.put(new JSONObject().put("event_id", event.getString("event_id")).put("body", body)
                             .put("expires_at", event.getString("expires_at")));
                         state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
@@ -265,7 +276,7 @@ final class DeliveryEngine {
         try {
             URI uri = new URI(endpoint); String host = uri.getHost();
             if (host == null || uri.getUserInfo() != null || uri.getFragment() != null || uri.getQuery() != null
-                || !("/events".equals(uri.getPath()) || "/hooks/agent".equals(uri.getPath()))) throw new IllegalArgumentException();
+                || !("/events".equals(uri.getPath()) || OpenClawWebhook.isEndpoint(endpoint))) throw new IllegalArgumentException();
             if ("https".equals(uri.getScheme())) return;
             if (!"http".equals(uri.getScheme())) throw new IllegalArgumentException();
             boolean local = "localhost".equals(host) || host.matches("127\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")
@@ -273,6 +284,6 @@ final class DeliveryEngine {
                 || host.matches("192\\.168\\.\\d{1,3}\\.\\d{1,3}")
                 || host.matches("172\\.(?:1[6-9]|2\\d|3[01])\\.\\d{1,3}\\.\\d{1,3}");
             if (!local) throw new IllegalArgumentException();
-        } catch (Exception error) { throw new IllegalArgumentException("Use the receiver /events or OpenClaw /hooks/agent URL. HTTP is limited to your local network."); }
+        } catch (Exception error) { throw new IllegalArgumentException("Use the receiver /events or OpenClaw /hooks/liveabit or /hooks/agent URL. HTTP is limited to your local network."); }
     }
 }

@@ -28,11 +28,17 @@ final class OpenClawContractCases {
             String setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", endpoint)
                 .put("key", token).put("agent_id", "liveabit").put("warning_minutes", 60).toString();
             ConnectionSetup imported = ConnectionSetup.parse(setup);
-            check(imported.url.equals(endpoint) && imported.key.equals(token) && imported.minutes == 60,
+            check(imported.url.equals(endpoint) && imported.key.equals(token) && imported.minutes == 60 && imported.agentId.equals("liveabit"),
                 "OpenClaw setup changed the connection");
-            check(ConnectionSetup.describe(endpoint).startsWith("OpenClaw — USB:"), "OpenClaw connection not identified");
+            check(ConnectionSetup.describe(endpoint).startsWith("OpenClaw (liveabit) — USB:"), "OpenClaw connection not identified");
+            ConnectionSetup mainSetup = ConnectionSetup.parse(new JSONObject(setup).put("agent_id", "main").toString());
+            check(mainSetup.agentId.equals("main") && ConnectionSetup.describe(endpoint, mainSetup.agentId)
+                .startsWith("OpenClaw (main) — USB:"), "Main agent setup did not retain its routing identity");
             String[] invalid = {
-                new JSONObject(setup).put("agent_id", "main").toString(),
+                new JSONObject(setup).put("agent_id", "Main").toString(),
+                new JSONObject(setup).put("agent_id", 42).toString(),
+                new JSONObject(setup).put("agent_id", "a".repeat(65)).toString(),
+                new JSONObject(setup).put("agent_id", "../main").toString(),
                 new JSONObject(setup).put("url", endpoint.replace("/hooks/agent", "/events")).toString(),
                 new JSONObject(setup).put("format", "liveabit.receiver.connection.v1").toString(),
                 new JSONObject(setup).put("url", "http://example.com/hooks/agent").toString(),
@@ -77,6 +83,12 @@ final class OpenClawContractCases {
             DeliveryEngine reopened = new DeliveryEngine(context);
             check(reopened.snapshot().getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
                 "Reopening changed the stored hook wrapper");
+            PublisherStore store = new PublisherStore(context);
+            JSONObject legacyAgent = reopened.snapshot(); legacyAgent.remove("agent_id"); store.write(legacyAgent);
+            check(reopened.snapshot().getString("agent_id").equals("liveabit")
+                && reopened.snapshot().getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
+                "Older OpenClaw storage migration changed the default agent or queued wrapper");
+            passed.add("native_openclaw_legacy_agent_migration_preserves_queued_body");
             String[] invalidAcknowledgements = {
                 "{\"ok\":\"true\",\"runId\":\"not-a-real-admission\"}",
                 "{\"ok\":true}", "{\"ok\":true,\"runId\":\"\"}",
@@ -129,18 +141,116 @@ final class OpenClawContractCases {
             check(originalAttempts >= 2, "The original pending hook was not retried");
             fixture.assertHealthy();
             passed.add("native_openclaw_http_refusal_durable_retry_and_admission_recovery");
+            mappedMainRouting(context, engine, fixture, endpoint, token, passed);
+            agentRouting(context, engine, fixture, endpoint, token, mainSetup.agentId, passed);
         } finally { engine.stop(); }
     }
 
-    static void live(Context context, DeliveryEngine engine, String endpoint, String token, List<String> passed) throws Exception {
+    private static void mappedMainRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
+                                          String token, List<String> passed) throws Exception {
+        engine.stop(); fixture.respond(503, "{\"ok\":false}");
+        String mappedEndpoint = endpoint.replace("/hooks/agent", "/hooks/liveabit");
+        JSONObject setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", mappedEndpoint)
+            .put("key", token).put("agent_id", "main");
+        ConnectionSetup imported = ConnectionSetup.parse(setup.toString());
+        check(imported.agentId.equals("main") && ConnectionSetup.describe(mappedEndpoint).startsWith("OpenClaw (main)"),
+            "Mapped main setup lost its destination");
+        boolean wrongAgentRefused = false;
+        try { ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "liveabit").toString()); }
+        catch (IllegalArgumentException expected) { wrongAgentRefused = true; }
+        check(wrongAgentRefused, "Mapped main setup accepted another agent");
+        engine.configure(imported.url, imported.key, "org.liveabit.fixture", 60, imported.agentId);
+        context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
+        cycle(context, engine, true);
+        JSONObject state = engine.snapshot();
+        check(state.getJSONArray("pending").length() > 0 && state.getString("agent_id").equals("main"),
+            "Mapped main hook did not queue actual Android activity");
+        JSONObject first = state.getJSONArray("pending").getJSONObject(0);
+        String id = first.getString("event_id"), body = first.getString("body");
+        JSONObject wrapper = new JSONObject(body);
+        check(wrapper.getString("agentId").equals("main") && Boolean.FALSE.equals(wrapper.opt("deliver"))
+            && !wrapper.has("sessionKey") && !wrapper.has("sessionMode"),
+            "Android replaced gateway-owned session routing");
+        boolean observed = false;
+        for (int i = 0; i < fixture.count(); i++) {
+            Request sent = fixture.request(i);
+            if (id.equals(sent.headers.get("idempotency-key"))) {
+                check(sent.path.equals("/hooks/liveabit") && sent.body.equals(body), "Mapped main hook sent the wrong route or body");
+                observed = true;
+            }
+        }
+        check(observed, "Native HTTP fixture received no mapped main hook");
+        boolean invalidChangeRefused = false;
+        try { engine.configure(mappedEndpoint, token, "org.liveabit.fixture", 60, "liveabit"); }
+        catch (IllegalArgumentException expected) { invalidChangeRefused = true; }
+        check(invalidChangeRefused && engine.snapshot().getString("stream_id").equals(state.getString("stream_id"))
+            && engine.snapshot().getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
+            "Wrong mapped agent changed saved sharing");
+        passed.add("native_openclaw_mapped_main_hook_and_gateway_owned_session_route");
+    }
+
+    private static void agentRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
+                                     String token, String selectedAgent, List<String> passed) throws Exception {
+        engine.stop(); fixture.respond(503, "{\"ok\":false}");
+        engine.configure(endpoint, token, "org.liveabit.fixture", 60, selectedAgent);
+        context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
+        cycle(context, engine, true);
+        JSONObject original = engine.snapshot();
+        check(original.getString("agent_id").equals("main") && original.getJSONArray("pending").length() > 0,
+            "Configured main agent was not persisted with pending activity");
+        JSONObject first = original.getJSONArray("pending").getJSONObject(0);
+        String body = first.getString("body"), id = first.getString("event_id");
+        check(new JSONObject(body).getString("agentId").equals("main"), "Collected activity did not target the selected main agent");
+        check(engine.pendingToClear(endpoint, token, "org.liveabit.fixture", 60, "main") == 0
+            && engine.pendingToClear(endpoint, token, "org.liveabit.fixture", 60, "liveabit") > 0,
+            "Agent switch did not fence the pending queue");
+        JSONObject unchanged = engine.snapshot();
+        check(unchanged.getString("stream_id").equals(original.getString("stream_id"))
+            && unchanged.getString("agent_id").equals("main")
+            && unchanged.getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
+            "Previewing or cancelling an agent switch changed the original queue");
+        cycle(context, engine, false);
+        Request retry = fixture.request(fixture.count() - 1);
+        check(retry.headers.get("idempotency-key").equals(id) && retry.body.equals(body),
+            "Agent switch preview rewrote the original main-agent retry");
+        passed.add("native_openclaw_main_agent_routing_and_switch_pending_fence");
+
+        for (String invalid : new String[] {null, "", "Main", "../main", "main\n", "a".repeat(65)}) {
+            boolean refused = false;
+            try { engine.configure(endpoint, token, "org.liveabit.fixture", 60, invalid); }
+            catch (IllegalArgumentException expected) { refused = true; }
+            check(refused, "Invalid agent configuration was saved");
+            JSONObject after = engine.snapshot();
+            check(after.getString("agent_id").equals("main") && after.getString("stream_id").equals(original.getString("stream_id"))
+                && after.getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
+                "Refused agent configuration changed saved sharing");
+        }
+        passed.add("native_openclaw_invalid_agent_preserves_current_sharing");
+
+        engine.configure(endpoint, token, "org.liveabit.fixture", 60, "liveabit");
+        context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
+        cycle(context, engine, true);
+        JSONObject switched = engine.snapshot();
+        check(switched.getString("agent_id").equals("liveabit")
+            && !switched.getString("stream_id").equals(original.getString("stream_id"))
+            && switched.getJSONArray("pending").length() > 0, "Confirmed agent switch did not create fresh sharing");
+        for (int i = 0; i < switched.getJSONArray("pending").length(); i++) {
+            JSONObject item = switched.getJSONArray("pending").getJSONObject(i);
+            check(!item.getString("event_id").equals(id) && new JSONObject(item.getString("body")).getString("agentId").equals("liveabit"),
+                "Confirmed agent switch forwarded the old agent's activity");
+        }
+        passed.add("native_openclaw_confirmed_agent_switch_creates_fresh_queue");
+    }
+
+    static void live(Context context, DeliveryEngine engine, String endpoint, String token, String agentId, List<String> passed) throws Exception {
         check(OpenClawWebhook.isEndpoint(endpoint), "Live check must target an OpenClaw webhook");
         engine.stop();
         try {
-            engine.configure(endpoint, token, "org.liveabit.fixture", 60);
+            engine.configure(endpoint, token, "org.liveabit.fixture", 60, agentId);
             context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
             cycle(context, engine, true);
             JSONObject state = engine.snapshot();
-            check(state.getLong("last_ack") > 0 && state.getJSONArray("pending").length() == 0
+            check(state.getString("agent_id").equals(agentId) && state.getLong("last_ack") > 0 && state.getJSONArray("pending").length() == 0
                 && !state.optString("last_run_id").isEmpty()
                 && "OpenClaw accepted activity for processing".equals(state.getString("status")),
                 "Installed OpenClaw did not admit the Android activity: " + state.getString("status"));

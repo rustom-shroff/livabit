@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.text.DateFormat;
 import java.nio.charset.StandardCharsets;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.TreeSet;
 
 public final class MainActivity extends Activity {
     private PublisherApplication app;
-    private EditText endpoint, key, minutes;
+    private EditText endpoint, key, minutes, agent;
     private TextView apps, status;
     private final Set<String> selected = new TreeSet<>();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -61,18 +62,21 @@ public final class MainActivity extends Activity {
         label(body, "Connect your Android activity", 20);
         label(body, "Choose the apps to share. Send their usage estimates directly to OpenClaw or your test receiver, including the last 15 minutes. Stop sharing at any time.", 16);
         button(body, getString(R.string.openclaw_help_button), () -> showConnectionHelp(R.string.openclaw_help_button, R.string.openclaw_help));
-        button(body, getString(R.string.wifi_help_button), () -> showConnectionHelp(R.string.wifi_help_button, R.string.wifi_help));
-        button(body, getString(R.string.usb_help_button), () -> showConnectionHelp(R.string.usb_help_button, R.string.usb_help));
+        button(body, getString(R.string.wifi_help_button), () -> showTransportHelp(true));
+        button(body, getString(R.string.usb_help_button), () -> showTransportHelp(false));
         button(body, "Import receiver setup file", () -> startActivityForResult(
             new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE), IMPORT_SETUP));
         button(body, "Paste receiver setup", this::pasteSetup);
         label(body, "Import your OpenClaw or receiver setup, or paste its copied setup. Then choose apps and tap Start sharing.", 14);
         label(body, "Receiver address", 16);
-        endpoint = field(body, "http://192.168.1.10:18789/hooks/agent", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
+        endpoint = field(body, "Import setup to fill the connection address", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
         endpoint.setId(R.id.receiver_address);
         label(body, "Connection key", 16);
         key = field(body, "Paste the hook token or receiver key", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         key.setId(R.id.connection_key);
+        label(body, "OpenClaw agent (filled by setup)", 16);
+        agent = field(body, "main", InputType.TYPE_CLASS_TEXT); agent.setText("main");
+        agent.setId(R.id.openclaw_agent);
         button(body, "Choose apps", this::chooseApps); apps = label(body, "No apps selected", 16);
         button(body, "Enable usage access", () -> startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS,
             Uri.parse("package:" + getPackageName()))));
@@ -91,6 +95,7 @@ public final class MainActivity extends Activity {
         label(body, "While sharing is on, Android schedules a send about every 15 minutes. Battery restrictions can delay background sends and warnings. Local HTTP is for testing on your own network.", 14);
         try {
             JSONObject state = app.engine().snapshot(); endpoint.setText(state.getString("url"));
+            if (OpenClawWebhook.isEndpoint(state.getString("url"))) agent.setText(state.optString("agent_id", "liveabit"));
             if (!state.getString("key").isEmpty()) key.setText(LocalSecret.open(state.getString("key")));
             minutes.setText(Integer.toString(state.getInt("alert_minutes")));
             JSONArray values = state.getJSONArray("packages"); for (int i = 0; i < values.length(); i++) selected.add(values.getString(i));
@@ -117,10 +122,10 @@ public final class MainActivity extends Activity {
             String runId = state.optString("last_run_id");
             status.setText(state.getString("status") + "\nPending events: " + state.getJSONArray("pending").length()
                 + "\nSharing: " + (state.getBoolean("enabled") ? "On" : "Off")
-                + "\nConfigured connection: " + ConnectionSetup.describe(state.getString("url"))
+                + "\nConfigured connection: " + ConnectionSetup.describe(state.getString("url"), state.optString("agent_id", "liveabit"))
                 + (openClaw ? "\nLast OpenClaw acceptance: " : "\nLast acknowledgement: ") + last
                 + (openClaw && !runId.isEmpty() ? "\nLast accepted run: " + runId : "")
-                + (openClaw ? "\nAcceptance starts processing. Check the liveabit agent session for the result." : "")
+                + (openClaw ? "\nAcceptance starts processing. Check the selected OpenClaw agent for the result." : "")
                 + "\nUsage access: " + (UsageCollector.permitted(this) ? "On" : "Off")
                 + "\nReceiver warnings: " + (warnings ? "On" : "Off — tap Enable receiver warnings")
                 + "\nWarning interval: " + state.getInt("alert_minutes") + " minutes");
@@ -130,14 +135,29 @@ public final class MainActivity extends Activity {
         new AlertDialog.Builder(this).setTitle(title).setMessage(instructions)
             .setPositiveButton(R.string.close_help, null).show();
     }
+    private void showTransportHelp(boolean wifi) {
+        int title = wifi ? R.string.wifi_help_button : R.string.usb_help_button;
+        String address = endpoint.getText().toString().trim();
+        if (!OpenClawWebhook.isEndpoint(address)) {
+            showConnectionHelp(title, wifi ? R.string.wifi_help : R.string.usb_help);
+            return;
+        }
+        URI uri = URI.create(address);
+        int port = uri.getPort();
+        if (port < 0) port = "https".equals(uri.getScheme()) ? 443 : 80;
+        new AlertDialog.Builder(this).setTitle(title)
+            .setMessage(getString(wifi ? R.string.openclaw_wifi_help : R.string.openclaw_usb_help, port))
+            .setPositiveButton(R.string.close_help, null).show();
+    }
     private void startSharing() {
         if (!UsageCollector.permitted(this)) { toast("Enable usage access first"); return; }
         try {
             String url = endpoint.getText().toString().trim(), token = key.getText().toString().trim();
+            String agentId = agent.getText().toString().trim();
             String selection = String.join("\n", selected); int interval = Integer.parseInt(minutes.getText().toString());
-            int pending = app.engine().pendingToClear(url, token, selection, interval);
+            int pending = app.engine().pendingToClear(url, token, selection, interval, agentId);
             Runnable apply = () -> {
-                try { app.engine().configure(url, token, selection, interval); send(); }
+                try { app.engine().configure(url, token, selection, interval, agentId); send(); }
                 catch (Exception error) { toast("Sharing setup could not be saved. Try again"); }
             };
             if (pending > 0) new AlertDialog.Builder(this).setTitle(R.string.switch_setup_title)
@@ -157,6 +177,7 @@ public final class MainActivity extends Activity {
     }
     private void applySetup(ConnectionSetup setup) {
         endpoint.setText(setup.url); key.setText(setup.key); minutes.setText(Integer.toString(setup.minutes));
+        if (setup.agentId != null) agent.setText(setup.agentId);
         toast("Setup imported. Choose apps and tap Start sharing to apply it");
     }
     @Override protected void onActivityResult(int request, int result, Intent data) {

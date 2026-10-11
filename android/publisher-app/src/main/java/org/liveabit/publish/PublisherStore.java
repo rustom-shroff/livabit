@@ -25,6 +25,7 @@ final class PublisherStore {
             if (!state.has(field)) { state.put(field, UUID.randomUUID().toString()); migrated = true; }
         }
         if (!state.has("scope_revision")) { state.put("scope_revision", 1); migrated = true; }
+        if (!state.has("agent_id")) { state.put("agent_id", OpenClawWebhook.AGENT_ID); migrated = true; }
         if (migrated) write(state);
         return state;
     }
@@ -37,6 +38,7 @@ final class PublisherStore {
     }
     static JSONObject empty() throws Exception {
         return new JSONObject().put("version", 1).put("enabled", false).put("url", "")
+            .put("agent_id", OpenClawWebhook.AGENT_ID)
             .put("key", "").put("packages", new JSONArray()).put("alert_minutes", 60)
             .put("stream_id", UUID.randomUUID().toString()).put("sequence", 0)
             .put("recipient_id", UUID.randomUUID().toString()).put("subscription_id", UUID.randomUUID().toString()).put("scope_revision", 1)

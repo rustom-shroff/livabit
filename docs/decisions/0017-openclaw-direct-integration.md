@@ -2,6 +2,8 @@
 
 Date: **2026-10-10**. Status: **authorized POC development**.
 
+The dedicated-agent implementation below is the verified 0.4.0 baseline. [ADR-0018](0018-existing-main-agent-context.md) subsequently selects the existing `main` agent and explicit native agent configuration for 0.5.0; preserve this decision and its original evidence as history.
+
 The user selected their installed OpenClaw as the first agent integration and asked development to continue without interruption unless their input is needed. This supersedes Grok as the active target. Retain earlier Grok, Muse and ChatGPT research, code and evidence as history. The accepted Android collector and deferred accuracy work remain unchanged.
 
 Implement the receiving path directly in the native Android sender: **Android -> the user's OpenClaw webhook -> a dedicated `liveabit` agent**. The installed OpenClaw runtime is the final recipient; the desktop test receiver remains an independent display consumer and does not forward events. No project backend, broker, tunnel or forwarding bridge is added.

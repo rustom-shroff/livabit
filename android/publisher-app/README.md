@@ -2,13 +2,15 @@
 
 This native Android app sends selected-app usage directly to the user's **OpenClaw** activity agent or to the independent desktop display receiver. Both paths reuse the accepted collector and keep the sharing controls on Android. No hosted relay or desktop forwarding bridge is involved. The existing local inspector remains a separate app.
 
-**Current POC, 2026-10-11:** [liveabit Sender 0.4.0-poc APK](../../artifacts/android-publisher/liveabit-sender-0.4.0-poc.apk), SHA-256 `43650faaef9f304a2a2f4d7522f43be6a78255df77bfc242c2b70623b5e78273`. The exact installed APK passed **31 native Android checks** on the owned Android 15/API 35 emulator, including admission by the installed OpenClaw gateway. Separate agent history confirmed interpretation that preserved unknown coverage and unverified estimates. Build/lint passed with zero errors and nine warnings. Wi-Fi setup is enabled after explicit approval; the physical phone has not been tested. See the [OpenClaw POC review](../../docs/review/openclaw-poc-2026-10-11.md) and [native validation](../../artifacts/android-publisher/run-ea7f57fe-4d14-4b9d-aed9-c6d1828b16c3/validation.json).
+**Current release, 2026-10-11:** [0.5.0-poc APK](../../artifacts/android-publisher/liveabit-sender-0.5.0-poc.apk) targets the user's existing main agent under [ADR-0018](../../docs/decisions/0018-existing-main-agent-context.md), with explicit saved agent selection and actual-port OpenClaw Wi-Fi/USB guides. Its exact bytes passed 37 native Android 15/API 35 checks, actual main admission and additional host-LAN admission; separate completed main output retained uncertainty. Main configuration and AGENTS were preserved. SHA-256: `fa0214538c6708742951ead442dfe408099ea7fb495c2634ee78e504a71f6c1e`. See the [main-agent review](../../docs/review/openclaw-main-agent-2026-10-11.md).
+
+The earlier [0.4.0-poc](../../artifacts/android-publisher/liveabit-sender-0.4.0-poc.apk), SHA-256 `43650faaef9f304a2a2f4d7522f43be6a78255df77bfc242c2b70623b5e78273`, remains the dedicated liveabit-agent baseline with its own 31-check [review](../../docs/review/openclaw-poc-2026-10-11.md). The first 0.5.0 main hook created the configured canonical conversation; earlier chats were not imported. Physical-phone activity delivery and the selected WhatsApp pairing/outbound setup remain untested or pending.
 
 ## Connect directly to OpenClaw
 
-The [OpenClaw guide](../../docs/integration-drafts/openclaw-direct.md) explains the dedicated agent and native webhook mapping. No display-receiver server is needed for this route.
+The [OpenClaw guide](../../docs/integration-drafts/openclaw-direct.md) explains the selected existing agent and server-owned native mapping. No display-receiver server is needed. Use the emulator-validated 0.5.0 APK for this main-agent workflow; 0.4.0 accepts only earlier liveabit setup.
 
-1. From the repository root, run `.\scripts\configure-openclaw.ps1`. It preserves the existing model configuration and generates private setup files under `artifacts/openclaw/`. Without `-Lan`, setup leaves the existing gateway binding unchanged and generates USB/emulator files.
+1. From the repository root, run `.\scripts\configure-openclaw.ps1 -AgentId main`. It installs liveabit Skill while preserving main's instructions/model/tools/heartbeat and generates private setup files. Native `/hooks/liveabit` configuration fixes main and the canonical main conversation, creating or reusing it; callers cannot choose session keys. Without `-Lan`, the binding is unchanged and USB/emulator files are generated.
 2. For a USB phone, enable USB debugging, connect the cable and authorize the computer. Use the actual generated port:
 
 ```powershell
@@ -17,11 +19,13 @@ $OpenClawPort = (Get-Content .\artifacts\openclaw\connection.json -Raw | Convert
 ```
 
 3. Import `artifacts/openclaw/android-usb-setup.json` in the sender. The owned emulator instead uses `android-emulator-setup.json`. Import fills the setup; it does not start sharing. Keep these files private because they contain the hook credential.
-4. Choose apps, enable usage access and receiver warnings, then tap **Start sharing**. Use **Send now** to send fresh observations. Inspect the dedicated `liveabit` sessions in OpenClaw for agent output.
+4. Check the **OpenClaw agent** field, choose apps, enable usage access and receiver warnings, then tap **Start sharing**. Use **Send now** to send fresh observations. Inspect the configured main conversation for output. A completed synthetic main response was verified separately from admission; this does not prove use of older chats or private goals.
 
-The app identifies `/hooks/agent` as OpenClaw and `/events` as the test receiver. Use the hook token from the generated setup, not the OpenClaw dashboard login token. A valid OpenClaw response acknowledges **run admission**; it does not prove completed interpretation or a user notification. Retained-event retry is best effort and duplicates are possible.
+The app distinguishes mapped `/hooks/liveabit`, legacy isolated `/hooks/agent` and display-receiver `/events`. Imported setup explicitly supplies `agent_id`; new manual OpenClaw setup defaults to main. Mapped setup requires main, while the legacy route supports configured agent IDs. Status identifies the saved agent. Use the hook token, not the dashboard login token. Success is run admission, not interpretation or notification. Retry is best effort; duplicates are possible. Changing agents prompts before clearing pending activity; older settings stay liveabit.
 
-For Wi-Fi, the user-approved LAN setup is now enabled and `artifacts/openclaw/android-wifi-setup.json` is ready. Keep the phone and computer on the same reachable private network, transfer that file to the phone and import it. The helper's `-Lan` option prepares this mode for a new setup; without it, the helper preserves the existing gateway binding. Do not hardcode a default gateway port: use the generated setup, because this Windows package uses its configured port. A local-network probe checked authentication and route reachability, and [native emulator-to-host-LAN admission](../../artifacts/openclaw/android-lan-admission.json) passed; actual phone delivery remains untested.
+For Wi-Fi, retain user-approved LAN mode and generate selected-agent files with `.\scripts\configure-openclaw.ps1 -AgentId main -Lan`. Keep both devices on a reachable private network, transfer `artifacts/openclaw/android-wifi-setup.json` and import it. Without `-Lan`, the binding is unchanged. Use the generated actual port. Native [main-agent host-LAN admission](../../artifacts/openclaw/android-main-lan-admission.json) and connection-guide checks passed with 0.5.0; physical-phone delivery remains untested. Earlier [dedicated-agent LAN evidence](../../artifacts/openclaw/android-lan-admission.json) remains separate.
+
+The user-selected WhatsApp channel still needs [phone-side QR pairing](../../docs/integration-drafts/openclaw-whatsapp-pairing.md) and a channel test. Current hooks use `deliver: false`, so main-agent output does not yet send a phone message. The Android **Receiver is down** warning is a separate notification.
 
 ## Start the independent display receiver
 
@@ -62,7 +66,7 @@ The owned emulator uses `http://10.0.2.2:8765/events`. If you choose a different
 
 ## Use the Android app
 
-The following workflow uses the independent display receiver. Install the [0.4.0 sender APK](../../artifacts/android-publisher/liveabit-sender-0.4.0-poc.apk), whose exact bytes also passed the display-receiver workflows. For this route:
+The following workflow uses the independent display receiver. Install the [0.5.0 sender APK](../../artifacts/android-publisher/liveabit-sender-0.5.0-poc.apk), whose exact bytes passed the display-receiver workflows. For this route:
 
 1. In the dashboard, choose **Phone connected by USB**, **Android emulator**, or a Wi-Fi address (available when the receiver listens on the LAN). Download its setup file, move it to the phone, then tap **Import receiver setup file** in liveabit. Alternatively use **Copy setup** and **Paste receiver setup**, or enter the address and key manually. Import only fills the fields; sharing stays under your control. The setup file contains the connection key, so keep it private.
 2. Choose apps and enable usage access. Start shares their recent 15 minutes and future observations.
@@ -84,7 +88,7 @@ The connection screen distinguishes an unreachable receiver, a refused key, an u
 .\scripts\test-android-publisher.ps1
 ```
 
-After configuring OpenClaw, include the actual installed gateway in the emulator run with `.\scripts\test-android-publisher.ps1 -OpenClaw`. This submits a synthetic emulator observation to the dedicated `liveabit` agent and records native run admission. Inspect agent output separately; an admission pass is not proof of interpretation.
+After configuring OpenClaw, include the actual installed gateway in the emulator run with `.\scripts\test-android-publisher.ps1 -OpenClaw`. This submits a synthetic emulator observation to the agent/route in the generated setup and records native run admission. The current setup selects main; legacy dedicated liveabit setup remains supported. Inspect agent output separately; an admission pass is not proof of interpretation.
 
 The test script accepts only the dedicated `liveabit-api35-test` emulator on `emulator-5580`. Start it using the existing emulator script. The tests start their own copy of the actual receiver on a temporary port, with separate files under the test run, and stop it when finished. They do not use or control your receiver on port 8765. Tests install the exact candidate APK, drive the owned lifecycle fixture, then run native Android instrumentation against the receiver and OpenClaw response fixtures. They include a real one-minute notification interval, connection guides, repeated Start with retained events and the change-setup confirmation. They clear only the sender's synthetic emulator data. No physical phone is touched.
 
@@ -92,8 +96,8 @@ New events use the [OAP observation draft](../../specs/protocol/activity-observa
 
 **When upgrading from 0.3.2 or earlier, restart your receiver with Ctrl+C and the launch script so it loads support for the new format.** Keep the existing connection/data files. Installing the new APK over the old one preserves its sharing setup and queued bytes. The receiver uses the project's existing locked Node dependencies for schema validation; no additional package or service was introduced.
 
-The [0.4.0 review](../../docs/review/openclaw-poc-2026-10-11.md) records its own 31-check emulator run, actual OpenClaw admission and separate agent output. The recorded agent described the owned fixture's 92.889 seconds as an unverified estimate, retained unknown coverage and did not treat 15 transitions as proof of leaving the app. Earlier [0.3.3](../../docs/review/android-sender-0.3.3-2026-10-10.md), [0.3.2](../../docs/review/android-sender-0.3.2-2026-10-09.md), [0.3.1](../../docs/review/android-sender-0.3.1-2026-10-09.md) and [0.3.0](../../docs/review/android-sender-0.3.0-2026-10-09.md) evidence remains preserved separately.
+The current [37-check validation](../../artifacts/android-publisher/run-472c26e5-8a30-4a4d-a025-fa48d09e2228/validation.json) binds the exact 0.5.0 APK. Its build passed in 1 minute 32 seconds with zero lint errors and ten warnings. Actual main output and preservation checks are recorded in the [main-agent review](../../docs/review/openclaw-main-agent-2026-10-11.md). The [0.4.0 review](../../docs/review/openclaw-poc-2026-10-11.md) retains its own 31-check emulator run and dedicated-agent output: the owned fixture's 92.889 seconds remained an unverified estimate, coverage stayed unknown and 15 transitions were not proof of leaving the app. Earlier [0.3.3](../../docs/review/android-sender-0.3.3-2026-10-10.md), [0.3.2](../../docs/review/android-sender-0.3.2-2026-10-09.md), [0.3.1](../../docs/review/android-sender-0.3.1-2026-10-09.md) and [0.3.0](../../docs/review/android-sender-0.3.0-2026-10-09.md) evidence remains preserved separately.
 
 ## Next steps
 
-Development can continue independently. The exact 0.4.0 APK is ready for an optional personal trial using the generated Wi-Fi or USB setup; no further approval or new account is needed. Phone delivery and physical background timing are still untested and are not prerequisites for continued local development.
+Development can continue independently, and the validated 0.5.0 APK is ready for an optional activity phone trial using generated Wi-Fi/USB setup. WhatsApp QR pairing needs the user's phone action before channel testing. Preserve 0.4.0 for its dedicated-agent baseline; do not import new main setup into the old APK.

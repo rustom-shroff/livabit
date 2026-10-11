@@ -40,7 +40,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.4.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.5.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null
@@ -135,9 +135,9 @@ try {
     $taskLiveRunId = $null
     if ($OpenClaw) {
         $taskHookSetup = Get-Content -LiteralPath (Join-Path $taskRoot 'artifacts\openclaw\android-emulator-setup.json') -Raw | ConvertFrom-Json
-        if ($taskHookSetup.format -ne 'liveabit.openclaw.connection.v1' -or $taskHookSetup.agent_id -ne 'liveabit') { throw 'Configure the dedicated OpenClaw agent first.' }
+        if ($taskHookSetup.format -ne 'liveabit.openclaw.connection.v1' -or $taskHookSetup.agent_id -notmatch '^[a-z0-9][a-z0-9_-]{0,63}$') { throw 'Configure the OpenClaw connection first.' }
         $taskLiveHook = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','openclaw_live',
-            '-e','endpoint',$taskHookSetup.url,'-e','key',$taskHookSetup.key,
+            '-e','endpoint',$taskHookSetup.url,'-e','key',$taskHookSetup.key,'-e','agent',$taskHookSetup.agent_id,
             'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
         $taskLiveHook | Set-Content -LiteralPath (Join-Path $taskRun 'openclaw-live.txt') -Encoding utf8
         if ($taskLiveHook -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw 'Installed OpenClaw did not accept the Android observation.' }
