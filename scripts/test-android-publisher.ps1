@@ -21,6 +21,11 @@ function Invoke-Device([string[]]$DeviceArgs) {
     }
     return ($taskResult -join "`n")
 }
+function Invoke-AutomaticJob {
+    $taskState = Invoke-Device @('shell','run-as','org.liveabit.publish','cat','files/sender.json') | ConvertFrom-Json
+    $taskJobId = if ($taskState.next_job_id) { [string]$taskState.next_job_id } else { '310' }
+    return Invoke-Device @('shell','cmd','jobscheduler','run','-f','org.liveabit.publish',$taskJobId)
+}
 try {
     if ((Invoke-Device @('emu','avd','name')).Split("`n")[0].Trim() -ne 'liveabit-api35-test') { throw 'Only the project test emulator may be used.' }
     if ((Invoke-Device @('shell','getprop','sys.boot_completed')).Trim() -ne '1') { throw 'Project emulator is not ready.' }
@@ -40,7 +45,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.6.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.7.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null
@@ -61,6 +66,17 @@ try {
     $taskResult | Set-Content -LiteralPath (Join-Path $taskRun 'native-tests.txt') -Encoding utf8
     if ($taskResult -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw 'Android-native sender checks failed. Read native-tests.txt.' }
     $taskChecks = ([regex]::Match($taskResult,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
+    foreach ($taskPhase in @('adaptive','ui_pages')) {
+        $taskAdaptive = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase',$taskPhase,
+            '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
+            'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
+        $taskAdaptive | Set-Content -LiteralPath (Join-Path $taskRun ($taskPhase + '.txt')) -Encoding utf8
+        if ($taskAdaptive -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw "Native $taskPhase checks failed." }
+        $taskChecks += ([regex]::Match($taskAdaptive,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
+    }
+    foreach ($taskPage in @('activity','setup','settings')) {
+        Invoke-Device @('pull',('/sdcard/Android/data/org.liveabit.publish/cache/' + $taskPage + '-screen.png'),(Join-Path $taskRun ($taskPage + '-screen.png'))) | Out-Null
+    }
     Invoke-Device @('push',(Join-Path $taskReceiverDirectory 'android-emulator-setup.json'),'/sdcard/Download/liveabit-emulator-setup.json') | Out-Null
     $taskImport = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','file_import',
         '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
@@ -76,8 +92,10 @@ try {
     $taskModeUrl = $taskConfig.emulator_events_url -replace 'http://10.0.2.2:', 'http://127.0.0.1:' -replace '/events$', '/api/mode'
     $taskHeaders = @{Authorization=('Bearer ' + $taskConfig.token)}
     Invoke-RestMethod -Uri $taskModeUrl -Method Post -Headers $taskHeaders -ContentType 'application/json' -Body '{"mode":"no_acknowledgement"}' | Out-Null
+    Invoke-Device @('shell','am','start','-W','-n','org.liveabit.fixture/.MainActivity') | Out-Null
+    Start-Sleep -Seconds 1
     Invoke-Device @('shell','am','start','-W','-n','org.liveabit.publish/.MainActivity') | Out-Null
-    Invoke-Device @('shell','cmd','jobscheduler','run','-f','org.liveabit.publish','310') | Set-Content -LiteralPath (Join-Path $taskRun 'job-run.txt') -Encoding utf8
+    Invoke-AutomaticJob | Set-Content -LiteralPath (Join-Path $taskRun 'job-run.txt') -Encoding utf8
     $taskBeforeRestart = $null
     for ($taskAttempt = 0; $taskAttempt -lt 20; $taskAttempt++) {
         Start-Sleep -Seconds 1
@@ -92,20 +110,21 @@ try {
         $taskRestored.pending[0].body -ne $taskBeforeRestart.pending[0].body -or $taskRestored.failure_since -ne $taskBeforeRestart.failure_since) {
         throw 'Reopening changed the retained delivery session.'
     }
-    Invoke-Device @('shell','cmd','jobscheduler','get-job-state','org.liveabit.publish','310') | Set-Content -LiteralPath (Join-Path $taskRun 'restored-periodic-job.txt') -Encoding utf8
+    Invoke-Device @('shell','cmd','jobscheduler','get-job-state','org.liveabit.publish',([string]$taskRestored.next_job_id)) | Set-Content -LiteralPath (Join-Path $taskRun 'restored-automatic-job.txt') -Encoding utf8
     Invoke-Device @('shell','cmd','jobscheduler','get-job-state','org.liveabit.publish','311') | Set-Content -LiteralPath (Join-Path $taskRun 'restored-warning-job.txt') -Encoding utf8
     $taskChecks += 'force_stop_reopen_restores_jobs_and_preserves_pending_session'
     # A restored periodic job can already be active. A forced run in that state
     # does not dispatch a second job, so wait for its real completion first.
     $taskJobIdle = $false
     for ($taskAttempt = 0; $taskAttempt -lt 40; $taskAttempt++) {
-        $taskJobState = Invoke-Device @('shell','cmd','jobscheduler','get-job-state','org.liveabit.publish','310')
+        $taskCurrent = Invoke-Device @('shell','run-as','org.liveabit.publish','cat','files/sender.json') | ConvertFrom-Json
+        $taskJobState = Invoke-Device @('shell','cmd','jobscheduler','get-job-state','org.liveabit.publish',([string]$taskCurrent.next_job_id))
         if ($taskJobState -notmatch '\bactive\b') { $taskJobIdle = $true; break }
         Start-Sleep -Milliseconds 500
     }
     if (-not $taskJobIdle) { throw 'Restored Android delivery job did not finish before recovery.' }
     Invoke-RestMethod -Uri $taskModeUrl -Method Post -Headers $taskHeaders -ContentType 'application/json' -Body '{"mode":"acknowledge"}' | Out-Null
-    Invoke-Device @('shell','cmd','jobscheduler','run','-f','org.liveabit.publish','310') |
+    Invoke-AutomaticJob |
         Set-Content -LiteralPath (Join-Path $taskRun 'recovery-job-run.txt') -Encoding utf8
     $taskState = $null
     for ($taskAttempt = 0; $taskAttempt -lt 20; $taskAttempt++) {
@@ -118,8 +137,9 @@ try {
     $taskView = Invoke-Device @('shell','uiautomator','dump','/sdcard/liveabit-publisher-ui.xml')
     Invoke-Device @('pull','/sdcard/liveabit-publisher-ui.xml',(Join-Path $taskRun 'connection-screen.xml')) | Out-Null
     $taskUi = Get-Content -LiteralPath (Join-Path $taskRun 'connection-screen.xml') -Raw
-    if ($taskUi -notmatch 'liveabit' -or $taskUi -notmatch 'Connect over Wi-Fi' -or $taskUi -notmatch 'Connect by USB') { throw 'Android connection guides were not visible.' }
-    $taskChecks += 'rendered_android_connection_screen'
+    if ($taskUi -notmatch 'liveabit' -or $taskUi -notmatch 'Activity' -or $taskUi -notmatch 'Setup' -or $taskUi -notmatch 'Settings' -or
+        $taskUi -match 'Connection key') { throw 'Android Activity tabs or separation were not rendered.' }
+    $taskChecks += 'rendered_android_activity_screen_with_separate_setup_settings'
     Invoke-Device @('shell','pm','revoke','org.liveabit.publish','android.permission.POST_NOTIFICATIONS') | Out-Null
     $taskWarnings = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','warnings_blocked',
         'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
@@ -150,11 +170,14 @@ try {
         receiver_isolated=$true; receiver_directory=$taskReceiverDirectory; receiver_port=([Uri]$taskConfig.desktop_url).Port;
         checks=$taskChecks; check_count=$taskChecks.Count; real_android_usage_query=$true; real_http_receiver=$true;
         real_notification_with_one_minute_user_setting=$true; default_warning_minutes=60;
+        default_send_minutes=5; default_screen_off_minutes=15; adaptive_screen_power_and_network_tested=$true;
+        native_activity_setup_settings_tested=$true; one_off_jobs_tested=$true;
         openclaw_native_contract_tested=$true; installed_openclaw_admission_tested=[bool]$OpenClaw; openclaw_run_id=$taskLiveRunId;
         production_grok_tested=$false; physical_phone_tested=$false;
         limits=@('One project emulator and local final receiver. No Grok account or real personal activity.',
             'One-minute real-time notification tested; default one-hour value checked rather than waiting an hour.',
-            'JobScheduler delivery force-triggered; exact background timing and battery behavior remain OS-dependent.') }
+            'JobScheduler delivery force-triggered; exact background timing and battery behavior remain OS-dependent.',
+            'Screen-off suppression exercised with a one-minute setting and real screen power; fifteen-minute default checked without waiting fifteen minutes.') }
     $taskReport | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $taskRun 'validation.json') -Encoding utf8
     Write-Output "PASS: $($taskChecks.Count) real Android sender checks; report: $taskRun\validation.json"
 } catch {

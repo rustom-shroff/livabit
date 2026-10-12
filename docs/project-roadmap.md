@@ -1,6 +1,8 @@
 # Project roadmap and phase gates
 
-**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
+**Current Android work, 2026-10-12:** [ADR-0019](decisions/0019-adaptive-android-delivery.md) implements configurable 5-minute active sends, a 15-minute screen-off pause and separate Activity/Setup/Settings pages. The native build, screen-power and UI checks passed; the final exact APK passed all 50 native checks, including installed OpenClaw admission. This advances TASK-P6-F05 directly in Android and leaves models, transport and the accepted collector intact.
+
+**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](review/openclaw-phone-notification-2026-10-11.md). Use the current tested 0.7.0 APK for the [real-activity phone trial](integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
 
 **Current priority — revision 0.32, 2026-10-11: selective WhatsApp policy and user-owned models.** WhatsApp is linked and connected. Native **0.6.0** clarifies local hook replies versus separately authorized phone nudges and passed all 37 native checks; [review](review/openclaw-whatsapp-2026-10-11.md). The user requested Sol 6.1 with medium thinking; [model management](integration-drafts/openclaw-model-settings.md) stays under their control and is separate from liveabit/channel setup. The verified [0.5.0 main-agent review](review/openclaw-main-agent-2026-10-11.md) and [0.4.0 dedicated-agent review](review/openclaw-poc-2026-10-11.md) remain unchanged. Keep the independent receiver and accepted collector; defer accuracy and Linux work. No intermediary is added.
 
@@ -44,6 +46,7 @@ TASK-P4-001..005 retain Windows evidence and the [Linux handoff](linux-verificat
 
 | ID | Work and output | Depends on |
 | --- | --- | --- |
+| TASK-P6-F05 | Native activity-aware scheduling and cleaner pages; preserve queued bytes/consent/outage state; default 5-minute active interval and 15-minute screen-off cutoff, both editable | User request and ADR-0019; exact APK, real screen power/HTTP/job tests and native UI workflow checks before phone trial |
 | TASK-P6-F04 | Build/test native OpenClaw delivery with explicit saved agent, mapped main conversation and endpoint-aware guides; preserve OAP bytes, legacy setup, retained retry, warnings and independent display receiver | Accepted collector; ADR-0015/0016 and current ADR-0018; exact new APK and actual main-route checks before phone trial |
 | TASK-P3-001 | Specify taxonomy/envelope/identities/time/metric/coverage; formal JSON schemas and valid/invalid fixtures (PA-01) | G0 |
 | TASK-P3-002 | Specify local grants/filter configuration, supported pairing/authentication, consent boundaries, expiry and offline revocation races (PA-02/03) | G0 |

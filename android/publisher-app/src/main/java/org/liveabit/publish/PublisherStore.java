@@ -26,6 +26,8 @@ final class PublisherStore {
         }
         if (!state.has("scope_revision")) { state.put("scope_revision", 1); migrated = true; }
         if (!state.has("agent_id")) { state.put("agent_id", OpenClawWebhook.AGENT_ID); migrated = true; }
+        if (!state.has("send_minutes")) { state.put("send_minutes", 5); migrated = true; }
+        if (!state.has("screen_off_minutes")) { state.put("screen_off_minutes", 15); migrated = true; }
         if (migrated) write(state);
         return state;
     }
@@ -40,6 +42,9 @@ final class PublisherStore {
         return new JSONObject().put("version", 1).put("enabled", false).put("url", "")
             .put("agent_id", OpenClawWebhook.AGENT_ID)
             .put("key", "").put("packages", new JSONArray()).put("alert_minutes", 60)
+            .put("send_minutes", 5).put("screen_off_minutes", 15)
+            .put("automatic_paused", false).put("automatic_status", "Start sharing to enable automatic sends")
+            .put("next_job_id", DeliveryEngine.PERIODIC_JOB).put("schedule_revision", 0).put("next_automatic_at", 0)
             .put("stream_id", UUID.randomUUID().toString()).put("sequence", 0)
             .put("recipient_id", UUID.randomUUID().toString()).put("subscription_id", UUID.randomUUID().toString()).put("scope_revision", 1)
             .put("cursor", 0).put("pending", new JSONArray()).put("last_ack", 0).put("last_run_id", "")
