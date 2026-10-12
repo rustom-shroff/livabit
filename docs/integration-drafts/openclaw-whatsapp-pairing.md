@@ -1,6 +1,8 @@
 # OpenClaw WhatsApp pairing and selective delivery
 
-Updated: **2026-10-11**. The user selected WhatsApp for phone communication. The official OpenClaw **2026.9.9** WhatsApp plugin is installed, and the account is [linked and connected](../../artifacts/openclaw/whatsapp-login/state.json). Managed configuration/restart and corrected login/status calls were exercised before successful phone pairing. The [explicit connection-check send](../../artifacts/openclaw/whatsapp-delivery-result.json) succeeded with a provider message ID for the verified own target; the helper confirmed agent/model settings were unchanged. Actual phone receipt and selective-nudge behavior remain unproven.
+**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](openclaw-phone-pilot.md); its bytes are unchanged.
+
+Updated: **2026-10-11**. The user selected WhatsApp for phone communication. The official OpenClaw **2026.9.9** WhatsApp plugin is installed, and the account is [linked and connected](../../artifacts/openclaw/whatsapp-login/state.json). Managed configuration/restart and corrected login/status calls were exercised before successful phone pairing. The [explicit connection-check send](../../artifacts/openclaw/whatsapp-delivery-result.json) succeeded with a provider message ID for the verified own target; the helper confirmed agent/model settings were unchanged. The user confirmed phone receipt and notification for both connection checks. A real-activity trial is next.
 
 The [preparation helper](../../scripts/prepare-openclaw-whatsapp.ps1) uses the installed Windows Gateway and its managed login. It prepares the `default` WhatsApp account with incoming direct/group chats and read receipts disabled, preserves unrelated settings and existing phone credentials, and saves a local configuration backup. It does not send a message. This channel belongs to OpenClaw, with no project-operated relay. The following pairing steps are retained for reconnecting; the connected account needs no new scan now.
 
@@ -37,7 +39,7 @@ For an explicit connection check to that same own chat:
 
 This sends one fixed test message with explicit main ownership. It does not invoke a model or change its selection. A provider message ID means the provider acknowledged the send; confirm phone receipt separately. The helper does not automatically retry an uncertain send.
 
-A separate [actual main-agent check](../../artifacts/openclaw/agent-whatsapp-check-result.json) completed on Sol 6.1. The agent read its private delivery policy and used the native message capability to send one authorized own-chat check; metadata reported source reply delivery, with a silent terminal reply. This verifies agent-driven channel use rather than only the helper's transport call. Phone display/read and a real goal-grounded activity nudge remain unproved.
+A separate [actual main-agent check](../../artifacts/openclaw/agent-whatsapp-check-result.json) completed on Sol 6.1. The agent read its private delivery policy and used the native message capability to send one authorized own-chat check; metadata reported source reply delivery, with a silent terminal reply. This verifies agent-driven channel use rather than only the helper's transport call. The user confirmed phone receipt and notification for the checks. A real goal-grounded activity trial is next.
 
 Current [liveabit hooks](openclaw-direct.md) keep `deliver: false`, so ordinary hook responses stay local. A separate host-owned policy authorizes a selective nudge only when available user goals/context justify it. Missing goals means no unsolicited nudge. Quiet hours, cooldown and duplicate suppression are **best-effort agent instructions**, not guaranteed transport enforcement. The Android **Receiver is down** notification remains independent.
 
@@ -45,4 +47,4 @@ This workflow follows the installed release's [WhatsApp channel documentation](h
 
 ## Next steps
 
-The account is connected, both the transport check and separate main-agent send succeeded, and exact Android 0.6.0 bytes passed all 37 native checks. Further development can continue independently. Phone display/read and goal-grounded nudges need actual evidence; no new pairing action is required now.
+The account is connected, both the transport check and separate main-agent send succeeded, and exact Android 0.6.0 bytes passed all 37 native checks. Further development can continue independently. Phone receipt and notification for the checks are user-confirmed; a real goal-grounded activity trial is next. No new pairing action is required.

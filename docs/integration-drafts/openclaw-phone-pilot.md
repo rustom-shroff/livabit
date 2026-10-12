@@ -1,0 +1,13 @@
+# First real-activity phone trial
+
+The WhatsApp checks [arrived with a phone notification](../review/openclaw-phone-notification-2026-10-11.md). Use the already emulator-tested [liveabit Sender 0.6.0 APK](../../artifacts/android-publisher/liveabit-sender-0.6.0-poc.apk) for the next step: real selected-app activity reaching your existing main OpenClaw agent.
+
+1. In the main OpenClaw conversation that receives liveabit observations, describe one goal you actually want help with, when it applies, and the kind of reminder you want. Your goals and model choices stay in OpenClaw. A goal given in another chat is not assumed to be available here.
+2. Copy the APK and private `artifacts/openclaw/android-wifi-setup.json` to your phone. Keep the computer running and both devices on the same reachable Wi-Fi network. If your network/address has changed, run `.\scripts\configure-openclaw.ps1 -AgentId main -Lan` from the project root to regenerate that setup. This preserves your model choices and existing private delivery policy. [Connection guide](../../android/publisher-app/README.md).
+3. Install the APK, import that setup, check **OpenClaw agent: main**, choose the apps you want to share, and enable usage access and receiver warnings. Tap **Start sharing**. Importing a file alone does not turn sharing on.
+4. Use one selected app normally, return to liveabit and tap **Send now**. Look for **OpenClaw accepted activity for processing**, a recent acknowledgement and no pending events. Then check that the observation appears in the receiving main conversation.
+5. Let the agent apply your goal and preferences. Ordinary observations stay in OpenClaw; a WhatsApp nudge is selective rather than a receipt for every send. Defaults are a 60-minute cooldown and quiet hours 22:00–08:00 America/Chicago. No established goal means no behavioral nudge. [Notification settings](openclaw-whatsapp-pairing.md).
+
+Android also schedules background sends about every 15 minutes; battery restrictions can delay them. **Send now** avoids waiting for that schedule during the initial trial. **Stop sharing** ends scheduled sends and clears pending activity. The receiver-down warning defaults to 60 minutes without acknowledgement and can be changed in the app.
+
+For the first result, report whether the app was accepted, whether the activity appeared in main, and whether any useful nudge arrived. A status description is enough; setup keys, goals and raw activity need not be pasted into this chat. Precise duration and complete coverage remain deferred.
