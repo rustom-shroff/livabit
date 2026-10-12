@@ -1,0 +1,135 @@
+{
+  "result": "native_android_sender_verified",
+  "date": "2026-10-09",
+  "version": "0.3.1-test",
+  "apk": "artifacts/android-publisher/liveabit-sender-0.3.1-test.apk",
+  "apk_sha256": "e0fc129ee27190776267227d93609e8f6eeb32f1ed02431bb4f82640259379ca",
+  "apk_bytes": 112160,
+  "native_report": "artifacts/android-publisher/run-abdc1916-abd4-4d8e-8656-552ce69a06dc/validation.json",
+  "android_native_checks": 18,
+  "instrumentation_apk_sha256": "991d49ddd916c4e1e968c433f12748fa88f84e8631461eb62c1cc6a9298938cc",
+  "actual_document_picker_import_tested": true,
+  "native_clipboard_import_tested": true,
+  "import_does_not_start_sharing": true,
+  "force_stop_reopen_preserves_pending_and_restores_jobs": true,
+  "real_bad_key_and_unreachable_receiver_tested": true,
+  "disabled_notification_permission_detected": true,
+  "actual_one_minute_notification_tested": true,
+  "default_warning_minutes": 60,
+  "receiver_setup_authentication_report": "artifacts/android-publisher/receiver-setup-validation-0.3.1.json",
+  "desktop_dashboard_observed": true,
+  "browser_copy_setup_observed": true,
+  "browser_download_completion_confirmed": false,
+  "screenshot": "artifacts/android-publisher/receiver-dashboard-0.3.1.png",
+  "build_log": "artifacts/android-publisher-build-0.3.1.txt",
+  "lint_errors": 0,
+  "lint_warnings": 7,
+  "lint_warning_scope": "English-only test UI localization",
+  "previous_inspector_apk_unchanged": true,
+  "previous_inspector_apk_sha256": "df5ae7d7aad1c53818d9ce9812f49a3213c8b02e47caf2f2807f7abc130e6d6c",
+  "javascript_sender_prototype_created": false,
+  "javascript_reference_suite_run": false,
+  "grok_account_used": false,
+  "intermediary_created": false,
+  "receiver_forwards_nothing": true,
+  "physical_phone_tested": false,
+  "source_bindings": [
+    {
+      "path": "android/publisher-app/build.gradle",
+      "sha256": "f3a0abd8e0db81b5989aed833634a1b7d284205d63ff32d79a1c81299684ee5c"
+    },
+    {
+      "path": "android/publisher-app/README.md",
+      "sha256": "89040027ad8c9d7cb27f3f795fc67973976a3c1a5325550cce7ac16d9aac3f70"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+      "sha256": "187228e8b03eada59b99496210c46cf59f9b5eec7a633096cc2a4174b34d06a4"
+    },
+    {
+      "path": "android/publisher-app/src/main/AndroidManifest.xml",
+      "sha256": "9434ae4a3e54a59d991ac14a44d92f816e7d1d9dd341c6434db811b706563836"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionSetup.java",
+      "sha256": "696f7a6b07e77b65f791183eabf5785f597b7e5674cb595c01b69e861fd0ab7d"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java",
+      "sha256": "e7cfee40fec3d77fea1e9f9d134115ec268e00e1c579a0db8e5174ce645e9f91"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryJobService.java",
+      "sha256": "eef299fcad00da2ee33084014db3852f9dd79de7f3e64c3c535052caf0b06bfa"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/LocalSecret.java",
+      "sha256": "87fec65a297236f4099a43c8732aac259923849dae3c2efecedd2ce67ae7d221"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java",
+      "sha256": "1653a73a5135ccdaa192a27335d562d2a98dae4f653090855958c1c2a193820f"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherApplication.java",
+      "sha256": "2ec7fc25e595e30d46d1e24e839a54db3d287255def08dfda2ca63ad4fb673ef"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherStore.java",
+      "sha256": "c65813cbb992be5da222062f58ff5f9066fab4e5c7eb78938ecc21cbd0e7b769"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/UsageCollector.java",
+      "sha256": "046e1c80dd69cc2686834b1cd6855ddcc8a516237029eedd1ef59e5faa3702b4"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/ids.xml",
+      "sha256": "8684c86785efa68bae4f5ab496801c037c5861f9d9fdae30dd8fc1f10f0f3be3"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/xml/data_extraction_rules.xml",
+      "sha256": "16105c150c33ed66c2f719d3aa7ac893e66c5b8c2f3c8fffaf921db9cce65dcd"
+    },
+    {
+      "path": "android/settings.gradle",
+      "sha256": "40c9c13a571f60eb6775c79697e1ea57396941a2445765a178f9dc257f03bb29"
+    },
+    {
+      "path": "docs/decisions/0015-android-first-test-receiver.md",
+      "sha256": "e67c89c17899a8939fc82609b1005d03c07135712d978c2eae07495fec09b5ea"
+    },
+    {
+      "path": "scripts/build-android-publisher.ps1",
+      "sha256": "a9c04a58bba3891bcec0794d8e3fc07a0a53438573e199cc8ff4c31bd5be01e2"
+    },
+    {
+      "path": "scripts/test-android-publisher.ps1",
+      "sha256": "658185630fcdb797b73f474e77d3d3f4324a31942eab9ff508f2d44107e05c54"
+    },
+    {
+      "path": "specs/android/test-publisher.md",
+      "sha256": "d2ad5b6d47831c7b0032801188e14fee285f142a3e6442bab762137625594b81"
+    },
+    {
+      "path": "tools/activity-receiver/dashboard.css",
+      "sha256": "c6bb5688cdb0ac45ba77655a220b5616edd5143788d9af9a8f09fe5e54bcd547"
+    },
+    {
+      "path": "tools/activity-receiver/dashboard.html",
+      "sha256": "17645afb2713dc4492432edea55635d22a025e23619c535bfedb7d44743a3e32"
+    },
+    {
+      "path": "tools/activity-receiver/dashboard.js",
+      "sha256": "8e3b82e73df08034b7ae3af35f7e069a0e1f14dfed904d6e01fb6723e97f70f3"
+    },
+    {
+      "path": "tools/activity-receiver/server.mjs",
+      "sha256": "6edef56694ea56807ada6f5baac186a83f45b68b32198da1508fc70fa52f0434"
+    }
+  ],
+  "limits": [
+    "One project emulator and local final receiver. No Grok account or real personal activity.",
+    "One-minute real-time notification tested; default one-hour value checked rather than waiting an hour.",
+    "JobScheduler delivery force-triggered; exact background timing and battery behavior remain OS-dependent."
+  ]
+}

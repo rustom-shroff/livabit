@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>liveabit · Activity receiver</title><link rel="stylesheet" href="/dashboard.css"><script src="/dashboard.js" defer></script></head>
+<body><main><header><span class="brand">liveabit</span><span class="badge">Test receiver</span></header>
+<h1>Activity arriving from your phone.</h1><p class="intro">Watch the selected apps your Android sender shares. Usage values are estimates; source coverage remains unknown.</p>
+<section id="connect"><label for="key">Connection key</label><div class="line"><input id="key" type="password" autocomplete="off" placeholder="Paste the key from connection.json"><button id="connect-button">Connect</button></div></section>
+<section class="connection"><div><span class="eyebrow">Connection</span><strong id="status">Waiting for connection key</strong></div>
+<label>Receiver test mode <select id="mode"><option value="acknowledge">Acknowledge events</option><option value="no_acknowledgement">Withhold acknowledgements</option><option value="wrong_acknowledgement">Send an incorrect acknowledgement</option></select></label></section>
+<section id="setup" hidden><h2>Connect your Android sender</h2>
+<p id="wifi-help" class="setup-note" hidden></p>
+<label for="connection-type">Connection to this computer</label><select id="connection-type"></select>
+<p id="setup-instructions" class="setup-note"></p>
+<div class="line"><button id="download-setup">Download setup file</button><button id="copy-setup" class="secondary">Copy setup</button></div>
+<p id="setup-status" class="setup-note">Import the file or paste the setup in liveabit. Keep it private: it contains your connection key.</p></section>
+<div class="heading"><h2>Received events</h2><span id="count">0</span></div><div id="events"><p class="empty">Start sharing in the Android app to see activity here.</p></div>
+<footer>This is the final local test receiver. It displays events here and sends nothing to an agent or other service. The latest 200 events are retained on this computer.</footer>
+</main></body></html>
