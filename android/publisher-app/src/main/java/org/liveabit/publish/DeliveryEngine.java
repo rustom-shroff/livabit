@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ import java.util.UUID;
 
 /** Native Android delivery, durable bounded pending events and OS notifications. */
 final class DeliveryEngine {
-    static final int PERIODIC_JOB = 310, OUTAGE_JOB = 311, OUTAGE_NOTIFICATION = 312;
+    static final int PERIODIC_JOB = 310, OUTAGE_JOB = 311, OUTAGE_NOTIFICATION = 312, NEXT_DELIVERY_JOB = 313;
     static final String CHANNEL = "receiver-health";
     private final Context context;
     private final PublisherStore store;
@@ -55,7 +56,8 @@ final class DeliveryEngine {
             .put("status", OpenClawWebhook.isEndpoint(url)
                 ? "Sharing enabled — waiting for OpenClaw to accept activity"
                 : "Sharing enabled — waiting for receiver acknowledgement");
-        store.write(state); disconnect(); cancelAlert(); schedulePeriodic();
+        state.put("send_minutes", previous.getInt("send_minutes")).put("screen_off_minutes", previous.getInt("screen_off_minutes"));
+        store.write(state); disconnect(); cancelAlert(); cancelAutomatic(); scheduleAutomatic(PERIODIC_JOB);
     }
     synchronized int pendingToClear(String url, String token, String selection, int minutes) throws Exception {
         return pendingToClear(url, token, selection, minutes, OpenClawWebhook.AGENT_ID);
@@ -84,27 +86,62 @@ final class DeliveryEngine {
         JSONObject state = store.read(); state.put("alert_minutes", minutes); store.write(state);
         checkHealth();
     }
+    synchronized void updateTiming(int sendMinutes, int screenOffMinutes, int alertMinutes) throws Exception {
+        for (int value : new int[] {sendMinutes, screenOffMinutes, alertMinutes}) {
+            if (value < 1 || value > 1440) throw new IllegalArgumentException("Choose between 1 and 1440 minutes.");
+        }
+        JSONObject state = store.read();
+        state.put("send_minutes", sendMinutes).put("screen_off_minutes", screenOffMinutes).put("alert_minutes", alertMinutes);
+        store.write(state);
+        if (state.getBoolean("enabled")) { cancelAutomatic(); scheduleAutomatic(PERIODIC_JOB); }
+        checkHealth();
+    }
     synchronized void stop() throws Exception {
         JSONObject state = store.read(); state.put("enabled", false).put("pending", new JSONArray())
-            .put("failure_since", 0).put("outage_notified", false).put("status", "Sharing stopped — pending activity cleared");
+            .put("failure_since", 0).put("outage_notified", false).put("status", "Sharing stopped — pending activity cleared")
+            .put("next_automatic_at", 0).put("automatic_paused", false).put("automatic_status", "Automatic sends are off");
         store.write(state); disconnect(); cancelAlert();
-        JobScheduler jobs = context.getSystemService(JobScheduler.class); jobs.cancel(PERIODIC_JOB); jobs.cancel(OUTAGE_JOB);
+        cancelAutomatic(); context.getSystemService(JobScheduler.class).cancel(OUTAGE_JOB);
     }
     private void disconnect() { HttpURLConnection active = connection; if (active != null) active.disconnect(); }
-    void cycle(boolean collect) {
+    void cycle(boolean collect) { cycle(collect, false, null, -1); }
+    void automaticCycle(String streamId, long revision) {
+        try {
+            synchronized (this) {
+                JSONObject state = store.read();
+                if (!state.getBoolean("enabled") || !state.getString("stream_id").equals(streamId)
+                        || state.optLong("schedule_revision") != revision) return;
+            }
+            cycle(true, true, streamId, revision);
+        } catch (Exception ignored) { }
+    }
+    private void cycle(boolean collect, boolean automatic, String expectedStream, long expectedRevision) {
         synchronized (this) { if (running) return; running = true; }
         try {
             JSONObject captured;
             synchronized (this) { captured = store.read(); }
             if (!captured.getBoolean("enabled")) return;
+            if (automatic && (!captured.getString("stream_id").equals(expectedStream)
+                    || captured.optLong("schedule_revision") != expectedRevision)) return;
             if (!UsageCollector.permitted(context)) { stop(); setStatus("Usage access is off — sharing stopped"); return; }
+            if (automatic) {
+                synchronized (this) {
+                    JSONObject state = store.read();
+                    if (!sameSession(state, captured)) return;
+                    boolean paused = ScreenActivity.paused(context, state);
+                    state.put("pending", prune(state.getJSONArray("pending")));
+                    state.put("automatic_status", paused ? "Paused — screen has been off" : "Watching for selected-app activity");
+                    store.write(state);
+                    if (paused) return;
+                }
+            }
             if (collect) {
                 JSONObject event = UsageCollector.collect(context, captured, System.currentTimeMillis());
                 synchronized (this) {
                     JSONObject state = store.read();
                     if (!sameSession(state, captured)) return;
                     JSONArray pending = prune(state.getJSONArray("pending"));
-                    if (event != null && pending.length() < 64) {
+                    if (event != null && pending.length() < 64 && (!automatic || hasActivity(event))) {
                         String observation = OapObservation.encode(event);
                         String body = OpenClawWebhook.isEndpoint(state.getString("url"))
                             ? OpenClawWebhook.wrap(observation, state.getString("agent_id")) : observation;
@@ -112,6 +149,9 @@ final class DeliveryEngine {
                             .put("expires_at", event.getString("expires_at")));
                         state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
                             .put("sequence", event.getLong("sequence"));
+                    } else if (event != null && automatic && pending.length() < 64) {
+                        state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
+                            .put("automatic_status", "No new selected-app activity — nothing sent");
                     }
                     state.put("pending", pending); store.write(state);
                 }
@@ -121,6 +161,12 @@ final class DeliveryEngine {
                 JSONObject state, item;
                 synchronized (this) {
                     state = store.read(); if (!sameSession(state, captured)) return;
+                    if (automatic) {
+                        if (ScreenActivity.paused(context, state)) {
+                            state.put("automatic_status", "Paused — screen has been off"); store.write(state); return;
+                        }
+                        store.write(state);
+                    }
                     JSONArray pending = prune(state.getJSONArray("pending")); state.put("pending", pending); store.write(state);
                     if (pending.length() == 0) break; item = pending.getJSONObject(0);
                 }
@@ -156,6 +202,14 @@ final class DeliveryEngine {
             synchronized (this) { running = false; }
             try { checkHealth(); } catch (Exception ignored) {}
         }
+    }
+    private static boolean hasActivity(JSONObject event) throws Exception {
+        JSONArray apps = event.getJSONObject("observation").getJSONArray("apps");
+        for (int index = 0; index < apps.length(); index++) {
+            JSONObject app = apps.getJSONObject(index);
+            if (app.getLong("transition_count") > 0 || (!app.isNull("foreground_duration_ms") && app.getLong("foreground_duration_ms") > 0)) return true;
+        }
+        return false;
     }
     private enum Outcome {
         ACCEPTED("Receiver acknowledged activity"), OPENCLAW_ACCEPTED("OpenClaw accepted activity for processing"),
@@ -274,18 +328,56 @@ final class DeliveryEngine {
             && manager.areNotificationsEnabled() && channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
     }
     synchronized void restoreScheduling() throws Exception {
-        if (!store.read().getBoolean("enabled")) return;
+        JSONObject state = store.read();
+        if (!state.getBoolean("enabled")) return;
         JobScheduler jobs = context.getSystemService(JobScheduler.class);
-        if (jobs.getPendingJob(PERIODIC_JOB) == null) schedulePeriodic();
+        JobInfo next = jobs.getPendingJob(state.optInt("next_job_id", PERIODIC_JOB));
+        boolean woke = ScreenActivity.interactive(context) && !state.optBoolean("screen_interactive", true);
+        if (woke) { ScreenActivity.record(context, state, true); store.write(state); }
+        if (woke || next == null || next.isPeriodic() || next.getExtras().getLong("revision", -1) != state.optLong("schedule_revision")) {
+            cancelAutomatic(); scheduleAutomatic(PERIODIC_JOB);
+        }
         checkHealth();
+    }
+    synchronized void screenChanged() throws Exception {
+        JSONObject state = store.read();
+        boolean interactive = ScreenActivity.interactive(context);
+        boolean changed = interactive != state.optBoolean("screen_interactive", true);
+        ScreenActivity.record(context, state, interactive); store.write(state);
+        if (changed && state.getBoolean("enabled")) { cancelAutomatic(); scheduleAutomatic(PERIODIC_JOB); }
+    }
+    synchronized void automaticFinished(int id, String streamId, long revision) throws Exception {
+        JSONObject state = store.read();
+        if (state.getBoolean("enabled") && state.getString("stream_id").equals(streamId)
+                && state.optLong("schedule_revision") == revision)
+            scheduleAutomatic(id == PERIODIC_JOB ? NEXT_DELIVERY_JOB : PERIODIC_JOB);
+    }
+    private void cancelAutomatic() {
+        JobScheduler jobs = context.getSystemService(JobScheduler.class);
+        jobs.cancel(PERIODIC_JOB); jobs.cancel(NEXT_DELIVERY_JOB);
     }
     private void cancelAlert() {
         context.getSystemService(NotificationManager.class).cancel(OUTAGE_NOTIFICATION);
         context.getSystemService(JobScheduler.class).cancel(OUTAGE_JOB);
     }
-    private void schedulePeriodic() {
-        int result = context.getSystemService(JobScheduler.class).schedule(new JobInfo.Builder(PERIODIC_JOB,
-            new ComponentName(context, DeliveryJobService.class)).setPeriodic(900_000).setPersisted(true).build());
+    private void scheduleAutomatic(int id) throws Exception {
+        JSONObject state = store.read();
+        if (!state.getBoolean("enabled")) return;
+        boolean paused = ScreenActivity.paused(context, state);
+        long delay = state.getInt(paused ? "screen_off_minutes" : "send_minutes") * 60_000L;
+        if (!paused && !ScreenActivity.interactive(context)) {
+            long off = state.optLong("screen_off_elapsed", -1);
+            if (off >= 0) delay = Math.min(delay, Math.max(1, state.getInt("screen_off_minutes") * 60_000L
+                - Math.max(0, SystemClock.elapsedRealtime() - off)));
+        }
+        long revision = state.optLong("schedule_revision") + 1;
+        state.put("next_job_id", id).put("schedule_revision", revision).put("next_automatic_at", System.currentTimeMillis() + delay);
+        state.put("automatic_status", paused ? "Paused — screen has been off" : "Watching for selected-app activity");
+        store.write(state);
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString("stream_id", state.getString("stream_id")); extras.putLong("revision", revision);
+        int result = context.getSystemService(JobScheduler.class).schedule(new JobInfo.Builder(id,
+            new ComponentName(context, DeliveryJobService.class)).setMinimumLatency(delay).setExtras(extras).setPersisted(true).build());
         if (result != JobScheduler.RESULT_SUCCESS) throw new IllegalStateException("Background delivery could not be scheduled.");
     }
     static void validateEndpoint(String endpoint) {

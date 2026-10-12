@@ -45,7 +45,7 @@ The user-approved LAN binding is enabled. Add `-Lan` when generating Wi-Fi files
 
 Import the appropriate file in the sender, check the selected OpenClaw agent, choose apps, grant usage access and notification permission, then explicitly start sharing. Import only fills setup. The format remains `liveabit.openclaw.connection.v1` with required `agent_id`, matching `[a-z0-9][a-z0-9_-]{0,63}`. An editable **OpenClaw agent** field defaults to `main` and is effective only for the exact OpenClaw hook paths. `/hooks/liveabit` accepts only `main`, matching the server mapping; `/hooks/agent` remains configurable. Changing agents requires the same explicit Start/queue-clearing confirmation as changing endpoints. Saved legacy settings retain `liveabit` and pending wrappers are not retargeted. The display receiver still uses `liveabit.receiver.connection.v1`.
 
-Generated files belong to the selected agent. Use the emulator-validated [0.6.0 APK](../../artifacts/android-publisher/liveabit-sender-0.6.0-poc.apk) for current main setup. Sender 0.4.0 accepts only earlier liveabit setup; do not combine a main file with the older APK.
+Generated files belong to the selected agent. Use the emulator-validated [0.7.0 APK](../../artifacts/android-publisher/liveabit-sender-0.7.0-poc.apk) for current main setup. Sender 0.4.0 accepts only earlier liveabit setup; do not combine a main file with the older APK.
 
 For USB, connect the phone with USB debugging enabled and reverse the helper's reported port before importing the USB file: `adb reverse tcp:<port> tcp:<port>`. Substitute the same actual port in both places. Run `adb reverse --remove tcp:<port>` to remove that mapping when finished.
 

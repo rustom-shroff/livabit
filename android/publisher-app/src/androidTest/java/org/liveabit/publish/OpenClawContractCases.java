@@ -245,6 +245,7 @@ final class OpenClawContractCases {
     static void live(Context context, DeliveryEngine engine, String endpoint, String token, String agentId, List<String> passed) throws Exception {
         check(OpenClawWebhook.isEndpoint(endpoint), "Live check must target an OpenClaw webhook");
         context.deleteFile("openclaw-failed-request.json");
+        context.deleteFile("receiver-http-error.json");
         engine.stop();
         try {
             engine.configure(endpoint, token, "org.liveabit.fixture", 60, agentId);
@@ -273,13 +274,13 @@ final class OpenClawContractCases {
         ((PublisherApplication) context.getApplicationContext()).worker.submit(() -> engine.cycle(collect)).get(30, TimeUnit.SECONDS);
     }
 
-    private static final class Request {
+    static final class Request {
         final String path, body;
         final Map<String, String> headers;
         Request(String path, String body, Map<String, String> headers) { this.path = path; this.body = body; this.headers = headers; }
     }
 
-    private static final class HookFixture implements AutoCloseable {
+    static final class HookFixture implements AutoCloseable {
         private final ServerSocket server = new ServerSocket(0, 4, InetAddress.getByName("127.0.0.1"));
         private final List<Request> requests = new ArrayList<>();
         private final Thread thread;

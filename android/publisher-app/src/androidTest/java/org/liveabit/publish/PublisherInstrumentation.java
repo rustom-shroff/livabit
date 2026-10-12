@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.view.WindowManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.net.HttpURLConnection;
@@ -159,6 +162,7 @@ public final class PublisherInstrumentation extends Instrumentation {
         String setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", endpoint)
             .put("key", token).put("agent_id", "main").put("warning_minutes", 60).toString();
         var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
         try {
             runOnMainSync(() -> {
                 activity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("OpenClaw setup", setup));
@@ -197,6 +201,12 @@ public final class PublisherInstrumentation extends Instrumentation {
             OpenClawContractCases.live(context, engine, endpoint, token,
                 arguments.getString("agent", OpenClawWebhook.AGENT_ID), passed); return;
         }
+        if ("adaptive".equals(arguments.getString("phase"))) {
+            AdaptiveDeliveryCases.run(this, context, engine, passed); return;
+        }
+        if ("ui_pages".equals(arguments.getString("phase"))) {
+            uiPages(context, engine, endpoint, token); return;
+        }
         if ("warnings_blocked".equals(arguments.getString("phase"))) {
             check(!engine.warningsEnabled(), "Warnings shown as enabled without notification permission");
             passed.add("denied_notification_permission_is_reported"); return;
@@ -208,6 +218,7 @@ public final class PublisherInstrumentation extends Instrumentation {
         }
         if ("file_import".equals(arguments.getString("phase"))) {
             var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Import receiver setup file").performClick());
             AccessibilityNodeInfo file = awaitNode("liveabit-emulator-setup.json", 1500);
             if (file == null) {
@@ -254,6 +265,7 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(ConnectionSetup.describe("").equals("No receiver configured"), "Empty setup shown as connected");
         passed.add("configured_connection_description");
         var setupActivity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        runOnMainSync(() -> findButton(setupActivity.getWindow().getDecorView(), "Setup").performClick());
         for (int[] guide : new int[][] { {R.string.wifi_help_button, R.string.wifi_help}, {R.string.usb_help_button, R.string.usb_help} }) {
             runOnMainSync(() -> findButton(setupActivity.getWindow().getDecorView(), context.getString(guide[0])).performClick());
             check(awaitNode(context.getString(guide[1]), 5000, "org.liveabit.publish") != null, "Connection guide did not render");
@@ -379,6 +391,8 @@ public final class PublisherInstrumentation extends Instrumentation {
         JSONObject beforeSwitch = engine.snapshot();
         var switchActivity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         runOnMainSync(() -> {
+            findButton(switchActivity.getWindow().getDecorView(), "Setup").performClick();
+            findButton(switchActivity.getWindow().getDecorView(), "Edit connection manually").performClick();
             ((EditText) switchActivity.findViewById(R.id.receiver_address)).setText("http://127.0.0.1:1/events");
             ((EditText) switchActivity.findViewById(R.id.connection_key)).setText(token);
             findButton(switchActivity.getWindow().getDecorView(), "Start sharing").performClick();
@@ -411,8 +425,76 @@ public final class PublisherInstrumentation extends Instrumentation {
         engine.updateAlert(60);
         legacyMigration(context, engine, endpoint, token);
     }
+    private void uiPages(Context context, DeliveryEngine engine, String endpoint, String token) throws Exception {
+        engine.stop(); engine.updateTiming(5, 15, 60);
+        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        try {
+            check(activity.findViewById(R.id.activity_page).isShown() && !activity.findViewById(R.id.setup_page).isShown()
+                && !activity.findViewById(R.id.settings_page).isShown() && !activity.findViewById(R.id.connection_key).isShown(),
+                "Daily activity page exposes setup/settings fields");
+            check((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) != 0, "Secure window flag removed");
+            capturePage(activity, "activity-screen.png");
+            runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
+            check(activity.findViewById(R.id.setup_page).isShown() && !activity.findViewById(R.id.activity_page).isShown(), "Setup tab did not open");
+            check(findButton(activity.getWindow().getDecorView(), "Connect over Wi-Fi").isShown()
+                && findButton(activity.getWindow().getDecorView(), "Connect by USB").isShown(), "Connection guides not in Setup");
+            capturePage(activity, "setup-screen.png");
+            runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Settings").performClick());
+            check(activity.findViewById(R.id.settings_page).isShown() && !activity.findViewById(R.id.setup_page).isShown()
+                && activity.findViewById(R.id.send_minutes).isShown(), "Settings tab did not isolate timing controls");
+            capturePage(activity, "settings-screen.png");
+            passed.add("native_activity_setup_settings_tabs_keep_connection_key_off_home");
+
+            engine.configure(endpoint, token, "org.liveabit.fixture", 60);
+            api("/api/mode", "no_acknowledgement"); cycle(engine, true);
+            JSONObject before = engine.snapshot();
+            check(before.getJSONArray("pending").length() > 0, "Settings trial has no pending bytes");
+            runOnMainSync(() -> {
+                ((EditText) activity.findViewById(R.id.send_minutes)).setText("7");
+                ((EditText) activity.findViewById(R.id.screen_off_minutes)).setText("19");
+                ((EditText) activity.findViewById(R.id.warning_minutes)).setText("90");
+                activity.findViewById(R.id.save_settings).performClick();
+            });
+            JSONObject changed = engine.snapshot();
+            check(changed.getInt("send_minutes") == 7 && changed.getInt("screen_off_minutes") == 19 && changed.getInt("alert_minutes") == 90
+                && changed.getString("stream_id").equals(before.getString("stream_id"))
+                && changed.getJSONArray("pending").getJSONObject(0).getString("body").equals(before.getJSONArray("pending").getJSONObject(0).getString("body"))
+                && changed.getLong("failure_since") == before.getLong("failure_since"), "Native Settings save changed queue/session/outage");
+            runOnMainSync(() -> {
+                ((EditText) activity.findViewById(R.id.send_minutes)).setText("0"); activity.findViewById(R.id.save_settings).performClick();
+            });
+            check(engine.snapshot().getInt("send_minutes") == 7, "Invalid UI timing was saved");
+            passed.add("native_settings_save_and_validation_preserve_pending_delivery");
+            runOnMainSync(() -> ((EditText) activity.findViewById(R.id.send_minutes)).setText("7"));
+            var monitor = addMonitor(MainActivity.class.getName(), null, false);
+            runOnMainSync(activity::recreate);
+            MainActivity recreated = (MainActivity) monitor.waitForActivityWithTimeout(5000); removeMonitor(monitor);
+            check(recreated != null && recreated.findViewById(R.id.settings_page).isShown()
+                && ((EditText) recreated.findViewById(R.id.send_minutes)).getText().toString().equals("7")
+                && ((EditText) recreated.findViewById(R.id.screen_off_minutes)).getText().toString().equals("19"),
+                "Recreation lost Settings tab or saved values");
+            runOnMainSync(recreated::finish);
+            passed.add("native_settings_tab_and_values_survive_activity_recreation");
+        } finally {
+            runOnMainSync(activity::finish); engine.stop(); engine.updateTiming(5, 15, 60); api("/api/mode", "acknowledge");
+        }
+    }
+    private void capturePage(MainActivity activity, String filename) {
+        // Render only this owned fixture's actual native views; production FLAG_SECURE stays enabled.
+        try { Thread.sleep(150); } catch (InterruptedException error) { Thread.currentThread().interrupt(); throw new AssertionError(error); }
+        waitForIdleSync();
+        runOnMainSync(() -> {
+            View root = activity.getWindow().getDecorView();
+            Bitmap picture = Bitmap.createBitmap(root.getWidth(), root.getHeight(), Bitmap.Config.ARGB_8888);
+            root.draw(new Canvas(picture));
+            try (var output = new java.io.FileOutputStream(new java.io.File(getTargetContext().getExternalCacheDir(), filename))) {
+                check(picture.compress(Bitmap.CompressFormat.PNG, 100, output), "Native page rendering failed");
+            } catch (Exception error) { throw new AssertionError("Could not save owned native view rendering", error); }
+            finally { picture.recycle(); }
+        });
+    }
     private static Button findButton(View view, String label) {
-        if (view instanceof Button && ((Button) view).getText().toString().equals(label)) return (Button) view;
+        if (view instanceof Button && view.isShown() && ((Button) view).getText().toString().equals(label)) return (Button) view;
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int i = 0; i < group.getChildCount(); i++) {
@@ -443,9 +525,24 @@ public final class PublisherInstrumentation extends Instrumentation {
         } while (SystemClock.elapsedRealtime() < deadline);
         return null;
     }
-    private static void clickNode(AccessibilityNodeInfo node) {
+    private void clickNode(AccessibilityNodeInfo node) throws Exception {
         check(node != null, "Android screen item was not found");
-        while (!node.isClickable() && node.getParent() != null) node = node.getParent();
-        check(node.performAction(AccessibilityNodeInfo.ACTION_CLICK), "Android screen item could not be selected");
+        String text = node.getText() != null && node.getText().length() > 0
+            ? node.getText().toString() : String.valueOf(node.getContentDescription());
+        String packageName = String.valueOf(node.getPackageName());
+        long deadline = SystemClock.elapsedRealtime() + 5000;
+        do {
+            AccessibilityNodeInfo root = getUiAutomation().getRootInActiveWindow();
+            if (root != null) for (AccessibilityNodeInfo match : root.findAccessibilityNodeInfosByText(text)) {
+                if (!packageName.equals(String.valueOf(match.getPackageName())) || !match.isVisibleToUser()
+                    || !(text.equalsIgnoreCase(String.valueOf(match.getText())) || text.equalsIgnoreCase(String.valueOf(match.getContentDescription())))) continue;
+                AccessibilityNodeInfo target = match;
+                while (target != null && !target.isClickable()) target = target.getParent();
+                if (target != null && target.isEnabled() && target.isVisibleToUser()
+                    && target.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return;
+            }
+            Thread.sleep(100);
+        } while (SystemClock.elapsedRealtime() < deadline);
+        throw new AssertionError("Android screen item could not be selected: " + text);
     }
 }
