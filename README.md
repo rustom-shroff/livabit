@@ -1,5 +1,7 @@
 # Open Activity Protocol (OAP)
 
+**Latest Android release, 2026-10-12:** [liveabit Sender 0.8.0](artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) continues reporting uninterrupted selected-app use across send windows. Exact bytes passed **63 native Android checks**, including receiver compatibility and installed OpenClaw admission. [Review](docs/review/android-continuity-2026-10-12.md). Five-minute active sends, the configurable screen-off pause and Activity/Setup/Settings pages remain. Development can continue independently; a phone update is optional.
+
 **Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](docs/review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](docs/integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
 
 OAP is an open protocol that lets any compatible personal agent receive and interpret activity signals. The activity provider shares authorized usage information; the user's chosen agent owns the goals, interpretation, coaching, and communication.

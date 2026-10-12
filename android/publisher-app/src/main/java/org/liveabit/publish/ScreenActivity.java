@@ -23,6 +23,7 @@ final class ScreenActivity {
                 || state.optInt("screen_off_boot", -1) != boot || state.optLong("screen_off_elapsed", -1) < 0) {
             state.put("screen_interactive", false).put("screen_off_elapsed", SystemClock.elapsedRealtime())
                 .put("screen_off_boot", boot);
+            state.remove("foreground_context");
         }
     }
     static boolean paused(Context context, JSONObject state) throws Exception {

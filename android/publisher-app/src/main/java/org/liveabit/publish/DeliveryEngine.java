@@ -100,6 +100,7 @@ final class DeliveryEngine {
         JSONObject state = store.read(); state.put("enabled", false).put("pending", new JSONArray())
             .put("failure_since", 0).put("outage_notified", false).put("status", "Sharing stopped — pending activity cleared")
             .put("next_automatic_at", 0).put("automatic_paused", false).put("automatic_status", "Automatic sends are off");
+        state.remove("foreground_context");
         store.write(state); disconnect(); cancelAlert();
         cancelAutomatic(); context.getSystemService(JobScheduler.class).cancel(OUTAGE_JOB);
     }
@@ -117,8 +118,8 @@ final class DeliveryEngine {
     }
     private void cycle(boolean collect, boolean automatic, String expectedStream, long expectedRevision) {
         synchronized (this) { if (running) return; running = true; }
+        JSONObject captured = null;
         try {
-            JSONObject captured;
             synchronized (this) { captured = store.read(); }
             if (!captured.getBoolean("enabled")) return;
             if (automatic && (!captured.getString("stream_id").equals(expectedStream)
@@ -132,11 +133,12 @@ final class DeliveryEngine {
                     state.put("pending", prune(state.getJSONArray("pending")));
                     state.put("automatic_status", paused ? "Paused — screen has been off" : "Watching for selected-app activity");
                     store.write(state);
-                    if (paused) return;
+                    if (paused) { state.remove("foreground_context"); store.write(state); return; }
                 }
             }
             if (collect) {
-                JSONObject event = UsageCollector.collect(context, captured, System.currentTimeMillis());
+                UsageCollector.Result collected = UsageCollector.collect(context, captured, System.currentTimeMillis());
+                JSONObject event = collected == null ? null : collected.event;
                 synchronized (this) {
                     JSONObject state = store.read();
                     if (!sameSession(state, captured)) return;
@@ -153,6 +155,8 @@ final class DeliveryEngine {
                         state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
                             .put("automatic_status", "No new selected-app activity — nothing sent");
                     }
+                    if (event != null && state.getLong("cursor") == collected.boundary.getLong("wall"))
+                        state.put("foreground_context", collected.boundary);
                     state.put("pending", pending); store.write(state);
                 }
             }
@@ -196,6 +200,12 @@ final class DeliveryEngine {
                 checkHealth(); if (!accepted) break;
             }
         } catch (Exception error) {
+            try {
+                synchronized (this) {
+                    JSONObject latest = store.read();
+                    if (captured != null && sameSession(latest, captured)) { latest.remove("foreground_context"); store.write(latest); }
+                }
+            } catch (Exception ignored) { }
             try { setStatus("Unable to read or save activity. Check usage access and try again."); } catch (Exception ignored) {}
         } finally {
             connection = null;

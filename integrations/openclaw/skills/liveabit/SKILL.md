@@ -5,7 +5,9 @@ description: Interpret liveabit OAP observation drafts with existing personal-ag
 
 # liveabit Skill
 
-This OpenClaw POC profile supports `0.2.0-draft.1` / `activity.observation`. The separate package at `skills/liveabit` retains its OAP 0.1.0 summary contract. Do not silently interchange these families.
+This OpenClaw POC profile supports `0.2.0-draft.1` and `0.2.0-draft.2` / `activity.observation`. The separate package at `skills/liveabit` retains its OAP 0.1.0 summary contract. Do not silently interchange these families.
+
+Draft 2 may estimate continued foreground time across adjacent windows without new pause/resume transitions. A positive duration with zero transitions is still an unverified estimate, never proof of attention or complete coverage. Interpret only the time inside each window; do not add earlier session time again. Draft 1 retains its closed-estimate rules.
 
 Interpret only the declared observation window and selected `(namespace, id)` application pairs. Coverage is unknown and foreground durations are unverified estimates. Null, missing apps and missing periods remain unknown. Android pause/resume transitions can occur within an application; they do not establish attention or a departure from it. Do not add app durations into an exclusive total.
 

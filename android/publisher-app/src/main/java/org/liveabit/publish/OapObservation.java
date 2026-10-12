@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /** OAP's draft observation family carries estimates without claiming measured coverage. */
 final class OapObservation {
-    static final String VERSION = "0.2.0-draft.1", EVENT_NAME = "activity.observation";
+    static final String VERSION = "0.2.0-draft.2", EVENT_NAME = "activity.observation";
     static final int MAX_BYTES = 16_384;
     private static final long MAX_INTEGER = 9_007_199_254_740_991L;
     private static final DateTimeFormatter UTC = new DateTimeFormatterBuilder().appendInstant(3).toFormatter();

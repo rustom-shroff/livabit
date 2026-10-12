@@ -116,6 +116,21 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(postEvent(oversized.toString()) == 400, "Receiver accepted oversized OAP bytes");
         passed.add("actual_receiver_schema_and_semantic_rejections_from_android");
     }
+    private void receiverContinuity() throws Exception {
+        long end = System.currentTimeMillis(), start = end - 1000;
+        JSONObject event = OapObservation.create(PublisherStore.empty(), start, end, end, new JSONArray().put(new JSONObject()
+            .put("application", new JSONObject().put("namespace", "android").put("id", "org.liveabit.fixture"))
+            .put("foreground_duration_ms", 1000).put("transition_count", 0)));
+        check(postEvent(OapObservation.encode(event)) == 200, "Receiver rejected a continued-use window with zero transitions");
+        passed.add("actual_receiver_accepts_draft_two_continuation_with_zero_new_transitions");
+        event.put("protocol_version", "0.2.0-draft.1").put("event_id", UUID.randomUUID().toString());
+        check(postEvent(OapObservation.encode(event)) == 400, "Older observation semantics were silently relaxed");
+        event.getJSONObject("observation").getJSONArray("apps").getJSONObject(0).put("transition_count", 2);
+        check(postEvent(OapObservation.encode(event)) == 200, "Receiver rejected an unchanged older queued observation");
+        passed.add("actual_receiver_preserves_draft_one_validation_and_acceptance");
+        event.put("protocol_version", "0.2.0-draft.unknown").put("event_id", UUID.randomUUID().toString());
+        check(postEvent(OapObservation.encode(event)) == 400, "Receiver accepted an unsupported revision");
+    }
     private void legacyMigration(Context context, DeliveryEngine engine, String endpoint, String token) throws Exception {
         PublisherStore store = new PublisherStore(context);
         JSONObject old = PublisherStore.empty(); long end = System.currentTimeMillis(), start = end - 1000;
@@ -203,6 +218,12 @@ public final class PublisherInstrumentation extends Instrumentation {
         }
         if ("adaptive".equals(arguments.getString("phase"))) {
             AdaptiveDeliveryCases.run(this, context, engine, passed); return;
+        }
+        if ("continuity".equals(arguments.getString("phase"))) {
+            ContinuityCases.run(this, context, engine, passed); return;
+        }
+        if ("receiver_continuity".equals(arguments.getString("phase"))) {
+            receiverContinuity(); return;
         }
         if ("ui_pages".equals(arguments.getString("phase"))) {
             uiPages(context, engine, endpoint, token); return;

@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { networkInterfaces } from 'node:os';
 import { parseJson } from '../../src/protocol.mjs';
-import { observationVersion, parseObservation } from './oap-observation.mjs';
+import { observationVersions, parseObservation } from './oap-observation.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
@@ -96,8 +96,8 @@ export async function startActivityReceiver({ host = '127.0.0.1', port = 8765,
         respond(response, 415, { error: 'JSON required' }); return;
       }
       const bytes = await body(request); let event = parseJson(bytes, 65_536), wireFormat;
-      if (event.protocol_version === observationVersion) {
-        event = parseObservation(bytes); wireFormat = 'OAP ' + observationVersion;
+      if (observationVersions.includes(event.protocol_version)) {
+        event = parseObservation(bytes); wireFormat = 'OAP ' + event.protocol_version;
       } else if (validLegacy(event)) wireFormat = 'Legacy liveabit test event';
       else { respond(response, 400, { error: 'Invalid or expired activity event' }); return; }
       const digest = hash(bytes), receivedAt = new Date().toISOString();
