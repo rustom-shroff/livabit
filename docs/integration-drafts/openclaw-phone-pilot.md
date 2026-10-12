@@ -1,6 +1,6 @@
 # First real-activity phone trial
 
-The WhatsApp checks [arrived with a phone notification](../review/openclaw-phone-notification-2026-10-11.md). Use the already emulator-tested [liveabit Sender 0.7.0 APK](../../artifacts/android-publisher/liveabit-sender-0.7.0-poc.apk) for the next step: real selected-app activity reaching your existing main OpenClaw agent.
+The WhatsApp checks [arrived with a phone notification](../review/openclaw-phone-notification-2026-10-11.md). Use the exact-byte emulator-tested [liveabit Sender 0.8.0 APK](../../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) for the next step: real selected-app activity reaching your existing main OpenClaw agent.
 
 1. In the main OpenClaw conversation that receives liveabit observations, describe one goal you actually want help with, when it applies, and the kind of reminder you want. Your goals and model choices stay in OpenClaw. A goal given in another chat is not assumed to be available here.
 2. Copy the APK and private `artifacts/openclaw/android-wifi-setup.json` to your phone. Keep the computer running and both devices on the same reachable Wi-Fi network. If your network/address has changed, run `.\scripts\configure-openclaw.ps1 -AgentId main -Lan` from the project root to regenerate that setup. This preserves your model choices and existing private delivery policy. [Connection guide](../../android/publisher-app/README.md).

@@ -45,7 +45,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.7.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.8.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null
@@ -66,7 +66,7 @@ try {
     $taskResult | Set-Content -LiteralPath (Join-Path $taskRun 'native-tests.txt') -Encoding utf8
     if ($taskResult -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw 'Android-native sender checks failed. Read native-tests.txt.' }
     $taskChecks = ([regex]::Match($taskResult,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
-    foreach ($taskPhase in @('adaptive','ui_pages')) {
+    foreach ($taskPhase in @('receiver_continuity','adaptive','continuity','ui_pages')) {
         $taskAdaptive = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase',$taskPhase,
             '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
             'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
@@ -171,6 +171,7 @@ try {
         checks=$taskChecks; check_count=$taskChecks.Count; real_android_usage_query=$true; real_http_receiver=$true;
         real_notification_with_one_minute_user_setting=$true; default_warning_minutes=60;
         default_send_minutes=5; default_screen_off_minutes=15; adaptive_screen_power_and_network_tested=$true;
+        foreground_continuity_and_actual_uninterrupted_use_tested=$true;
         native_activity_setup_settings_tested=$true; one_off_jobs_tested=$true;
         openclaw_native_contract_tested=$true; installed_openclaw_admission_tested=[bool]$OpenClaw; openclaw_run_id=$taskLiveRunId;
         production_grok_tested=$false; physical_phone_tested=$false;

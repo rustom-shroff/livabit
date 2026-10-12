@@ -1,0 +1,113 @@
+{
+  "result": "native_android_foreground_continuity_verified",
+  "date": "2026-10-12",
+  "version": "0.8.0-poc",
+  "version_code": 10,
+  "apk": "artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk",
+  "apk_sha256": "10d7610980b861ebbd12d7f90f1fc4bdee965f27efdf2cf230fed9fbfa02f175",
+  "apk_bytes": 244172,
+  "native_report": "artifacts/android-publisher/run-382ff97d-b091-41cb-a9cc-7024aee21f03/validation.json",
+  "native_checks": 63,
+  "added_native_continuity_checks": 11,
+  "added_actual_receiver_compatibility_checks": 2,
+  "actual_uninterrupted_fixture_use_tested": true,
+  "atomic_file_reopen_tested": true,
+  "process_kill_continuity_claimed": false,
+  "old_observation_schema_unchanged": true,
+  "accepted_inspector_unchanged": true,
+  "observation_version": "0.2.0-draft.2",
+  "receiver_accepts_versions": [
+    "0.2.0-draft.1",
+    "0.2.0-draft.2"
+  ],
+  "default_send_minutes": 5,
+  "default_screen_off_minutes": 15,
+  "default_warning_minutes": 60,
+  "installed_openclaw_admission_tested": true,
+  "openclaw_run_id": "fba9b9b0-0431-4a6f-b09b-b776c7b544dc",
+  "installed_skill_updated": true,
+  "protected_openclaw_config_and_delivery_files_unchanged": true,
+  "new_model_or_coaching_response_claimed": false,
+  "models_or_goals_authored": false,
+  "new_runtime_permissions": [],
+  "new_dependencies": [],
+  "new_intermediary": false,
+  "physical_phone_tested": false,
+  "exact_background_timing_proven": false,
+  "coverage_or_precision_proven": false,
+  "build_report": "artifacts/android-publisher-build-0.8.0-final.txt",
+  "lint_errors": 0,
+  "lint_warnings": 10,
+  "contract_report": "artifacts/openclaw/spec-validation-0.8.0.json",
+  "owned_emulator_stopped": true,
+  "isolated_receiver_stopped": true,
+  "openclaw_left_running": true,
+  "user_receiver_controlled": false,
+  "source_hash_normalization": "UTF-8 with CRLF normalized to LF",
+  "sources": [
+    {
+      "path": "android/publisher-app/build.gradle",
+      "sha256_lf": "df0f1f393b85c30340c5a5639e8b3ba7b2854f2052e723ed4e77b7e2d17925f6"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ForegroundContinuity.java",
+      "sha256_lf": "a7ffa32f45321f69f48afd3ac5ddcd7c8b57f38a97a61c1376a91aa6ed3d1ae4"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/UsageCollector.java",
+      "sha256_lf": "d5b1f56601494e2ee9c5eeeede299dd607fc60a6f5711db956a670e225fd8613"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java",
+      "sha256_lf": "29f105442f11f941da68bd528ef294a59055961918de763f5b22f47f7e057f50"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ScreenActivity.java",
+      "sha256_lf": "9f3435899819ad6019f6192c8e8acb42a9ce20abbeedf5d9ae726adaaa793313"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OapObservation.java",
+      "sha256_lf": "30e690f590e27069f5a12cc05d0da3be84f5762e818eb7d56eea026a657eedb9"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OpenClawWebhook.java",
+      "sha256_lf": "ff929cc0c1a5d064af2e27b5e41895f97a43b7b0af63bd0c96a3fd959547d644"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/ContinuityCases.java",
+      "sha256_lf": "6153b3feaa37742cf32c59f8c469065a72ddd6cc39f18fb9c5c409bc8346b68f"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+      "sha256_lf": "19ea946f541900a5c0dfcbba796b3f819bdfe1b413b6b7455c283b9beeb06233"
+    },
+    {
+      "path": "scripts/build-android-publisher.ps1",
+      "sha256_lf": "0f40dbf22d35b0512730df171f1a4eb39ef6968e9b646848571b9fb9e48e8496"
+    },
+    {
+      "path": "scripts/test-android-publisher.ps1",
+      "sha256_lf": "e780a8f7d8e661c595bbc4ab515ed46181f9c5a08feef6f8401f71eaf304e007"
+    },
+    {
+      "path": "schemas/oap/0.2.0-draft.1/activity-observation.schema.json",
+      "sha256_lf": "4bbae4f3c46d179281926729eac16d22133db41da4c30a7732c5612158c45ff5"
+    },
+    {
+      "path": "schemas/oap/0.2.0-draft.2/activity-observation.schema.json",
+      "sha256_lf": "6dd6a8986cfd650e77bab8e3123ee37fe086bef6ff2a849fc63737456b606660"
+    },
+    {
+      "path": "tools/activity-receiver/oap-observation.mjs",
+      "sha256_lf": "744c394df8a694bae8e3dfb1cd1d583d7585f1ad4dc1455522e45ec7fe0c3676"
+    },
+    {
+      "path": "tools/activity-receiver/server.mjs",
+      "sha256_lf": "8fa2d17047335847b45f8f5e26e03a0a18c79fedcef6f8523eec1b69cca2c744"
+    },
+    {
+      "path": "integrations/openclaw/skills/liveabit/SKILL.md",
+      "sha256_lf": "63294bf1e9577e009beda7e13ece79f35e2f5336b4980ace4e899f35055fcfda"
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 # OpenClaw direct Android integration
 
-**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](openclaw-phone-pilot.md); its bytes are unchanged.
+**Current Android release, 2026-10-12:** [0.8.0 APK](../../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) passed 63 native checks and uses observation draft 2 for uninterrupted-use windows; [review](../review/android-continuity-2026-10-12.md). The installed liveabit Skill recognizes draft 1 and draft 2. Existing main-agent mapping, connection, model/thinking and private notification policy are preserved. The earlier model/channel evidence below retains its original scope.
+
+**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../review/openclaw-phone-notification-2026-10-11.md). Use the current tested 0.8.0 APK for the [real-activity phone trial](openclaw-phone-pilot.md).
 
 Updated: **2026-10-11**. Status: **0.6.0 passed all 37 native checks; user-selected model and main-agent WhatsApp check verified**. See the [0.6.0 review](../review/openclaw-whatsapp-2026-10-11.md). Current decision: [ADR-0018](../decisions/0018-existing-main-agent-context.md). The [0.5.0 main-agent](../review/openclaw-main-agent-2026-10-11.md) and [0.4.0 dedicated-agent](../review/openclaw-poc-2026-10-11.md) baselines remain preserved. Sol 6.1 completed a separate operator run; medium is the verified inherited configuration, not directly reported effort telemetry. Phone receipt and notification for the checks are user-confirmed. Goal-grounded nudges are ready for a real-activity trial.
 
@@ -17,7 +19,7 @@ The verified target is OpenClaw **2026.9.9**, commit **`bcfc888`**, installed th
 | Agent | Saved `agent_id`; mapped `/hooks/liveabit` requires `main`, while `/hooks/agent` supports an explicitly allowed agent, including legacy `liveabit` |
 | Conversation | Server-owned canonical main key and persistent mode create/reuse the configured conversation; callers cannot choose session keys |
 | Run behavior | `name: "liveabit"`, `wakeMode: "now"`, `deliver: false` |
-| Message | Fixed activity-data introduction followed by the original canonical `0.2.0-draft.1` / `activity.observation` JSON |
+| Message | Fixed activity-data introduction followed by the original canonical `0.2.0-draft.2` / `activity.observation` JSON; already queued draft-1 bodies remain unchanged |
 | Retry identity | `Idempotency-Key` equals the original `event_id` |
 | Successful acknowledgement | HTTP 200 with `ok: true` and nonempty `runId`; **run admission only** |
 
@@ -45,7 +47,7 @@ The user-approved LAN binding is enabled. Add `-Lan` when generating Wi-Fi files
 
 Import the appropriate file in the sender, check the selected OpenClaw agent, choose apps, grant usage access and notification permission, then explicitly start sharing. Import only fills setup. The format remains `liveabit.openclaw.connection.v1` with required `agent_id`, matching `[a-z0-9][a-z0-9_-]{0,63}`. An editable **OpenClaw agent** field defaults to `main` and is effective only for the exact OpenClaw hook paths. `/hooks/liveabit` accepts only `main`, matching the server mapping; `/hooks/agent` remains configurable. Changing agents requires the same explicit Start/queue-clearing confirmation as changing endpoints. Saved legacy settings retain `liveabit` and pending wrappers are not retargeted. The display receiver still uses `liveabit.receiver.connection.v1`.
 
-Generated files belong to the selected agent. Use the emulator-validated [0.7.0 APK](../../artifacts/android-publisher/liveabit-sender-0.7.0-poc.apk) for current main setup. Sender 0.4.0 accepts only earlier liveabit setup; do not combine a main file with the older APK.
+Generated files belong to the selected agent. Use the emulator-validated [0.8.0 APK](../../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) for current main setup. Sender 0.4.0 accepts only earlier liveabit setup; do not combine a main file with the older APK.
 
 For USB, connect the phone with USB debugging enabled and reverse the helper's reported port before importing the USB file: `adb reverse tcp:<port> tcp:<port>`. Substitute the same actual port in both places. Run `adb reverse --remove tcp:<port>` to remove that mapping when finished.
 

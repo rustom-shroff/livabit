@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "activity-observation.schema.json",
+  "title": "Open Activity Protocol 0.2.0-draft.2 activity observation",
+  "description": "Experimental retrospective selected-app estimates with explicitly unknown coverage. Not the OAP 0.1.0 measured-summary family or a transport authorization document.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol_version", "event_name", "event_id", "recipient_id", "stream_id", "subscription_id", "scope_revision", "sequence", "emitted_at", "expires_at", "window", "observation"],
+  "properties": {
+    "protocol_version": {"const": "0.2.0-draft.2"},
+    "event_name": {"const": "activity.observation"},
+    "event_id": {"$ref": "../0.1.0/common.schema.json#/$defs/uuid"},
+    "recipient_id": {"$ref": "../0.1.0/common.schema.json#/$defs/uuid"},
+    "stream_id": {"$ref": "../0.1.0/common.schema.json#/$defs/uuid"},
+    "subscription_id": {"$ref": "../0.1.0/common.schema.json#/$defs/uuid"},
+    "scope_revision": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+    "sequence": {"type": "integer", "minimum": 1, "maximum": 9007199254740991},
+    "emitted_at": {"$ref": "../0.1.0/common.schema.json#/$defs/timestamp"},
+    "expires_at": {"$ref": "../0.1.0/common.schema.json#/$defs/timestamp"},
+    "window": {
+      "type": "object", "additionalProperties": false, "required": ["window_id", "start", "end"],
+      "properties": {
+        "window_id": {"$ref": "../0.1.0/common.schema.json#/$defs/uuid"},
+        "start": {"$ref": "../0.1.0/common.schema.json#/$defs/timestamp"},
+        "end": {"$ref": "../0.1.0/common.schema.json#/$defs/timestamp"}
+      }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metric", "unit", "coverage", "quality", "apps"],
+      "properties": {
+        "metric": {"const": "foreground_duration"},
+        "unit": {"const": "millisecond"},
+        "coverage": {"const": "unknown"},
+        "quality": {"const": "unverified_estimate"},
+        "apps": {
+          "type": "array", "minItems": 1, "maxItems": 32,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["application", "foreground_duration_ms", "transition_count"],
+            "properties": {
+              "application": {
+                "type": "object", "additionalProperties": false, "required": ["namespace", "id"],
+                "properties": {
+                  "namespace": {"const": "android"},
+                  "id": {"type": "string", "maxLength": 128, "pattern": "^[A-Za-z][A-Za-z0-9_]*(?:\\.[A-Za-z][A-Za-z0-9_]*)+$"}
+                }
+              },
+              "foreground_duration_ms": {"type": ["integer", "null"], "minimum": 1, "maximum": 900000},
+              "transition_count": {"type": "integer", "minimum": 0, "maximum": 4096}
+            }
+          }
+        }
+      }
+    }
+  }
+}

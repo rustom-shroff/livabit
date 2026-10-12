@@ -1,5 +1,7 @@
 # OAP activity observations, 0.2.0-draft.1
 
+This revision retains its original closed-estimate semantics for older queued events. Sender 0.8.0 produces [draft 2](activity-observation-draft-2.md), which permits open/continued estimates with fewer than two new transitions. The current final receiver accepts both revisions.
+
 Date: **2026-10-10**. Status: **experimental event draft implemented by Android Sender 0.3.3 and the final local test receiver**. The agreed OAP 0.1.0 summary contract and its reference implementation remain unchanged. This draft is not evidence of Grok support or production transport conformance.
 
 ## Purpose
