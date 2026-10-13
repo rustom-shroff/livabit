@@ -1,4 +1,5 @@
 param(
+    [ValidateSet('liveabit','main')][string]$AgentId = 'liveabit',
     [ValidateRange(1,1440)][int]$CooldownMinutes = 60,
     [ValidateRange(0,23)][int]$QuietStartHour = 22,
     [ValidateRange(0,23)][int]$QuietEndHour = 8,
@@ -19,7 +20,7 @@ catch {
 }
 $taskOutput = Join-Path $taskRoot 'artifacts\openclaw\whatsapp-delivery'
 $taskUtf8 = New-Object Text.UTF8Encoding $false
-$taskSettings = @{cooldown_minutes=$CooldownMinutes;quiet_start_hour=$QuietStartHour;quiet_end_hour=$QuietEndHour;time_zone=$TimeZone;send_test=[bool]$SendTest}
+$taskSettings = @{agent_id=$AgentId;cooldown_minutes=$CooldownMinutes;quiet_start_hour=$QuietStartHour;quiet_end_hour=$QuietEndHour;time_zone=$TimeZone;send_test=[bool]$SendTest;preference_parameters=@($PSBoundParameters.Keys | Where-Object { $_ -in @('CooldownMinutes','QuietStartHour','QuietEndHour','TimeZone') })}
 $taskSettingsEncoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($taskSettings | ConvertTo-Json -Compress)))
 $taskSkillEncoded = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $taskRoot 'integrations\openclaw\skills\liveabit\SKILL.md')))
 
@@ -29,12 +30,15 @@ $taskUtf8 = New-Object Text.UTF8Encoding $false
 $taskSettings = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('__SETTINGS__')) | ConvertFrom-Json
 $taskConfigPath = Join-Path $env:USERPROFILE '.openclaw/openclaw.json'
 $taskConfig = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
-$taskWorkspace = $taskConfig.agents.entries.main.workspace
-if (-not $taskWorkspace -or -not (Test-Path -LiteralPath $taskWorkspace)) { throw 'Configure the existing main agent before WhatsApp delivery.' }
+$taskAgentId = $taskSettings.agent_id
+$taskAgent = $taskConfig.agents.entries.PSObject.Properties[$taskAgentId].Value
+$taskWorkspace = $taskAgent.workspace
+if (-not $taskWorkspace -or -not (Test-Path -LiteralPath $taskWorkspace)) { throw 'Configure the selected agent before WhatsApp delivery.' }
 $taskAgentsBefore = $taskConfig.agents | ConvertTo-Json -Depth 32 -Compress
-$taskMapping = @($taskConfig.hooks.mappings | Where-Object { $_.id -eq 'liveabit-main' })
-if ($taskMapping.Count -ne 1 -or $taskMapping[0].agentId -ne 'main' -or $taskMapping[0].deliver -ne $false) {
-    throw 'Configure the main liveabit hook with automatic announcements disabled first.'
+$taskMappingId = if ($taskAgentId -eq 'liveabit') { 'liveabit-tasks' } else { 'liveabit-main' }
+$taskMapping = @($taskConfig.hooks.mappings | Where-Object { $_.id -eq $taskMappingId })
+if ($taskMapping.Count -ne 1 -or $taskMapping[0].agentId -ne $taskAgentId -or $taskMapping[0].deliver -ne $false -or $taskMapping[0].action -ne 'agent' -or $taskMapping[0].match.path -ne 'liveabit') {
+    throw 'Configure the selected liveabit hook with automatic announcements disabled first.'
 }
 # Preserve PS5/.cmd JSON argument quoting used by the installed Store package.
 $taskArgumentMode = (Get-Variable -Name PSNativeCommandArgumentPassing -ErrorAction SilentlyContinue).Value
@@ -87,12 +91,35 @@ New-Item -ItemType Directory -Force -Path $taskReferences | Out-Null
 [IO.File]::WriteAllBytes((Join-Path $taskSkillRoot 'SKILL.md'),[Convert]::FromBase64String('__SKILL__'))
 $taskPolicyPath = Join-Path $taskReferences 'delivery.json'
 $taskPolicy = [ordered]@{
-    format='liveabit.openclaw.delivery.v1';enabled=$true;agent_id='main';channel='whatsapp';account_id='default';target=$taskOwnTarget
+    format='liveabit.openclaw.delivery.v1';enabled=$true;agent_id=$taskAgentId;channel='whatsapp';account_id='default';target=$taskOwnTarget
     identity_source='whatsapp.directory.self';cooldown_minutes=$taskSettings.cooldown_minutes
     quiet_hours=@{enabled=($taskSettings.quiet_start_hour -ne $taskSettings.quiet_end_hour);start_hour=$taskSettings.quiet_start_hour;end_hour=$taskSettings.quiet_end_hour;time_zone=$taskSettings.time_zone}
     state_file='delivery-state.json';enforcement='agent-policy-best-effort';updated_at=[DateTime]::UtcNow.ToString('o')
 }
-if (Test-Path -LiteralPath $taskPolicyPath) { Copy-Item -LiteralPath $taskPolicyPath -Destination (Join-Path $taskBackupRoot ([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfff') + '-delivery-policy.json')) }
+if (Test-Path -LiteralPath $taskPolicyPath) {
+    $taskExistingPolicy = Get-Content -LiteralPath $taskPolicyPath -Raw | ConvertFrom-Json
+    if ($taskExistingPolicy.format -ne 'liveabit.openclaw.delivery.v1' -or $taskExistingPolicy.agent_id -ne $taskAgentId) { throw 'The selected agent delivery policy needs review before updating it.' }
+    Copy-Item -LiteralPath $taskPolicyPath -Destination (Join-Path $taskBackupRoot ([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfff') + '-delivery-policy.json'))
+    # Keep private preference fields and extensions. Only explicitly supplied
+    # preferences replace existing values; defaults apply to a new policy.
+    foreach ($taskProperty in $taskExistingPolicy.PSObject.Properties) { $taskPolicy[$taskProperty.Name] = $taskProperty.Value }
+    $taskPolicy.agent_id = $taskAgentId; $taskPolicy.channel = 'whatsapp'; $taskPolicy.account_id = 'default'
+    $taskPolicy.target = $taskOwnTarget; $taskPolicy.identity_source = 'whatsapp.directory.self'
+    $taskPolicy.updated_at = [DateTime]::UtcNow.ToString('o')
+    if ($taskSettings.preference_parameters -contains 'CooldownMinutes') { $taskPolicy.cooldown_minutes = $taskSettings.cooldown_minutes }
+    $taskQuiet = @{}
+    if ($taskPolicy.quiet_hours) { foreach ($taskProperty in $taskPolicy.quiet_hours.PSObject.Properties) { $taskQuiet[$taskProperty.Name] = $taskProperty.Value } }
+    foreach ($taskDefault in @('start_hour','end_hour','time_zone')) {
+        if (-not $taskQuiet.ContainsKey($taskDefault)) {
+            $taskQuiet[$taskDefault] = switch ($taskDefault) { 'start_hour' { $taskSettings.quiet_start_hour }; 'end_hour' { $taskSettings.quiet_end_hour }; 'time_zone' { $taskSettings.time_zone } }
+        }
+    }
+    if ($taskSettings.preference_parameters -contains 'QuietStartHour') { $taskQuiet.start_hour = $taskSettings.quiet_start_hour }
+    if ($taskSettings.preference_parameters -contains 'QuietEndHour') { $taskQuiet.end_hour = $taskSettings.quiet_end_hour }
+    if ($taskSettings.preference_parameters -contains 'TimeZone') { $taskQuiet.time_zone = $taskSettings.time_zone }
+    if (-not $taskQuiet.ContainsKey('enabled') -or $taskSettings.preference_parameters -contains 'QuietStartHour' -or $taskSettings.preference_parameters -contains 'QuietEndHour') { $taskQuiet.enabled = $taskQuiet.start_hour -ne $taskQuiet.end_hour }
+    $taskPolicy.quiet_hours = $taskQuiet
+}
 [IO.File]::WriteAllText($taskPolicyPath,($taskPolicy | ConvertTo-Json -Depth 8),$taskUtf8)
 $taskDeliveryStatePath = Join-Path $taskReferences 'delivery-state.json'
 if (-not (Test-Path -LiteralPath $taskDeliveryStatePath)) {
@@ -111,7 +138,7 @@ if ($taskSettings.send_test) {
     if ($taskState.connected -ne $true) { throw 'Delivery is configured, but WhatsApp is reconnecting. Retry the connection check once it is connected.' }
     # The Gateway send contract accepts an explicit owner. The message CLI does
     # not accept --agent and can otherwise require a global System Agent change.
-    $taskSendParams = ConvertTo-NativeJsonArgument @{agentId='main';channel='whatsapp';accountId='default';to=$taskOwnTarget;message='liveabit connection check: OpenClaw can send to your own WhatsApp chat. Activity nudges will use your existing goals and notification preferences.';idempotencyKey=('liveabit-whatsapp-check:' + [Guid]::NewGuid().ToString())}
+    $taskSendParams = ConvertTo-NativeJsonArgument @{agentId=$taskAgentId;channel='whatsapp';accountId='default';to=$taskOwnTarget;message='liveabit connection check: OpenClaw can send to your own WhatsApp chat. Activity nudges will use your current personal tasks and notification preferences.';idempotencyKey=('liveabit-whatsapp-check:' + [Guid]::NewGuid().ToString())}
     $taskSendRaw = & openclaw gateway call send --params $taskSendParams --timeout 45000 --json 2>&1
     if ($LASTEXITCODE -ne 0) { $taskSendRaw | Write-Output; throw 'WhatsApp did not confirm the connection-check send. Do not assume it arrived.' }
     $taskSent = ($taskSendRaw -join "`n") | ConvertFrom-Json
@@ -119,7 +146,7 @@ if ($taskSettings.send_test) {
     if ($taskSent.ok -eq $false -or $taskSent.dryRun -eq $true -or [string]::IsNullOrWhiteSpace($taskMessageId) -or $taskMessageId -match '[\x00-\x1f\x7f]' -or $taskMessageId.Length -gt 256) { throw 'WhatsApp did not return a usable provider message ID.' }
 }
 # Never return phone identity, raw account state, credentials or provider payload.
-@{configured=$true;agent_id='main';account_id='default';target_verified_self=$true;target_printed=$false;incoming_chats_enabled=$false;existing_allowlist_entries_preserved=$true;model_settings_unchanged=$true;policy_file=$taskPolicyPath;cooldown_minutes=$taskSettings.cooldown_minutes;quiet_hours=$taskPolicy.quiet_hours;messages_sent=$(if ($taskMessageId) {1} else {0});provider_message_id=$taskMessageId;phone_receipt_confirmed=$false} | ConvertTo-Json -Depth 8 -Compress
+@{configured=$true;agent_id=$taskAgentId;account_id='default';target_verified_self=$true;target_printed=$false;incoming_chats_enabled=$false;existing_allowlist_entries_preserved=$true;model_settings_unchanged=$true;policy_file=$taskPolicyPath;cooldown_minutes=$taskPolicy.cooldown_minutes;quiet_hours=$taskPolicy.quiet_hours;messages_sent=$(if ($taskMessageId) {1} else {0});provider_message_id=$taskMessageId;phone_receipt_confirmed=$false} | ConvertTo-Json -Depth 8 -Compress
 '@
 $taskGuest = $taskGuest.Replace('__SETTINGS__',$taskSettingsEncoded).Replace('__SKILL__',$taskSkillEncoded)
 $taskEncoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($taskGuest))

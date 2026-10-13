@@ -1,19 +1,21 @@
 # Choose the model in OpenClaw
 
-Updated: **2026-10-11**. The model and thinking level belong to the user. liveabit activity setup and WhatsApp setup preserve them. The requested **Sol 6.1, medium thinking** choice is configured as `openai/gpt-6.1-sol`. The [configuration result](../../artifacts/openclaw/model-config-result.json) confirmed that the retained main conversation follows its defaults. A separate [successful operator agent run](../../artifacts/openclaw/model-choice-verification.json) confirmed the requested/effective/response model and returned its expected marker without changing conversation identity. Medium thinking is verified as saved configuration with no session/hook override and source-confirmed inheritance; run telemetry did not directly report reasoning effort.
+Updated: **2026-10-13**. Models and thinking levels belong to the user. liveabit activity/task setup and WhatsApp setup preserve them. The dedicated **liveabit** agent is explicitly configured as **openai/gpt-6.1-sol** with **medium** thinking. Its canonical conversation follows those defaults after clearing its old session overrides; [local configuration result](../../artifacts/openclaw/liveabit-model-selection.json). Main's existing model choice remains unchanged.
 
-Use OpenClaw's **Models** settings to inspect the current account's available choices. Its chat model picker changes the active conversation; use the helper below for main's configured model/thinking. Conversation-specific overrides can affect the effective choice, so changing a default does not necessarily retarget a pinned conversation. See the installed release's [model-selection documentation](https://github.com/openclaw/openclaw/blob/v2026.9.9/docs/concepts/models.md). Keep provider access and model configuration in OpenClaw; the Android app stores neither.
+Use OpenClaw's Models settings to inspect the available choices. A chat model picker can affect only the active conversation; a pinned conversation can override an agent's configured default. Provider access stays in OpenClaw. Android stores neither model configuration nor provider credentials. See the installed release's [model-selection documentation](https://github.com/openclaw/openclaw/blob/v2026.9.9/docs/concepts/models.md) and the requested [Sol 6.1 model documentation](https://developers.openai.com/api/docs/models/gpt-6.1-sol).
 
-The optional [model helper](../../scripts/set-openclaw-model.ps1) applies an explicit choice to the existing main agent and clears that conversation's model/thinking overrides so it follows main's settings:
+The [model helper](../../scripts/set-openclaw-model.ps1) applies your explicit choice to the selected existing agent and clears that agent's canonical conversation model/thinking overrides so it follows its defaults:
 
 ```powershell
-.\scripts\set-openclaw-model.ps1 -Model openai/gpt-6.1-sol -Thinking medium
+.\scripts\set-openclaw-model.ps1 -AgentId liveabit -Model openai/gpt-6.1-sol -Thinking medium
 ```
 
-For later choices, use the exact provider/model ID shown in the available catalog and the supported thinking level. The helper keeps the current provider and authentication profile, checks catalog availability, retains authored fallback ordering, backs up configuration and preserves conversation identity. Configure another provider inside OpenClaw before using it here. It does not invoke a model or choose one automatically for activity events.
+Use `-AgentId main` to change main instead; omitting AgentId retains the helper's historical main default. Configure another provider inside OpenClaw before selecting it here. Use the exact catalog model ID and its supported thinking level. The helper verifies catalog availability, preserves provider/authentication profiles and authored fallback order, backs up configuration and retains conversation identity. It neither invokes a model nor chooses one automatically for activity.
 
-If the helper saves settings but cannot verify their effective resolution, check OpenClaw's model and conversation settings before sending another event. A saved preference, an available catalog entry and a completed run are separate evidence.
+A saved preference, catalog entry, inherited session configuration and completed model run are distinct evidence. If resolution cannot be verified, inspect OpenClaw's model/session settings before sending another event. Task-aware runtime evidence belongs in the [current review](../review/openclaw-task-aware-2026-10-13.md).
+
+Earlier main-agent configuration and the [successful operator run](../../artifacts/openclaw/model-choice-verification.json) remain the **2026-10-11 main-agent baseline**. That run confirmed matching requested/effective/response Sol 6.1 and retained conversation identity. Medium was verified inherited configuration; telemetry did not directly report reasoning effort. This historical run is not proof of the dedicated agent's current execution.
 
 ## Next steps
 
-Model selection is ready for user-controlled changes, and the requested model has a completed-run check. Further development can continue independently; no account purchase or phone action is required.
+Development can continue independently with the user-selected dedicated model. No model approval, account purchase or phone action is required. Future model changes remain the user's choice.

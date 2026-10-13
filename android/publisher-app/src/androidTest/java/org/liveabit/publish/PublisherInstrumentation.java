@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.WindowManager;
@@ -175,9 +176,12 @@ public final class PublisherInstrumentation extends Instrumentation {
         int port = 62283;
         String endpoint = "http://127.0.0.1:" + port + "/hooks/liveabit", token = "g".repeat(43);
         String setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", endpoint)
-            .put("key", token).put("agent_id", "main").put("warning_minutes", 60).toString();
+            .put("key", token).put("agent_id", "liveabit").put("warning_minutes", 60).toString();
         var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
+        runOnMainSync(() -> {
+            findButton(activity.getWindow().getDecorView(), "Setup").performClick();
+            findButton(activity.getWindow().getDecorView(), "Edit connection manually").performClick();
+        });
         try {
             runOnMainSync(() -> {
                 activity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("OpenClaw setup", setup));
@@ -185,7 +189,7 @@ public final class PublisherInstrumentation extends Instrumentation {
             });
             check(((EditText) activity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint)
                 && ((EditText) activity.findViewById(R.id.connection_key)).getText().toString().equals(token)
-                && ((EditText) activity.findViewById(R.id.openclaw_agent)).getText().toString().equals("main"),
+                && ((EditText) activity.findViewById(R.id.openclaw_agent)).getText().toString().equals("liveabit"),
                 "OpenClaw paste did not fill the imported destination");
             check(!engine.snapshot().getBoolean("enabled") && engine.snapshot().getJSONArray("pending").length() == 0,
                 "OpenClaw setup import started sharing");
@@ -222,6 +226,15 @@ public final class PublisherInstrumentation extends Instrumentation {
         if ("continuity".equals(arguments.getString("phase"))) {
             ContinuityCases.run(this, context, engine, passed); return;
         }
+        if ("meaningful_delivery".equals(arguments.getString("phase"))) {
+            MeaningfulDeliveryCases.run(context, engine, passed); return;
+        }
+        if ("connection_probe".equals(arguments.getString("phase"))) {
+            ConnectionProbeCases.run(context, engine, passed); return;
+        }
+        if ("setup_connection".equals(arguments.getString("phase"))) {
+            uiConnectionCases(context, engine); return;
+        }
         if ("receiver_continuity".equals(arguments.getString("phase"))) {
             receiverContinuity(); return;
         }
@@ -240,7 +253,7 @@ public final class PublisherInstrumentation extends Instrumentation {
         if ("file_import".equals(arguments.getString("phase"))) {
             var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
-            runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Import receiver setup file").performClick());
+            runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Import receiver file").performClick());
             AccessibilityNodeInfo file = awaitNode("liveabit-emulator-setup.json", 1500);
             if (file == null) {
                 clickNode(awaitNode("Show roots", 5000));
@@ -286,7 +299,10 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(ConnectionSetup.describe("").equals("No receiver configured"), "Empty setup shown as connected");
         passed.add("configured_connection_description");
         var setupActivity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        runOnMainSync(() -> findButton(setupActivity.getWindow().getDecorView(), "Setup").performClick());
+        runOnMainSync(() -> {
+            findButton(setupActivity.getWindow().getDecorView(), "Setup").performClick();
+            findButton(setupActivity.getWindow().getDecorView(), "Edit connection manually").performClick();
+        });
         for (int[] guide : new int[][] { {R.string.wifi_help_button, R.string.wifi_help}, {R.string.usb_help_button, R.string.usb_help} }) {
             runOnMainSync(() -> findButton(setupActivity.getWindow().getDecorView(), context.getString(guide[0])).performClick());
             check(awaitNode(context.getString(guide[1]), 5000, "org.liveabit.publish") != null, "Connection guide did not render");
@@ -454,17 +470,28 @@ public final class PublisherInstrumentation extends Instrumentation {
                 && !activity.findViewById(R.id.settings_page).isShown() && !activity.findViewById(R.id.connection_key).isShown(),
                 "Daily activity page exposes setup/settings fields");
             check((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) != 0, "Secure window flag removed");
+            check(findButton(activity.getWindow().getDecorView(), "Change apps or connection") == null,
+                "Activity page still contains the redundant setup shortcut");
             capturePage(activity, "activity-screen.png");
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
             check(activity.findViewById(R.id.setup_page).isShown() && !activity.findViewById(R.id.activity_page).isShown(), "Setup tab did not open");
-            check(findButton(activity.getWindow().getDecorView(), "Connect over Wi-Fi").isShown()
-                && findButton(activity.getWindow().getDecorView(), "Connect by USB").isShown(), "Connection guides not in Setup");
+            ViewGroup connection = (ViewGroup) activity.findViewById(R.id.import_receiver).getParent();
+            int visibleOptions = 0;
+            for (int index = 0; index < connection.getChildCount(); index++)
+                if (connection.getChildAt(index) instanceof Button && connection.getChildAt(index).isShown()) visibleOptions++;
+            check(visibleOptions == 3 && activity.findViewById(R.id.import_receiver).isShown()
+                && activity.findViewById(R.id.connect_openclaw).isShown() && activity.findViewById(R.id.edit_connection).isShown()
+                && findButton(activity.getWindow().getDecorView(), "Paste receiver setup") == null
+                && findButton(activity.getWindow().getDecorView(), "Connect over Wi-Fi") == null
+                && findButton(activity.getWindow().getDecorView(), "Connect by USB") == null
+                && !activity.findViewById(R.id.connection_key).isShown(), "Setup did not limit the main connection options to three");
             capturePage(activity, "setup-screen.png");
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Settings").performClick());
             check(activity.findViewById(R.id.settings_page).isShown() && !activity.findViewById(R.id.setup_page).isShown()
                 && activity.findViewById(R.id.send_minutes).isShown(), "Settings tab did not isolate timing controls");
             capturePage(activity, "settings-screen.png");
             passed.add("native_activity_setup_settings_tabs_keep_connection_key_off_home");
+            passed.add("native_setup_has_three_connection_options_and_activity_omits_setup_shortcut");
 
             engine.configure(endpoint, token, "org.liveabit.fixture", 60);
             api("/api/mode", "no_acknowledgement"); cycle(engine, true);
@@ -499,6 +526,93 @@ public final class PublisherInstrumentation extends Instrumentation {
         } finally {
             runOnMainSync(activity::finish); engine.stop(); engine.updateTiming(5, 15, 60); api("/api/mode", "acknowledge");
         }
+    }
+    private void uiConnectionCases(Context context, DeliveryEngine engine) throws Exception {
+        engine.stop();
+        String token = "u".repeat(43);
+        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
+        String before = engine.snapshot().toString();
+        try (var fixture = new OpenClawContractCases.HookFixture()) {
+            fixture.respond(400, "{\"ok\":false,\"error\":\"message required\"}");
+            var workerHeld = new java.util.concurrent.CountDownLatch(1);
+            var releaseWorker = new java.util.concurrent.CountDownLatch(1);
+            var sharingWorker = ((PublisherApplication) context.getApplicationContext()).worker.submit(() -> {
+                workerHeld.countDown();
+                try { releaseWorker.await(20, java.util.concurrent.TimeUnit.SECONDS); }
+                catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); }
+            });
+            try {
+                check(workerHeld.await(5000, java.util.concurrent.TimeUnit.MILLISECONDS), "Sharing worker did not start its owned fixture wait");
+                runOnMainSync(() -> {
+                    ((EditText) activity.findViewById(R.id.receiver_address)).setText(fixture.endpoint());
+                    ((EditText) activity.findViewById(R.id.connection_key)).setText(token);
+                    ((EditText) activity.findViewById(R.id.openclaw_agent)).setText("liveabit");
+                    activity.findViewById(R.id.connect_openclaw).performClick();
+                    check(((TextView) activity.findViewById(R.id.connection_check_status)).getText().toString().contains("Checking")
+                        && !activity.findViewById(R.id.connect_openclaw).isEnabled(), "Connect did not show immediate progress");
+                });
+                String verified = awaitConnectionResult(activity);
+                check(verified.contains("connection verified") && fixture.count() == 1 && !sharingWorker.isDone()
+                    && fixture.request(0).body.equals("{}") && !fixture.request(0).headers.containsKey("idempotency-key")
+                    && engine.snapshot().toString().equals(before), "Connect waited behind sharing, submitted activity or hid its result");
+            } finally { releaseWorker.countDown(); sharingWorker.get(5000, java.util.concurrent.TimeUnit.MILLISECONDS); }
+            passed.add("native_setup_connect_openclaw_verifies_immediately_without_starting_sharing");
+
+            fixture.respond(401, "{\"ok\":false}");
+            runOnMainSync(() -> activity.findViewById(R.id.connect_openclaw).performClick());
+            String refused = awaitConnectionResult(activity);
+            check(refused.contains("refused the connection key") && !refused.contains(token)
+                && awaitNode("Could not connect to OpenClaw", 5000, "org.liveabit.publish") != null
+                && fixture.count() == 2 && fixture.request(1).body.equals("{}") && engine.snapshot().toString().equals(before),
+                "Bad connection key was silently accepted or changed sharing state");
+            clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
+            passed.add("native_setup_connection_key_failure_is_visible_in_dialog_and_status");
+            fixture.assertHealthy();
+
+            int closedPort;
+            try (var closed = new java.net.ServerSocket(0, 1, java.net.InetAddress.getByName("127.0.0.1"))) {
+                closedPort = closed.getLocalPort();
+            }
+            String unreachable = "http://127.0.0.1:" + closedPort + "/hooks/agent";
+            runOnMainSync(() -> {
+                ((EditText) activity.findViewById(R.id.receiver_address)).setText(unreachable);
+                activity.findViewById(R.id.connect_openclaw).performClick();
+            });
+            String failure = awaitConnectionResult(activity);
+            check(failure.contains("Cannot reach OpenClaw")
+                && awaitNode("Could not connect to OpenClaw", 5000, "org.liveabit.publish") != null
+                && engine.snapshot().toString().equals(before), "Unreachable server was not immediately flagged without sharing");
+            clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
+            passed.add("native_setup_unreachable_openclaw_is_visible_in_dialog_and_status");
+
+            runOnMainSync(() -> {
+                ((EditText) activity.findViewById(R.id.receiver_address)).setText("");
+                ((EditText) activity.findViewById(R.id.connection_key)).setText("");
+                activity.findViewById(R.id.connect_openclaw).performClick();
+            });
+            check(awaitNode(context.getString(R.string.openclaw_setup_prompt), 5000, "org.liveabit.publish") != null
+                && awaitNode("Import receiver file", 5000, "org.liveabit.publish") != null
+                && awaitNode("Paste receiver setup", 5000, "org.liveabit.publish") != null
+                && awaitNode("Edit connection manually", 5000, "org.liveabit.publish") != null
+                && fixture.count() == 2 && engine.snapshot().toString().equals(before),
+                "Missing connection did not offer clean setup actions without starting sharing");
+            clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
+            passed.add("native_connect_missing_configuration_offers_import_paste_manual_without_sharing");
+        } finally { runOnMainSync(activity::finish); engine.stop(); }
+    }
+    private String awaitConnectionResult(MainActivity activity) throws Exception {
+        long deadline = SystemClock.elapsedRealtime() + 12_000;
+        do {
+            String[] result = new String[1];
+            runOnMainSync(() -> {
+                if (activity.findViewById(R.id.connect_openclaw).isEnabled())
+                    result[0] = ((TextView) activity.findViewById(R.id.connection_check_status)).getText().toString();
+            });
+            if (result[0] != null && !result[0].isEmpty() && !result[0].contains("Checking")) return result[0];
+            Thread.sleep(50);
+        } while (SystemClock.elapsedRealtime() < deadline);
+        throw new AssertionError("Native connection check did not finish or show its result");
     }
     private void capturePage(MainActivity activity, String filename) {
         // Render only this owned fixture's actual native views; production FLAG_SECURE stays enabled.

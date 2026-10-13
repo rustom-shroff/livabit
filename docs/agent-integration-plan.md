@@ -1,5 +1,13 @@
 # Existing-agent direct integration plan
 
+**Active plan, 2026-10-13:** [ADR-0021](decisions/0021-task-aware-liveabit-agent.md) targets the dedicated **liveabit** agent in the user's installed OpenClaw. [Current direct setup](integration-drafts/openclaw-direct.md) maps `/hooks/liveabit` to persistent `agent:liveabit:main`; Android skips nonmeaningful activity before HTTP and the native host filters empty/expired/invalid wrappers before model dispatch. Exact 0.9 APK bytes passed 80 native emulator checks; [current review](review/openclaw-task-aware-2026-10-13.md).
+
+Main manages ordinary personal tasks in native Workboard; liveabit reads shared open cards and uses real priority/deadline/next step for selective WhatsApp nudges. Task data stays host-owned; activity authorizes no task mutation or internal Goal creation. The dedicated user-selected Sol 6.1/medium model and copied verified self-chat policy preserve user control. Development can continue independently; task-grounded coaching is a separate optional [phone trial](integration-drafts/openclaw-phone-pilot.md).
+
+## Historical integration preparation
+
+The retained plan below records earlier host decisions and broader conformance requirements. Its Grok/Muse account gates do not block the active installed OpenClaw POC.
+
 **Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
 
 **Active target, 2026-10-11: existing OpenClaw main and selective WhatsApp communication.** WhatsApp is linked and connected. Sender **0.6.0** clarifies ordinary local hook replies versus separate host-policy nudges. Its exact APK passed all 37 native checks, including installed-gateway delivery; see the [0.6.0 review](review/openclaw-whatsapp-2026-10-11.md). The user requested Sol 6.1 with medium thinking and owns all future [model changes](integration-drafts/openclaw-model-settings.md). Neither activity setup nor channel setup chooses a model. The verified **0.5.0** [main-agent review](review/openclaw-main-agent-2026-10-11.md) retains 37 native passes, actual admission/LAN delivery and separate uncertainty-preserving output. HTTP success remains admission only; device controls and independent display receiver remain, with no forwarding backend or JavaScript sender prototype.

@@ -141,52 +141,52 @@ final class OpenClawContractCases {
             check(originalAttempts >= 2, "The original pending hook was not retried");
             fixture.assertHealthy();
             passed.add("native_openclaw_http_refusal_durable_retry_and_admission_recovery");
-            mappedMainRouting(context, engine, fixture, endpoint, token, passed);
+            mappedLiveabitRouting(context, engine, fixture, endpoint, token, passed);
             agentRouting(context, engine, fixture, endpoint, token, mainSetup.agentId, passed);
         } finally { engine.stop(); }
     }
 
-    private static void mappedMainRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
+    private static void mappedLiveabitRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
                                           String token, List<String> passed) throws Exception {
         engine.stop(); fixture.respond(503, "{\"ok\":false}");
         String mappedEndpoint = endpoint.replace("/hooks/agent", "/hooks/liveabit");
         JSONObject setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", mappedEndpoint)
-            .put("key", token).put("agent_id", "main");
+            .put("key", token).put("agent_id", "liveabit");
         ConnectionSetup imported = ConnectionSetup.parse(setup.toString());
-        check(imported.agentId.equals("main") && ConnectionSetup.describe(mappedEndpoint).startsWith("OpenClaw (main)"),
-            "Mapped main setup lost its destination");
+        check(imported.agentId.equals("liveabit") && ConnectionSetup.describe(mappedEndpoint).startsWith("OpenClaw (liveabit)"),
+            "Mapped liveabit setup lost its destination");
         boolean wrongAgentRefused = false;
-        try { ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "liveabit").toString()); }
+        try { ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "main").toString()); }
         catch (IllegalArgumentException expected) { wrongAgentRefused = true; }
-        check(wrongAgentRefused, "Mapped main setup accepted another agent");
+        check(wrongAgentRefused, "Mapped liveabit setup accepted another agent");
         engine.configure(imported.url, imported.key, "org.liveabit.fixture", 60, imported.agentId);
         context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
         cycle(context, engine, true);
         JSONObject state = engine.snapshot();
-        check(state.getJSONArray("pending").length() > 0 && state.getString("agent_id").equals("main"),
-            "Mapped main hook did not queue actual Android activity");
+        check(state.getJSONArray("pending").length() > 0 && state.getString("agent_id").equals("liveabit"),
+            "Mapped liveabit hook did not queue actual Android activity");
         JSONObject first = state.getJSONArray("pending").getJSONObject(0);
         String id = first.getString("event_id"), body = first.getString("body");
         JSONObject wrapper = new JSONObject(body);
-        check(wrapper.getString("agentId").equals("main") && Boolean.FALSE.equals(wrapper.opt("deliver"))
+        check(wrapper.getString("agentId").equals("liveabit") && Boolean.FALSE.equals(wrapper.opt("deliver"))
             && !wrapper.has("sessionKey") && !wrapper.has("sessionMode"),
             "Android replaced gateway-owned session routing");
         boolean observed = false;
         for (int i = 0; i < fixture.count(); i++) {
             Request sent = fixture.request(i);
             if (id.equals(sent.headers.get("idempotency-key"))) {
-                check(sent.path.equals("/hooks/liveabit") && sent.body.equals(body), "Mapped main hook sent the wrong route or body");
+                check(sent.path.equals("/hooks/liveabit") && sent.body.equals(body), "Mapped liveabit hook sent the wrong route or body");
                 observed = true;
             }
         }
-        check(observed, "Native HTTP fixture received no mapped main hook");
+        check(observed, "Native HTTP fixture received no mapped liveabit hook");
         boolean invalidChangeRefused = false;
-        try { engine.configure(mappedEndpoint, token, "org.liveabit.fixture", 60, "liveabit"); }
+        try { engine.configure(mappedEndpoint, token, "org.liveabit.fixture", 60, "main"); }
         catch (IllegalArgumentException expected) { invalidChangeRefused = true; }
         check(invalidChangeRefused && engine.snapshot().getString("stream_id").equals(state.getString("stream_id"))
             && engine.snapshot().getJSONArray("pending").getJSONObject(0).getString("body").equals(body),
             "Wrong mapped agent changed saved sharing");
-        passed.add("native_openclaw_mapped_main_hook_and_gateway_owned_session_route");
+        passed.add("native_openclaw_mapped_liveabit_hook_and_gateway_owned_session_route");
     }
 
     private static void agentRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,

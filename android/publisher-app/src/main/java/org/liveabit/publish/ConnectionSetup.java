@@ -36,7 +36,7 @@ final class ConnectionSetup {
         return new ConnectionSetup(url, key, minutes, agentId);
     }
     static String describe(String url) {
-        return describe(url, OpenClawWebhook.isMainEndpoint(url) ? "main" : OpenClawWebhook.AGENT_ID);
+        return describe(url, OpenClawWebhook.AGENT_ID);
     }
     static String describe(String url, String agentId) {
         if (url == null || url.isEmpty()) return "No receiver configured";

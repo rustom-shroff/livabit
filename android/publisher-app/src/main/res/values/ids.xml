@@ -9,4 +9,8 @@
     <item name="setup_page" type="id" />
     <item name="settings_page" type="id" />
     <item name="save_settings" type="id" />
+    <item name="import_receiver" type="id" />
+    <item name="connect_openclaw" type="id" />
+    <item name="edit_connection" type="id" />
+    <item name="connection_check_status" type="id" />
 </resources>

@@ -19,6 +19,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManager;
@@ -42,10 +44,14 @@ import java.util.TreeSet;
 public final class MainActivity extends Activity {
     private PublisherApplication app;
     private EditText endpoint, key, minutes, agent, sendMinutes, screenOffMinutes;
-    private TextView apps, status, sharingTitle, homeApps, schedule, connectionSummary;
+    private TextView apps, status, sharingTitle, homeApps, schedule, connectionSummary, connectionCheckStatus;
     private final View[] pages = new View[3];
     private final Button[] tabs = new Button[3];
     private Button homeStart, homeSend, homeStop;
+    private Button connectOpenClaw;
+    private LinearLayout manualConnection;
+    private boolean checkingConnection, verifyImportedOpenClaw;
+    private long connectionCheckGeneration;
     private LinearLayout root;
     private int currentTab;
     private static final int INK = Color.rgb(27, 43, 58), BLUE = Color.rgb(26, 89, 177), MUTED = Color.rgb(91, 108, 124);
@@ -95,23 +101,22 @@ public final class MainActivity extends Activity {
         label(delivery, "Connection", 18).setTypeface(null, Typeface.BOLD);
         status = label(delivery, "Ready to connect", 15);
         button(delivery, "Connection details", this::showDetails);
-        button(home, "Change apps or connection", () -> showTab(1));
         label(home, "Your agent decides when a nudge is useful. An accepted event starts processing; it does not mean a message is sent every time.", 14).setTextColor(MUTED);
 
         LinearLayout setup = page(content, 1, R.id.setup_page);
         label(setup, "Set up sharing", 24).setTypeface(null, Typeface.BOLD);
-        label(setup, "Import your connection, then choose which apps to share.", 15).setTextColor(MUTED);
+        label(setup, "Connect your agent, then choose which apps to share.", 15).setTextColor(MUTED);
         LinearLayout connection = card(setup);
         label(connection, "Connect your agent", 18).setTypeface(null, Typeface.BOLD);
         connectionSummary = label(connection, "No connection imported", 15);
-        button(connection, "Import receiver setup file", () -> startActivityForResult(
-            new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE), IMPORT_SETUP));
-        button(connection, "Paste receiver setup", this::pasteSetup);
-        button(connection, getString(R.string.wifi_help_button), () -> showTransportHelp(true));
-        button(connection, getString(R.string.usb_help_button), () -> showTransportHelp(false));
-        button(connection, getString(R.string.openclaw_help_button), () -> showConnectionHelp(R.string.openclaw_help_button, R.string.openclaw_help));
+        button(connection, getString(R.string.import_receiver_button), () -> importSetup(false)).setId(R.id.import_receiver);
+        connectOpenClaw = button(connection, getString(R.string.openclaw_help_button), this::connectToOpenClaw);
+        connectOpenClaw.setId(R.id.connect_openclaw);
+        button(connection, "Edit connection manually", this::toggleManualConnection).setId(R.id.edit_connection);
+        connectionCheckStatus = label(connection, "", 14); connectionCheckStatus.setId(R.id.connection_check_status);
+        connectionCheckStatus.setVisibility(View.GONE);
         LinearLayout manual = new LinearLayout(this); manual.setOrientation(LinearLayout.VERTICAL);
-        button(connection, "Edit connection manually", () -> manual.setVisibility(manual.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE));
+        manualConnection = manual;
         connection.addView(manual); manual.setVisibility(View.GONE);
         label(manual, "Receiver address", 15);
         endpoint = field(manual, "Import setup to fill the address", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
@@ -120,8 +125,11 @@ public final class MainActivity extends Activity {
         key = field(manual, "Hook token or receiver key", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         key.setId(R.id.connection_key);
         label(manual, "OpenClaw agent", 15);
-        agent = field(manual, "main", InputType.TYPE_CLASS_TEXT); agent.setText("main");
+        agent = field(manual, "liveabit", InputType.TYPE_CLASS_TEXT); agent.setText("liveabit");
         agent.setId(R.id.openclaw_agent);
+        button(manual, "Paste receiver setup", this::pasteSetup);
+        button(manual, getString(R.string.wifi_help_button), () -> showTransportHelp(true));
+        button(manual, getString(R.string.usb_help_button), () -> showTransportHelp(false));
         LinearLayout selection = card(setup);
         label(selection, "Apps to share", 18).setTypeface(null, Typeface.BOLD);
         apps = label(selection, "No apps selected", 16);
@@ -162,11 +170,24 @@ public final class MainActivity extends Activity {
         } catch (Exception error) { toast("Saved settings could not be read"); }
         if (saved != null && saved.containsKey("selected_apps")) {
             selected.clear(); selected.addAll(saved.getStringArrayList("selected_apps"));
+            verifyImportedOpenClaw = saved.getBoolean("verify_imported_openclaw", false);
         }
+        TextWatcher draftWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence value, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence value, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable value) {
+                if (!checkingConnection) connectionCheckStatus.setVisibility(View.GONE);
+                String address = endpoint.getText().toString().trim();
+                connectionSummary.setText(address.isEmpty() ? "No connection imported"
+                    : ConnectionSetup.describe(address, agent.getText().toString().trim()));
+            }
+        };
+        endpoint.addTextChangedListener(draftWatcher); key.addTextChangedListener(draftWatcher); agent.addTextChangedListener(draftWatcher);
         showApps(); showTab(saved == null ? 0 : saved.getInt("tab", 0)); render();
     }
     @Override protected void onSaveInstanceState(Bundle state) {
         state.putInt("tab", currentTab); state.putStringArrayList("selected_apps", new ArrayList<>(selected));
+        state.putBoolean("verify_imported_openclaw", verifyImportedOpenClaw);
         super.onSaveInstanceState(state);
     }
     private void showTab(int index) {
@@ -185,6 +206,7 @@ public final class MainActivity extends Activity {
         visible = true; handler.post(refresh);
     }
     @Override protected void onStop() { visible = false; handler.removeCallbacks(refresh); super.onStop(); }
+    @Override protected void onDestroy() { connectionCheckGeneration++; super.onDestroy(); }
     private void send() {
         status.setText("Reading activity and sending…");
         app.worker.execute(() -> { app.engine().cycle(true); runOnUiThread(() -> { if (!isFinishing()) render(); }); });
@@ -226,6 +248,59 @@ public final class MainActivity extends Activity {
                 .setPositiveButton("Close", null).show();
         } catch (Exception error) { toast("Connection details unavailable"); }
     }
+    private void toggleManualConnection() {
+        manualConnection.setVisibility(manualConnection.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        if (manualConnection.getVisibility() == View.VISIBLE) endpoint.requestFocus();
+    }
+    private void importSetup(boolean verifyOpenClaw) {
+        verifyImportedOpenClaw = verifyOpenClaw;
+        startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
+            .addCategory(Intent.CATEGORY_OPENABLE), IMPORT_SETUP);
+    }
+    private void connectToOpenClaw() {
+        if (checkingConnection) return;
+        String url = endpoint.getText().toString().trim(), token = key.getText().toString().trim();
+        if (url.isEmpty() || token.isEmpty()) { showOpenClawSetup(); return; }
+        String agentId = agent.getText().toString().trim();
+        long checkGeneration = ++connectionCheckGeneration;
+        checkingConnection = true; connectOpenClaw.setEnabled(false);
+        showConnectionCheck("Checking OpenClaw connection…", MUTED);
+        new Thread(() -> {
+            ConnectionProbe.Result result = app.engine().checkConnection(url, token, agentId);
+            runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed() || checkGeneration != connectionCheckGeneration) return;
+                checkingConnection = false; connectOpenClaw.setEnabled(true);
+                if (!url.equals(endpoint.getText().toString().trim()) || !token.equals(key.getText().toString().trim())
+                    || !agentId.equals(agent.getText().toString().trim())) {
+                    showConnectionCheck("Connection changed. Tap Connect to OpenClaw to check it.", MUTED); return;
+                }
+                showConnectionCheck(result.message, result.connected ? Color.rgb(21, 110, 96) : Color.rgb(168, 38, 38));
+                if (!result.connected) new AlertDialog.Builder(this).setTitle("Could not connect to OpenClaw")
+                    .setMessage(result.message).setPositiveButton("Close", null).show();
+            });
+        }, "openclaw-connection-check").start();
+    }
+    private void showConnectionCheck(String message, int color) {
+        connectionCheckStatus.setText(message); connectionCheckStatus.setTextColor(color);
+        connectionCheckStatus.setVisibility(View.VISIBLE);
+    }
+    private void showOpenClawSetup() {
+        LinearLayout body = new LinearLayout(this); body.setOrientation(LinearLayout.VERTICAL);
+        body.setPadding(dp(20), dp(4), dp(20), dp(8));
+        label(body, getString(R.string.openclaw_setup_prompt), 15);
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.openclaw_help_button)
+            .setView(body).setNegativeButton("Close", null).create();
+        button(body, getString(R.string.import_receiver_button), () -> { dialog.dismiss(); importSetup(true); });
+        button(body, "Paste receiver setup", () -> {
+            if (pasteSetupValue()) { dialog.dismiss(); connectToOpenClaw(); }
+        });
+        button(body, "Edit connection manually", () -> {
+            dialog.dismiss(); manualConnection.setVisibility(View.VISIBLE); endpoint.requestFocus();
+        });
+        button(body, getString(R.string.wifi_help_button), () -> showTransportHelp(true));
+        button(body, getString(R.string.usb_help_button), () -> showTransportHelp(false));
+        dialog.show();
+    }
     private void showConnectionHelp(int title, int instructions) {
         new AlertDialog.Builder(this).setTitle(title).setMessage(instructions)
             .setPositiveButton(R.string.close_help, null).show();
@@ -266,22 +341,30 @@ public final class MainActivity extends Activity {
         } catch (Exception error) { toast("Check the receiver address, connection key, chosen apps and warning interval"); }
     }
     private void pasteSetup() {
+        pasteSetupValue();
+    }
+    private boolean pasteSetupValue() {
         ClipData clip = getSystemService(ClipboardManager.class).getPrimaryClip();
         try {
             if (clip == null || clip.getItemCount() == 0 || clip.getItemAt(0).getText() == null)
                 throw new IllegalArgumentException();
             applySetup(ConnectionSetup.parse(clip.getItemAt(0).getText().toString()));
-        } catch (Exception error) { toast("Copy a liveabit receiver setup, then try again"); }
+            return true;
+        } catch (Exception error) { toast("Copy a liveabit receiver setup, then try again"); return false; }
     }
     private void applySetup(ConnectionSetup setup) {
         endpoint.setText(setup.url); key.setText(setup.key); minutes.setText(Integer.toString(setup.minutes));
         if (setup.agentId != null) agent.setText(setup.agentId);
         render();
+        showConnectionCheck(OpenClawWebhook.isEndpoint(setup.url) ? "Connection imported. Tap Connect to OpenClaw to check it."
+            : "Receiver connection imported. Choose apps and start sharing.", MUTED);
         toast("Setup imported. Choose apps and tap Start sharing to apply it");
     }
     @Override protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
-        if (request != IMPORT_SETUP || result != RESULT_OK || data == null || data.getData() == null) return;
+        if (request != IMPORT_SETUP) return;
+        boolean checkAfterImport = verifyImportedOpenClaw; verifyImportedOpenClaw = false;
+        if (result != RESULT_OK || data == null || data.getData() == null) return;
         Uri uri = data.getData();
         app.worker.execute(() -> {
             try (var input = getContentResolver().openInputStream(uri)) {
@@ -289,7 +372,9 @@ public final class MainActivity extends Activity {
                 byte[] bytes = input.readNBytes(ConnectionSetup.MAX_BYTES + 1);
                 if (bytes.length > ConnectionSetup.MAX_BYTES) throw new IllegalArgumentException();
                 ConnectionSetup setup = ConnectionSetup.parse(new String(bytes, StandardCharsets.UTF_8));
-                runOnUiThread(() -> { if (!isFinishing() && !isDestroyed()) applySetup(setup); });
+                runOnUiThread(() -> {
+                    if (!isFinishing() && !isDestroyed()) { applySetup(setup); if (checkAfterImport) connectToOpenClaw(); }
+                });
             } catch (Exception error) {
                 runOnUiThread(() -> { if (!isFinishing() && !isDestroyed()) toast("Choose a valid liveabit receiver setup file"); });
             }

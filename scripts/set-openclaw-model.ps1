@@ -1,4 +1,5 @@
 param(
+    [ValidatePattern('^[a-z0-9][a-z0-9_-]{0,63}$')][string]$AgentId = 'main',
     [Parameter(Mandatory=$true)]
     [ValidatePattern('^[a-z][a-z0-9._-]*/[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$')]
     [string]$Model,
@@ -13,16 +14,17 @@ if (-not (Test-Path -LiteralPath $taskCtl)) { throw 'The OpenClaw Windows Gatewa
 $taskOutput = Join-Path $taskRoot 'artifacts\openclaw\model-config'
 $taskUtf8 = New-Object Text.UTF8Encoding $false
 
-# Model choices belong to the user. This helper changes only the existing main
-# agent and clears its conversation pins so later choices can be inherited.
+# Model choices belong to the user. This helper changes only the existing
+# selected agent and clears its conversation pins so later choices can be inherited.
 $taskGuest = @'
 $ErrorActionPreference = 'Stop'
 $taskModel = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('__MODEL__'))
 $taskThinking = '__THINKING__'
+$taskAgentId = '__AGENT__'
 $taskConfigPath = Join-Path $env:USERPROFILE '.openclaw/openclaw.json'
 $taskConfig = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
-$taskMain = $taskConfig.agents.entries.main
-if (-not $taskMain -or -not $taskMain.workspace) { throw 'Configure an existing main OpenClaw agent first.' }
+$taskAgent = $taskConfig.agents.entries.PSObject.Properties[$taskAgentId].Value
+if (-not $taskAgent -or -not $taskAgent.workspace) { throw 'Configure an existing selected OpenClaw agent first.' }
 
 function Read-CliJson([string[]]$Arguments) {
     $taskRaw = & openclaw @Arguments 2>&1
@@ -45,7 +47,7 @@ function Has-PolicyAllow($Policy) {
     return ($null -ne $Policy -and $null -ne $Policy.PSObject.Properties['allow'])
 }
 
-$taskCurrent = Get-PrimaryModel $taskMain.model
+$taskCurrent = Get-PrimaryModel $taskAgent.model
 if (-not $taskCurrent) { $taskCurrent = Get-PrimaryModel $taskConfig.agents.defaults.model }
 if (-not $taskCurrent -or $taskCurrent -notmatch '^(?<base>[a-z][a-z0-9._-]*/[^@\s]+)(?<profile>@[^\s]+)?$') {
     throw 'The existing main agent needs a compatible provider/model configuration.'
@@ -58,33 +60,33 @@ if ($taskModel.Split('/')[0] -cne $taskCurrentBase.Split('/')[0]) {
 
 # Read the published catalog; listing models does not run a model or inspect
 # conversation messages. --all includes choices outside the current policy.
-$taskCatalog = Read-CliJson @('models','list','--agent','main','--all','--json')
+$taskCatalog = Read-CliJson @('models','list','--agent',$taskAgentId,'--all','--json')
 $taskCandidate = @($taskCatalog.models | Where-Object { $_.key -ceq $taskModel })
 if ($taskCandidate.Count -ne 1 -or $taskCandidate[0].available -ne $true) {
     throw 'The requested model is not available in the current OpenClaw account catalog. Refresh Models in OpenClaw and try again.'
 }
-$taskMainKey = if ($taskConfig.session.mainKey) { $taskConfig.session.mainKey } else { 'main' }
-$taskSessionKey = if ($taskConfig.session.scope -eq 'global') { 'global' } else { 'agent:main:' + $taskMainKey }
-$taskSessions = Read-CliJson @('sessions','--agent','main','--json','--limit','all')
+$taskAgentKey = if ($taskConfig.session.mainKey) { $taskConfig.session.mainKey } else { 'main' }
+$taskSessionKey = if ($taskConfig.session.scope -eq 'global') { 'global' } else { 'agent:' + $taskAgentId + ':' + $taskAgentKey }
+$taskSessions = Read-CliJson @('sessions','--agent',$taskAgentId,'--json','--limit','all')
 $taskSession = @($taskSessions.sessions | Where-Object { $_.key -ceq $taskSessionKey })
 if ($taskSession.Count -ne 1 -or -not $taskSession[0].sessionId) {
-    throw 'The main conversation was not found. Open it in OpenClaw before changing its model.'
+    throw 'The selected agent conversation was not found. Open it in OpenClaw before changing its model.'
 }
 
 $taskNewPrimary = $taskModel + $taskProfileSuffix
 $taskNewModel = $taskNewPrimary
-if ($taskMain.model -and $taskMain.model -isnot [string]) {
+if ($taskAgent.model -and $taskAgent.model -isnot [string]) {
     # Retain the user's fallback order when main has an authored model object.
     $taskNewModel = @{}
-    foreach ($taskProperty in $taskMain.model.PSObject.Properties) { $taskNewModel[$taskProperty.Name] = $taskProperty.Value }
+    foreach ($taskProperty in $taskAgent.model.PSObject.Properties) { $taskNewModel[$taskProperty.Name] = $taskProperty.Value }
     $taskNewModel.primary = $taskNewPrimary
 }
 $taskEntryPatch = @{model=$taskNewModel;thinkingDefault=$taskThinking}
-$taskExistingTarget = Get-ModelEntry $taskMain.models $taskModel
+$taskExistingTarget = Get-ModelEntry $taskAgent.models $taskModel
 if ($null -eq $taskExistingTarget) {
-    $taskCurrentEntry = Get-ModelEntry $taskMain.models $taskCurrentBase
+    $taskCurrentEntry = Get-ModelEntry $taskAgent.models $taskCurrentBase
     if (-not $taskCurrentEntry) { $taskCurrentEntry = Get-ModelEntry $taskConfig.agents.defaults.models $taskCurrentBase }
-    $taskRuntime = if ($taskCurrentEntry.agentRuntime) { $taskCurrentEntry.agentRuntime } else { $taskMain.agentRuntime }
+    $taskRuntime = if ($taskCurrentEntry.agentRuntime) { $taskCurrentEntry.agentRuntime } else { $taskAgent.agentRuntime }
     $taskTargetEntry = @{}
     # Copy the runtime only; other model-specific parameters must stay with
     # their original model. Existing target metadata is left untouched.
@@ -96,8 +98,8 @@ if ($null -eq $taskExistingTarget) {
 # An explicit per-agent policy replaces the shared policy. Preserve the
 # effective restrictions, including [] meaning unrestricted, while admitting
 # the selected model. This also survives legacy model-map policy migration.
-if (Has-PolicyAllow $taskMain.modelPolicy) {
-    $taskAllowed = @($taskMain.modelPolicy.allow)
+if (Has-PolicyAllow $taskAgent.modelPolicy) {
+    $taskAllowed = @($taskAgent.modelPolicy.allow)
 } elseif (Has-PolicyAllow $taskConfig.agents.defaults.modelPolicy) {
     $taskAllowed = @($taskConfig.agents.defaults.modelPolicy.allow)
 } elseif ($taskConfig.meta.migrations.modelPolicyAllowlist -ne $true -and -not $taskConfig.agents.defaults.modelPolicy -and $taskConfig.agents.defaults.models) {
@@ -105,7 +107,7 @@ if (Has-PolicyAllow $taskMain.modelPolicy) {
 } else { $taskAllowed = @() }
 if ($taskAllowed.Count -gt 0) { $taskAllowed = @(@($taskAllowed) + @($taskModel) | Select-Object -Unique) }
 $taskEntryPatch.modelPolicy = @{allow=@($taskAllowed)}
-$taskPatch = @{agents=@{entries=@{main=$taskEntryPatch}}}
+$taskEntries = @{}; $taskEntries[$taskAgentId] = $taskEntryPatch; $taskPatch = @{agents=@{entries=$taskEntries}}
 
 $taskBackupRoot = Join-Path $env:USERPROFILE '.openclaw/liveabit-setup-backups'
 New-Item -ItemType Directory -Force -Path $taskBackupRoot | Out-Null
@@ -117,9 +119,9 @@ if ($LASTEXITCODE -ne 0) { $taskValidationRaw | Write-Output; throw 'OpenClaw re
 $taskAppliedRaw = $taskPatchText | & openclaw config patch --stdin 2>&1
 if ($LASTEXITCODE -ne 0) { $taskAppliedRaw | Write-Output; throw 'OpenClaw could not save the selected model settings.' }
 $taskSavedConfig = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
-$taskSavedPrimary = Get-PrimaryModel $taskSavedConfig.agents.entries.main.model
+$taskSavedPrimary = Get-PrimaryModel $taskSavedConfig.agents.entries.PSObject.Properties[$taskAgentId].Value.model
 $taskSavedModel = if ($taskSavedPrimary) { $taskSavedPrimary.Split('@')[0] } else { $null }
-$taskSavedThinking = $taskSavedConfig.agents.entries.main.thinkingDefault
+$taskSavedThinking = $taskSavedConfig.agents.entries.PSObject.Properties[$taskAgentId].Value.thinkingDefault
 $taskSavedSelectionMatches = $taskSavedModel -ceq $taskModel -and $taskSavedThinking -ceq $taskThinking
 
 # The Store guest can use Windows PowerShell and an openclaw.cmd wrapper.
@@ -127,7 +129,7 @@ $taskSavedSelectionMatches = $taskSavedModel -ceq $taskModel -and $taskSavedThin
 $taskArgumentMode = (Get-Variable -Name PSNativeCommandArgumentPassing -ErrorAction SilentlyContinue).Value
 $taskCliCommand = Get-Command openclaw -ErrorAction Stop
 $taskLegacyJson = $PSVersionTable.PSVersion -lt [version]'7.3' -or $taskArgumentMode -eq 'Legacy' -or ($taskArgumentMode -ne 'Standard' -and $taskCliCommand.Source -match '\.(cmd|bat)$')
-$taskSessionParams = @{key=$taskSessionKey;agentId='main';expectedSessionId=$taskSession[0].sessionId;model=$null;thinkingLevel=$null} | ConvertTo-Json -Compress
+$taskSessionParams = @{key=$taskSessionKey;agentId=$taskAgentId;expectedSessionId=$taskSession[0].sessionId;model=$null;thinkingLevel=$null} | ConvertTo-Json -Compress
 if ($taskLegacyJson) { $taskSessionParams = $taskSessionParams.Replace('"','\"') }
 
 # Config reload is normally automatic. Briefly observe its actual resolution;
@@ -155,7 +157,7 @@ if (-not $taskFollowsDefaults) {
 @{model=$taskModel;thinking=$taskThinking;session_follows_defaults=$true} | ConvertTo-Json -Compress
 '@
 $taskModelEncoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Model))
-$taskGuest = $taskGuest.Replace('__MODEL__',$taskModelEncoded).Replace('__THINKING__',$Thinking)
+$taskGuest = $taskGuest.Replace('__MODEL__',$taskModelEncoded).Replace('__THINKING__',$Thinking).Replace('__AGENT__',$AgentId)
 $taskEncoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($taskGuest))
 $taskCommand = "& ([scriptblock]::Create([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$taskEncoded'))))"
 $taskPreviousPreference = $ErrorActionPreference
