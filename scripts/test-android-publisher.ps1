@@ -106,7 +106,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.10.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.11.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null
@@ -114,6 +114,7 @@ try {
     Invoke-Device @('shell','pm','clear','org.liveabit.publish') | Out-Null
     Invoke-Device @('shell','appops','set','org.liveabit.publish','GET_USAGE_STATS','allow') | Out-Null
     Invoke-Device @('shell','pm','grant','org.liveabit.publish','android.permission.POST_NOTIFICATIONS') | Out-Null
+    Invoke-Device @('shell','settings','put','secure','show_ime_with_hard_keyboard','1') | Out-Null
     $taskInstalled = (Invoke-Device @('shell','pm','path','org.liveabit.publish')).Trim().Substring(8)
     Invoke-Device @('pull',$taskInstalled,(Join-Path $taskRun 'installed-sender.apk')) | Out-Null
     $taskHash = (Get-FileHash -LiteralPath $taskApk -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -127,7 +128,7 @@ try {
     $taskResult | Set-Content -LiteralPath (Join-Path $taskRun 'native-tests.txt') -Encoding utf8
     if ($taskResult -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw 'Android-native sender checks failed. Read native-tests.txt.' }
     $taskChecks = ([regex]::Match($taskResult,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
-    foreach ($taskPhase in @('receiver_continuity','adaptive','continuity','meaningful_delivery','connection_probe','setup_connection','ui_pages')) {
+    foreach ($taskPhase in @('receiver_continuity','adaptive','continuity','meaningful_delivery','connection_probe','setup_connection','setup_regression_ui','ui_pages')) {
         $taskAdaptive = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase',$taskPhase,
             '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
             'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
@@ -135,10 +136,48 @@ try {
         if ($taskAdaptive -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw "Native $taskPhase checks failed." }
         $taskChecks += ([regex]::Match($taskAdaptive,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
     }
-    foreach ($taskPage in @('activity','setup','settings')) {
+    foreach ($taskPage in @('activity','setup','settings','setup-manual')) {
         Invoke-Device @('pull',('/sdcard/Android/data/org.liveabit.publish/cache/' + $taskPage + '-screen.png'),(Join-Path $taskRun ($taskPage + '-screen.png'))) | Out-Null
     }
     Invoke-Device @('push',(Join-Path $taskReceiverDirectory 'android-emulator-setup.json'),'/sdcard/Download/liveabit-emulator-setup.json') | Out-Null
+    # Exercise byte-for-byte exports through Android's actual document picker. Do not
+    # configure the engine from host-parsed setup data, which bypassed the broken flow.
+    $taskCurrentWifiFile = Join-Path $taskRun 'current-openclaw-wifi.json'
+    $taskRetainedWifiFile = Join-Path $taskRun 'retained-openclaw-wifi.json'
+    $taskWrongHostFile = Join-Path $taskRun 'wrong-host-connection.json'
+    if ($OpenClaw) {
+        $taskCurrentSource = Join-Path $taskRoot 'artifacts\openclaw\android-wifi-setup.json'
+        $taskRetainedSource = Join-Path $taskRoot 'artifacts\openclaw\liveabit-openclaw-wifi-192-168-1-234.json'
+        if (-not (Test-Path -LiteralPath $taskCurrentSource) -or -not (Test-Path -LiteralPath $taskRetainedSource)) {
+            throw 'OpenClaw import regression requires both the current Wi-Fi setup and the retained main-agent Wi-Fi export.'
+        }
+        Copy-Item -LiteralPath $taskCurrentSource -Destination $taskCurrentWifiFile
+        Copy-Item -LiteralPath $taskRetainedSource -Destination $taskRetainedWifiFile
+        Copy-Item -LiteralPath (Join-Path $taskRoot 'artifacts\openclaw\connection.json') -Destination $taskWrongHostFile
+    } else {
+        $taskOfflineWifi = @{ format='liveabit.openclaw.connection.v1'; url='http://192.168.1.234:62283/hooks/liveabit'; key=('f' * 43); agent_id='liveabit'; warning_minutes=60 }
+        [IO.File]::WriteAllText($taskCurrentWifiFile, ($taskOfflineWifi | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+        $taskOfflineWifi.agent_id = 'main'
+        [IO.File]::WriteAllText($taskRetainedWifiFile, ($taskOfflineWifi | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+        [IO.File]::WriteAllText($taskWrongHostFile, (@{format='liveabit.openclaw.local.v1'; port=62283; token=('f' * 43)} | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+    }
+    $taskCurrentWifi = Get-Content -LiteralPath $taskCurrentWifiFile -Raw | ConvertFrom-Json
+    $taskRetainedWifi = Get-Content -LiteralPath $taskRetainedWifiFile -Raw | ConvertFrom-Json
+    $taskMalformed = Join-Path $taskRun 'malformed-secret.json'
+    [IO.File]::WriteAllText($taskMalformed, '{"key":"malformed_private_fixture_key_do_not_echo_12345",', (New-Object Text.UTF8Encoding($false)))
+    Invoke-Device @('push',$taskCurrentWifiFile,'/sdcard/Download/liveabit-current-openclaw-wifi.json') | Out-Null
+    Invoke-Device @('push',$taskRetainedWifiFile,'/sdcard/Download/liveabit-retained-openclaw-wifi.json') | Out-Null
+    Invoke-Device @('push',$taskWrongHostFile,'/sdcard/Download/liveabit-wrong-host-connection.json') | Out-Null
+    Invoke-Device @('push',$taskMalformed,'/sdcard/Download/liveabit-malformed-secret.json') | Out-Null
+    $taskImportRegression = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','setup_import_regression',
+        '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
+        '-e','wifi_url',$taskCurrentWifi.url,'-e','wifi_key',$taskCurrentWifi.key,
+        '-e','legacy_url',$taskRetainedWifi.url,'-e','legacy_key',$taskRetainedWifi.key,
+        'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
+    $taskImportRegression | Set-Content -LiteralPath (Join-Path $taskRun 'setup-import-regression.txt') -Encoding utf8
+    if ($taskImportRegression -notmatch 'INSTRUMENTATION_RESULT: result=PASS') { throw 'Actual downloaded setup-file regression checks failed.' }
+    $taskChecks += ([regex]::Match($taskImportRegression,'INSTRUMENTATION_RESULT: checks=(.+)')).Groups[1].Value.Trim().Split(';')
+    Invoke-Device @('pull','/sdcard/Android/data/org.liveabit.publish/cache/setup-import-error-screen.png',(Join-Path $taskRun 'setup-import-error-screen.png')) | Out-Null
     $taskImport = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','file_import',
         '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
         'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
