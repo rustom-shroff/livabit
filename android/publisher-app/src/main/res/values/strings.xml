@@ -13,4 +13,5 @@
     <string name="switch_setup_title">Change sharing setup?</string>
     <string name="switch_setup_message">This changes the receiver, key or selected apps. Pending events to clear: %1$d. Cancel to keep the current sharing setup, or switch and clear them.</string>
     <string name="switch_setup_confirm">Switch and clear</string>
+    <string name="restart_sharing_help">Your sharing choice is saved. After a restart and unlock, sharing resumes if it was on. Stop sharing keeps it off.</string>
 </resources>

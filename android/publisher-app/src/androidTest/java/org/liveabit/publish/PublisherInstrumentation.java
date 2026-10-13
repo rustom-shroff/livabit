@@ -212,6 +212,15 @@ public final class PublisherInstrumentation extends Instrumentation {
         waitForIdleSync(); // Wait for the target Application.onCreate before reading its native engine.
         Context context = getTargetContext(); DeliveryEngine engine = ((PublisherApplication) context.getApplicationContext()).engine();
         String endpoint = arguments.getString("endpoint"), token = arguments.getString("key");
+        if ("reboot_on_setup".equals(arguments.getString("phase"))) {
+            RebootResumeCases.prepareOn(context, engine, endpoint, token, passed); return;
+        }
+        if ("reboot_off_setup".equals(arguments.getString("phase"))) {
+            RebootResumeCases.prepareOff(context, engine, endpoint, token, passed); return;
+        }
+        if ("reboot_restore".equals(arguments.getString("phase"))) {
+            RebootResumeCases.restoreOriginal(context, engine); return;
+        }
         if ("openclaw_contract".equals(arguments.getString("phase"))) {
             openClawSetupGuides(context, engine);
             OpenClawContractCases.run(context, engine, passed); return;

@@ -158,6 +158,7 @@ public final class MainActivity extends Activity {
             } catch (Exception error) { toast("Enter 1 to 1440 minutes for each setting"); }
         }).setId(R.id.save_settings);
         button(settings, "Enable receiver warnings", this::enableWarnings);
+        label(settings, getString(R.string.restart_sharing_help), 14).setTextColor(MUTED);
         label(settings, "Android can delay background jobs and warnings to save battery. These intervals are targets, not exact alarms.", 14).setTextColor(MUTED);
         try {
             JSONObject state = app.engine().snapshot(); endpoint.setText(state.getString("url"));
