@@ -55,6 +55,12 @@ These files contain a credential. Keep them local and outside Git, issue reports
 
 The connection is local. Wi-Fi reachability depends on the computer's gateway binding and firewall and on the two devices being on a network that permits communication. USB remains a direct alternative. No public port, hosted relay or tunnel is required.
 
+## Wi-Fi troubleshooting
+
+Enabling LAN binding does not verify Windows inbound firewall access. First open the exported computer host and port in the phone's browser, using `http://<host>:<port>/`. An OpenClaw page or an HTTP error proves HTTP reachability; a browser timeout means network, firewall or routing must be checked before connection keys, OAP payloads or model settings. Compare with the computer's `/healthz` check, which tests HTTP liveness without sending activity or calling a model. See [OpenClaw health checks](https://docs.openclaw.ai/gateway/health).
+
+If the computer's health check works but the phone times out, check that both devices share reachable Wi-Fi, guest-network isolation or a VPN is not blocking traffic, and Windows Firewall allows the actual bundled OpenClaw Node executable; it can differ from the project's Node executable. Any needed firewall exception requires explicit approval and should cover only that program, the actual TCP port, and the current local subnet and Wi-Fi interface. Windows may require an administrator prompt. Keep the firewall enabled and do not forward the port through the router. [Microsoft's New-NetFirewallRule reference](https://learn.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule) documents these rule conditions. Retry from the phone to establish reachability and then verify the sender's acknowledgement separately.
+
 ## Existing-agent context and 0.5.0 baseline
 
 Goals, memories, instructions and conversations stay in OpenClaw. The app/helper do not read or copy them into liveabit. Native mapping creates or reuses the configured canonical main conversation. Its record was absent before setup; the verified first hook created it and completed a main-agent response. Main's configuration entry matched its backup, and AGENTS remained unchanged. This demonstrates use of the existing agent/workspace, not imported earlier chats or proved use of private goals. Activity cannot select a conversation or widen authority.
