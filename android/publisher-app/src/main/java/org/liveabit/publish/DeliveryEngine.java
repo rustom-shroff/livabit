@@ -38,6 +38,9 @@ final class DeliveryEngine {
     DeliveryEngine(Context context) { this.context = context.getApplicationContext(); store = new PublisherStore(this.context); }
 
     synchronized JSONObject snapshot() throws Exception { return store.read(); }
+    ConnectionProbe.Result checkConnection(String url, String token, String agentId) {
+        return ConnectionProbe.check(url, token, agentId);
+    }
     synchronized void configure(String url, String token, String selection, int minutes) throws Exception {
         configure(url, token, selection, minutes, OpenClawWebhook.AGENT_ID);
     }
@@ -130,7 +133,7 @@ final class DeliveryEngine {
                     JSONObject state = store.read();
                     if (!sameSession(state, captured)) return;
                     boolean paused = ScreenActivity.paused(context, state);
-                    state.put("pending", prune(state.getJSONArray("pending")));
+                    state.put("pending", pruneForEndpoint(state));
                     state.put("automatic_status", paused ? "Paused — screen has been off" : "Watching for selected-app activity");
                     store.write(state);
                     if (paused) { state.remove("foreground_context"); store.write(state); return; }
@@ -142,8 +145,10 @@ final class DeliveryEngine {
                 synchronized (this) {
                     JSONObject state = store.read();
                     if (!sameSession(state, captured)) return;
-                    JSONArray pending = prune(state.getJSONArray("pending"));
-                    if (event != null && pending.length() < 64 && (!automatic || hasActivity(event))) {
+                    JSONArray pending = pruneForEndpoint(state);
+                    boolean openClaw = OpenClawWebhook.isEndpoint(state.getString("url"));
+                    boolean meaningful = event != null && hasActivity(event);
+                    if (event != null && pending.length() < 64 && (meaningful || (!automatic && !openClaw))) {
                         String observation = OapObservation.encode(event);
                         String body = OpenClawWebhook.isEndpoint(state.getString("url"))
                             ? OpenClawWebhook.wrap(observation, state.getString("agent_id")) : observation;
@@ -151,9 +156,11 @@ final class DeliveryEngine {
                             .put("expires_at", event.getString("expires_at")));
                         state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
                             .put("sequence", event.getLong("sequence"));
-                    } else if (event != null && automatic && pending.length() < 64) {
+                    } else if (event != null && pending.length() < 64) {
                         state.put("cursor", Instant.parse(event.getJSONObject("window").getString("end")).toEpochMilli())
                             .put("automatic_status", "No new selected-app activity — nothing sent");
+                        if (pending.length() == 0)
+                            state.put("status", "No meaningful selected-app activity — nothing sent");
                     }
                     if (event != null && state.getLong("cursor") == collected.boundary.getLong("wall"))
                         state.put("foreground_context", collected.boundary);
@@ -171,7 +178,7 @@ final class DeliveryEngine {
                         }
                         store.write(state);
                     }
-                    JSONArray pending = prune(state.getJSONArray("pending")); state.put("pending", pending); store.write(state);
+                    JSONArray pending = pruneForEndpoint(state); state.put("pending", pending); store.write(state);
                     if (pending.length() == 0) break; item = pending.getJSONObject(0);
                 }
                 Receipt receipt;
@@ -213,11 +220,14 @@ final class DeliveryEngine {
             try { checkHealth(); } catch (Exception ignored) {}
         }
     }
-    private static boolean hasActivity(JSONObject event) throws Exception {
+    static boolean hasActivity(JSONObject event) throws Exception {
         JSONArray apps = event.getJSONObject("observation").getJSONArray("apps");
         for (int index = 0; index < apps.length(); index++) {
             JSONObject app = apps.getJSONObject(index);
-            if (app.getLong("transition_count") > 0 || (!app.isNull("foreground_duration_ms") && app.getLong("foreground_duration_ms") > 0)) return true;
+            Object duration = app.opt("foreground_duration_ms");
+            // A transition alone may be an unmatched pause or another unknown estimate.
+            // Only positive estimated use warrants asking an agent to interpret a packet.
+            if ((duration instanceof Integer || duration instanceof Long) && ((Number) duration).longValue() > 0) return true;
         }
         return false;
     }
@@ -295,6 +305,33 @@ final class DeliveryEngine {
         for (int index = 0; index < pending.length(); index++) {
             JSONObject item = pending.getJSONObject(index);
             if (Instant.parse(item.getString("expires_at")).toEpochMilli() > now) next.put(item);
+        }
+        return next;
+    }
+    private JSONArray pruneForEndpoint(JSONObject state) throws Exception {
+        JSONArray pending = prune(state.getJSONArray("pending"));
+        if (!OpenClawWebhook.isEndpoint(state.getString("url"))) return pending;
+        JSONArray next = new JSONArray(); boolean removedEmpty = false;
+        for (int index = 0; index < pending.length(); index++) {
+            JSONObject item = pending.getJSONObject(index);
+            boolean empty = false;
+            try {
+                String message = new JSONObject(item.getString("body")).getString("message");
+                int start = message.indexOf('{');
+                if (start >= 0) {
+                    JSONObject event = new JSONObject(message.substring(start));
+                    empty = OapObservation.EVENT_NAME.equals(event.optString("event_name")) && !hasActivity(event);
+                }
+            } catch (Exception invalid) {
+                // Do not rewrite or discard an unfamiliar queued request during migration.
+                // Normal persisted wrappers always contain the canonical OAP JSON.
+            }
+            if (empty) removedEmpty = true; else next.put(item);
+        }
+        if (removedEmpty && next.length() == 0) {
+            state.put("failure_since", 0).put("outage_notified", false)
+                .put("status", "No meaningful selected-app activity — nothing sent");
+            cancelAlert();
         }
         return next;
     }

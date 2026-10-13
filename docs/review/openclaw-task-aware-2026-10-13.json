@@ -1,0 +1,180 @@
+{
+  "result": "native_android_and_dedicated_task_agent_poc_verified",
+  "date": "2026-10-13",
+  "version": "0.9.0-poc",
+  "version_code": 11,
+  "protocol_version": "0.2.0-draft.2",
+  "draft_one_compatible": true,
+  "event_name": "activity.observation",
+  "protocol_status": "experimental_record_draft",
+  "apk": "artifacts/android-publisher/liveabit-sender-0.9.0-poc.apk",
+  "apk_sha256": "11a99ae5440a3ea6c4024f21f6c832cba8ad0abf69833accf581ea8f2f80df64",
+  "apk_bytes": 167008,
+  "native_report": "artifacts/android-publisher/run-e35d025c-f286-4b1a-b15b-c9bfaa7089e8/validation.json",
+  "android_native_checks": 80,
+  "installed_openclaw_version": "2026.9.9",
+  "selected_agent": "liveabit",
+  "hook_path": "/hooks/liveabit",
+  "canonical_session": "agent:liveabit:main",
+  "installed_gateway_admission_tested": true,
+  "native_gateway_run_id": "7cd8ecff-aace-4c72-97f1-9ac5d75bdc5d",
+  "caller_selected_session_allowed": false,
+  "automatic_hook_delivery_enabled": false,
+  "final_gateway_native_run_id": "e21733ca-047c-43f8-9449-355f35d0a967",
+  "final_setup_helper_applied": true,
+  "gateway_health_verified": true,
+  "whatsapp_policy_helper_applied": true,
+  "manual_and_automatic_empty_openclaw_requests_suppressed": true,
+  "legacy_empty_pending_pruned": true,
+  "meaningful_retry_bytes_preserved": true,
+  "setup_connection_choices": 3,
+  "connection_probe_starts_agent": false,
+  "immediate_connection_failure_ui_tested": true,
+  "activity_setup_shortcut_removed": true,
+  "actual_workboard_rpc_tested": true,
+  "actual_agent_workboard_list_tested": true,
+  "actual_task_access_run_id": "e588632e-fb75-4528-b1e8-22a5cfa1ef10",
+  "actual_task_access_model": "gpt-6.1-sol",
+  "configured_reasoning": "medium",
+  "main_and_liveabit_models_preserved": true,
+  "open_task_count": 0,
+  "task_data_exported": false,
+  "tasks_created_or_changed": false,
+  "internal_goal_used_for_tasks": false,
+  "native_completion_deadline_field": false,
+  "host_filter_tests": 4,
+  "installed_empty_packet_status": 204,
+  "installed_probe_status": 400,
+  "installed_bad_key_status": 401,
+  "verified_whatsapp_self_policy_installed": true,
+  "new_whatsapp_messages_sent": 0,
+  "whatsapp_preferences_preserved": true,
+  "task_grounded_coaching_phone_tested": false,
+  "exact_apk_physical_phone_tested": false,
+  "prior_phone_admission_review": "docs/review/openclaw-phone-delivery-2026-10-12.md",
+  "default_send_minutes": 5,
+  "default_screen_off_minutes": 15,
+  "default_warning_minutes": 60,
+  "precise_duration_proved": false,
+  "complete_coverage_proved": false,
+  "exact_background_timing_tested": false,
+  "receiver_isolated": true,
+  "user_receiver_controlled": false,
+  "owned_emulator_stopped": true,
+  "openclaw_left_running": true,
+  "lint_errors": 0,
+  "lint_warnings": 11,
+  "javascript_sender_prototype_created": false,
+  "intermediary_created": false,
+  "new_firewall_or_router_changes": false,
+  "source_hash_normalization": "UTF-8 text, CRLF normalized to LF",
+  "source_bindings": [
+    {
+      "sha256": "6638ef3b839fc6fe464a48d3c6f1847144154b0997e9421cba15919acb3b1771",
+      "path": "android/collector-core/src/main/java/org/liveabit/collector/core/LocalInspectionCore.java"
+    },
+    {
+      "sha256": "30e690f590e27069f5a12cc05d0da3be84f5762e818eb7d56eea026a657eedb9",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OapObservation.java"
+    },
+    {
+      "sha256": "dc2539adc94eab41508ba2da2357b97e5af5a18d71a5276f07b0f490c9d6b623",
+      "path": "android/publisher-app/build.gradle"
+    },
+    {
+      "sha256": "5f337414304eb4c5dc46ae356cbbed78dc9cd4691178ff889acd661a1c3576b7",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java"
+    },
+    {
+      "sha256": "7b44cbac872f9d2d1158487e2ae7fbe231f3051507819e8a3101ea8a890afeca",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionProbe.java"
+    },
+    {
+      "sha256": "bfa78bba1d19ab4713188d427ddde404a6e720119e54bb56352daab8503c22f0",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionSetup.java"
+    },
+    {
+      "sha256": "306f3e82f11f6300774054d024c9bdf2ca49c9e300611666f8a5e7ce8d62eeef",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java"
+    },
+    {
+      "sha256": "6f0f616d524616c0d797b1950a550a2db35ae91679317ff61aa616ba1a419b86",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OpenClawWebhook.java"
+    },
+    {
+      "sha256": "56a6838eeebe850b5ec81a38e33b37bc06ddf86ad1c91ccbc04db203148fccbd",
+      "path": "android/publisher-app/src/main/res/values/strings.xml"
+    },
+    {
+      "sha256": "a23955818e863ab92d15d391daf32e383b3a0ba28bb00d1ae09d6c39584e9939",
+      "path": "android/publisher-app/src/main/res/values/ids.xml"
+    },
+    {
+      "sha256": "d9b5587ad2ba9a44f46a10d52da8a3c787a06bba9460078cc39be18279ee654e",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java"
+    },
+    {
+      "sha256": "0655eb6860ba511a2728234be1c08f52a439fc8cfbd0158c80a2f15cfb7d7303",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/ConnectionProbeCases.java"
+    },
+    {
+      "sha256": "7a2a9f8cf5f25b1b22060ac1541be8a6330f043def11ad05d0c6616036bd4aa5",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/MeaningfulDeliveryCases.java"
+    },
+    {
+      "sha256": "0b75930e6dd54dd819ccd7274763279c6dcda3e77cc176bd73c225ba34049da2",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/OpenClawContractCases.java"
+    },
+    {
+      "sha256": "e575cb5ee815c910752244085a6c74bfe123527dc6275fc8924e0380e5591afb",
+      "path": "integrations/openclaw/liveabit-activity.mjs"
+    },
+    {
+      "sha256": "98959c0cb3658c255f832636e36d5bb71610768c362cef108f8cc3bed99b9f9a",
+      "path": "integrations/openclaw/activity-agent.md"
+    },
+    {
+      "sha256": "a935dab0ba50985ae30b3be0e5d4eb6e9c5cf8922dfaddfa857473665524c728",
+      "path": "integrations/openclaw/skills/liveabit/SKILL.md"
+    },
+    {
+      "sha256": "79cd55145ef0303ab82e3765d6cb05e398235ad7f8703b21490f31295ace108d",
+      "path": "integrations/openclaw/skills/personal-tasks/SKILL.md"
+    },
+    {
+      "sha256": "eaeba0c026ee875d4f0686f89111945d9382ce16990de97e3086218fce5b3c1d",
+      "path": "scripts/configure-openclaw.ps1"
+    },
+    {
+      "sha256": "9fa858748ce4def70c750edc9ac47218defaa0fd942155ceb9e83825c84fca07",
+      "path": "scripts/configure-openclaw-task-agent.ps1"
+    },
+    {
+      "sha256": "ec5794941ca3a22371625c3cfb10e17964fa82537089b980a32c129cfe50de59",
+      "path": "scripts/set-openclaw-model.ps1"
+    },
+    {
+      "sha256": "9b047b516f0c16695d98d25a54dfa1f4b4b33e1967ba27fb7ff873ef85e5add3",
+      "path": "scripts/configure-openclaw-whatsapp.ps1"
+    },
+    {
+      "sha256": "ceb900150a2759c9d12e9b3ee707776cf0564518c855896add7c85ea41921c02",
+      "path": "scripts/build-android-publisher.ps1"
+    },
+    {
+      "sha256": "5d82e11703cfd8023113bf671f499296fc88aa116a31c70d537b9b3237df0601",
+      "path": "scripts/test-android-publisher.ps1"
+    },
+    {
+      "sha256": "d2cef73b749b1ae61678dd75e58792fd0bd823e038d408a302d2cf0be06871ab",
+      "path": "test/openclaw-activity-filter.test.mjs"
+    }
+  ],
+  "limits": [
+    "One Android 15 project emulator; exact revision not installed on a physical phone.",
+    "Open Workboard was empty; actual list tool and store access verified without inventing user tasks.",
+    "Task-grounded WhatsApp coaching usefulness and delivery from this revision remain untested.",
+    "Quiet hours, cooldown and duplicate suppression are best-effort agent policies.",
+    "Timing defaults checked; shorter real-time warning/screen-off settings and force-triggered Android jobs exercised."
+  ]
+}

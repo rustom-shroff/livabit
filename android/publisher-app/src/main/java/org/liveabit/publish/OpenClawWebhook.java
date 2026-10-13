@@ -44,8 +44,8 @@ final class OpenClawWebhook {
 
     static void validateAgentForEndpoint(String url, String agentId) {
         validateAgentId(agentId);
-        if (isMainEndpoint(url) && !"main".equals(agentId))
-            throw new IllegalArgumentException("The liveabit OpenClaw hook connects to the main agent.");
+        if (isMainEndpoint(url) && !AGENT_ID.equals(agentId))
+            throw new IllegalArgumentException("This hook uses the liveabit agent. Import the updated OpenClaw setup.");
     }
 
     static String acceptedRunId(JSONObject acknowledgement) {

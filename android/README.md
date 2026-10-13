@@ -1,7 +1,6 @@
 # liveabit local inspection
 
-**Current sender, 2026-10-12:** [0.8.0 APK](../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) passed 63 native emulator checks and adds uninterrupted-use estimates across adjacent windows. [Review](../docs/review/android-continuity-2026-10-12.md), [sender instructions](publisher-app/README.md). The separate local inspector and its historical evidence below remain unchanged.
-
+**Current sender, 2026-10-13:** [0.9.0 APK](../artifacts/android-publisher/liveabit-sender-0.9.0-poc.apk) passed **80 native emulator checks**. Setup exposes three connection options and immediately flags OpenClaw connection failures. OpenClaw sends require positive selected-app duration, including manual sends. Dedicated liveabit reads shared native Workboard tasks for selective WhatsApp nudges. [Current review](../docs/review/openclaw-task-aware-2026-10-13.md), [sender instructions](publisher-app/README.md), [ADR-0021](../docs/decisions/0021-task-aware-liveabit-agent.md). The separate inspector and frozen evidence below remain unchanged.
 **New Android-first development, 2026-10-09:** the separate [liveabit Sender app](publisher-app/README.md) sends selected-app usage directly to a real desktop receiver, retries pending events and warns after configurable missing acknowledgements. This app has its own network permission and explicit sharing controls. The inspector described below remains unchanged and local-only. [ADR-0015](../docs/decisions/0015-android-first-test-receiver.md) replaces the JavaScript-first sender development sequence.
 
 The Android collector is a local diagnostic app. It lets you choose apps, begin a separate inspection session, use those apps, then inspect their permitted transitions. The current 0.2.4 candidate adds a process-owned read slot across screen recreation; it retains 0.2.3's accumulated-clock checks and optional exact fixture timing details. Activity-level transitions, uncertainty, permission-status refresh and discarded-estimate warnings remain. The collector is accepted for continued development under [ADR-0010](../docs/decisions/0010-collector-accepted-and-chatgpt-dots-priority.md). [ADR-0014](../docs/decisions/0014-resume-grok-bot-direct-webhook.md) resumes Grok Bot/lowest-eligible-plan direct routine webhook integration and [protected local setup](../docs/integration-drafts/grok-bot-local-setup.md), retaining the completed Muse assessment and dots/MCP work. The user has no Grok account; actual entitlement, protected pairing and real transport remain untested; its native HTTP 200 is receipt/run-start only. Production sending, native profile selection, valid consumption, OAP evaluation and M2 remain unproven or disabled pending actual setup and admission review. Protected setup and isolated synthetic desktop transport are separate from this unchanged local inspector. Further duration/coverage experiments are deferred. See the [local specification](../specs/android/local-inspector.md) and [measurement plan](../docs/android-feasibility-plan.md).
@@ -46,6 +45,7 @@ From the project root, after the existing build-tool setup and SDK acceptance, u
 .\scripts\setup-android-emulator.ps1
 .\scripts\start-android-emulator.ps1
 $taskAdb = Join-Path (Get-Location) 'artifacts\android-sdk\platform-tools\adb.exe'
+
 # Wait for the owned emulator to boot; see the bounded readiness procedure in the plan.
 $taskAvd = @(& $taskAdb -s emulator-5580 emu avd name)
 if ($LASTEXITCODE -ne 0 -or $taskAvd[0].Trim() -ne 'liveabit-api35-test') { throw 'Unexpected emulator identity.' }
@@ -106,6 +106,7 @@ Portable tools, caches, the development signing key and build artifacts stay und
 ```powershell
 .\scripts\setup-android-tools.ps1 -Stage Jvm
 .\scripts\test-android-core.ps1
+
 # Only after accepting Google's SDK terms:
 .\scripts\setup-android-tools.ps1 -Stage Sdk -AndroidSdkTermsAccepted
 .\scripts\verify-android.ps1

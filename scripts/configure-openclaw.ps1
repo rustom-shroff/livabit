@@ -1,5 +1,6 @@
-param([switch]$Lan,[ValidateSet('main','liveabit')][string]$AgentId='main')
+param([switch]$Lan,[ValidateSet('main','liveabit')][string]$AgentId='liveabit')
 $ErrorActionPreference = 'Stop'
+if ($AgentId -eq 'liveabit') { & (Join-Path $PSScriptRoot 'configure-openclaw-task-agent.ps1') -Lan:$Lan; return }
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskCtl = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\clawctl.exe'
 if (-not (Test-Path -LiteralPath $taskCtl)) { throw 'The OpenClaw Windows Gateway package is required.' }
@@ -7,6 +8,7 @@ $taskGuidance = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $ta
 $taskSkill = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $taskRoot 'integrations\openclaw\skills\liveabit\SKILL.md')))
 $taskGuest = @'
 $ErrorActionPreference = 'Stop'
+if ($AgentId -eq 'liveabit') { & (Join-Path $PSScriptRoot 'configure-openclaw-task-agent.ps1') -Lan:$Lan; return }
 $taskConfigPath = Join-Path $env:USERPROFILE '.openclaw/openclaw.json'
 $taskConfig = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
 if ($taskConfig.gateway.mode -ne 'local' -or $taskConfig.gateway.auth.mode -ne 'token' -or -not $taskConfig.gateway.auth.token) {

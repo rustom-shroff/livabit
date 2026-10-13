@@ -1,65 +1,84 @@
 # OpenClaw direct Android integration
 
-**Current Android release, 2026-10-12:** [0.8.0 APK](../../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) passed 63 native checks and uses observation draft 2 for uninterrupted-use windows; [review](../review/android-continuity-2026-10-12.md). The installed liveabit Skill recognizes draft 1 and draft 2. Existing main-agent mapping, connection, model/thinking and private notification policy are preserved. The earlier model/channel evidence below retains its original scope.
+Updated: **2026-10-13**. Current decision: [ADR-0021](../decisions/0021-task-aware-liveabit-agent.md). [liveabit Sender 0.9.0](../../artifacts/android-publisher/liveabit-sender-0.9.0-poc.apk) passed **80 native Android emulator checks**, including immediate connection checks and installed OpenClaw admission. [Current review](../review/openclaw-task-aware-2026-10-13.md). Dedicated-agent task coaching remains distinct from HTTP admission and earlier user-confirmed WhatsApp notifications.
 
-**Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../review/openclaw-phone-notification-2026-10-11.md). Use the current tested 0.8.0 APK for the [real-activity phone trial](openclaw-phone-pilot.md).
-
-Updated: **2026-10-11**. Status: **0.6.0 passed all 37 native checks; user-selected model and main-agent WhatsApp check verified**. See the [0.6.0 review](../review/openclaw-whatsapp-2026-10-11.md). Current decision: [ADR-0018](../decisions/0018-existing-main-agent-context.md). The [0.5.0 main-agent](../review/openclaw-main-agent-2026-10-11.md) and [0.4.0 dedicated-agent](../review/openclaw-poc-2026-10-11.md) baselines remain preserved. Sol 6.1 completed a separate operator run; medium is the verified inherited configuration, not directly reported effort telemetry. Phone receipt and notification for the checks are user-confirmed. Goal-grounded nudges are ready for a real-activity trial.
-
-The activity path is **liveabit Sender on Android -> the user's installed OpenClaw -> the explicitly selected agent**. The user selected existing **`main`** for goals and context. OpenClaw is the final recipient; the desktop display receiver remains independent and does not forward activity.
+Activity travels directly from Android to the user's installed OpenClaw **liveabit** agent. OpenClaw owns personal tasks, interpretation and phone communication. Main manages the tasks; liveabit uses the shared Workboard task store when activity arrives. The independent display receiver remains available for local inspection and does not forward requests.
 
 ## Native webhook mapping
 
-The verified target is OpenClaw **2026.9.9**, commit **`bcfc888`**, installed through Windows package **2026.9.900.0**. Use the installed version's webhook behavior; current online documentation can describe later releases.
+The installed target is OpenClaw **2026.9.9**, commit **bcfc888**, Windows package **2026.9.900.0**. Use the installed release's behavior when newer online documentation differs.
 
 | Android delivery | OpenClaw mapping |
 | --- | --- |
-| Destination | `/hooks/liveabit` for server-fixed main conversation; legacy `/hooks/agent` for isolated runs |
-| Authentication | `Authorization: Bearer` with the dedicated hook token, separate from gateway admin authentication |
-| Agent | Saved `agent_id`; mapped `/hooks/liveabit` requires `main`, while `/hooks/agent` supports an explicitly allowed agent, including legacy `liveabit` |
-| Conversation | Server-owned canonical main key and persistent mode create/reuse the configured conversation; callers cannot choose session keys |
-| Run behavior | `name: "liveabit"`, `wakeMode: "now"`, `deliver: false` |
-| Message | Fixed activity-data introduction followed by the original canonical `0.2.0-draft.2` / `activity.observation` JSON; already queued draft-1 bodies remain unchanged |
-| Retry identity | `Idempotency-Key` equals the original `event_id` |
-| Successful acknowledgement | HTTP 200 with `ok: true` and nonempty `runId`; **run admission only** |
+| Destination | Exact `/hooks/liveabit`; legacy `/hooks/agent` remains a configurable isolated-run route |
+| Authentication | Dedicated hook bearer token, separate from gateway administration authentication |
+| Agent | Mapped path requires saved `agent_id: liveabit`; server fixes liveabit |
+| Conversation | Persistent `agent:liveabit:main`; caller session selection is disabled |
+| Run behavior | `name: liveabit`, immediate wake, `deliver: false` |
+| Message | Fixed data introduction and original canonical OAP observation draft 2; meaningful older queued bodies remain unchanged |
+| Retry identity | Original `event_id` as `Idempotency-Key` |
+| Android acknowledgement | HTTP 200, literal `ok: true`, nonempty `runId`; admission only |
 
-The sender retains its selected-app collection, immutable pending events, bounded queue, expiry, protected token storage and configurable receiver-down warning. A valid OpenClaw admission response clears the admitted event from the local queue. It does not establish completed interpretation, user notification or an OAP valid-consumption receipt. A missing response can cause retry after the run was already admitted. OpenClaw's verified in-memory idempotency cache lasts five minutes and does not survive restart, so this POC does not promise exactly-once delivery.
+Both automatic and manual OpenClaw sends require positive estimated foreground duration for at least one selected app. No apps, null/zero duration and transition counts alone produce no new OpenClaw packet. Empty scans retain local continuity and advance the cursor without starting an outage. Known empty queued packets are removed; meaningful pending bytes/identities remain immutable. Default active interval is five minutes, with automatic network requests paused after fifteen minutes screen-off; both are configurable.
 
-The original observation remains unchanged inside the webhook message: unknown coverage stays unknown, unavailable durations stay null, and retained estimates stay unverified. OpenClaw's wrapper is a provider mapping, not a change to the OAP observation schema. Existing summary-only adapters remain separate.
+The OpenClaw-native hook transform also drops known empty, expired or invalid observation wrappers before agent dispatch, returning HTTP 204. This prevents model use by older senders. A 204 drop is not a successful Android admission response; upgrade Android to avoid sending empty packets in the first place. The empty-object connection check deliberately remains a missing-message HTTP 400 response and invokes no model.
+
+Unknown coverage and nullable, unverified estimates remain explicit. HTTP admission does not prove completed interpretation, valid OAP consumption or a WhatsApp notification. Missing responses can cause retries after admission; OpenClaw's observed in-memory idempotency cache lasts five minutes and does not survive restart. Exactly-once delivery is not promised.
 
 ## Local setup
 
-The [setup helper](../../scripts/configure-openclaw.ps1) defaults `-AgentId` to `main`, installs liveabit Skill in its existing workspace and generates private files using native `/hooks/liveabit` mapping. The server fixes main and its canonical persistent conversation key; caller session selection is disabled. No canonical conversation record existed before setup, so the first verified hook created it. Earlier chats are not imported. For explicit main-agent local setup:
+From the repository root:
 
 ```powershell
-.\scripts\configure-openclaw.ps1 -AgentId main
+.\scripts\configure-openclaw.ps1 -AgentId liveabit -Lan
 ```
 
-Without `-Lan`, setup leaves the existing gateway binding unchanged and generates USB/emulator files. Read its output for the actual port; this Windows package can use a dynamic port. Main-agent setup preserves its existing AGENTS, model, ordinary tool policy, heartbeat, other skills and unrelated settings. It merges the hook agent allowlist and any explicit skill allowlist instead of replacing earlier entries. Do not apply the dedicated activity agent's restrictions to `main`.
+The default agent is now liveabit; the helper configures its dedicated workspace, liveabit Skill, bounded hook mapping and Workboard access. Main receives the personal-tasks Skill and Workboard management access. Unrelated settings, main's authored instructions and both agents' model/thinking choices are preserved. Existing dedicated instructions are retained around the managed liveabit section. Setup copies the existing verified private WhatsApp self-chat policy and delivery state to liveabit if absent, retaining destination/preferences and changing its agent identity. It does not relink WhatsApp or create a new recipient.
 
-The user-approved LAN binding is enabled. Add `-Lan` when generating Wi-Fi files for the selected agent. Use generated addresses rather than a hardcoded default port. Native [main-agent emulator-to-host-LAN admission](../../artifacts/openclaw/android-main-lan-admission.json) passed with the 0.5.0 APK. Earlier [0.4.0 LAN evidence](../../artifacts/openclaw/android-lan-admission.json) remains separate. Physical-phone delivery is untested.
+Without `-Lan`, setup preserves the existing gateway binding and generates USB/emulator files. With `-Lan`, it also generates Wi-Fi files using the computer's actual address and port. This option makes no router or firewall change. The previously approved scoped Wi-Fi firewall fix and user-confirmed phone admission are recorded [separately](../review/openclaw-phone-delivery-2026-10-12.md).
 
-| Connection file | Intended use |
+| Private connection file | Use |
 | --- | --- |
-| `artifacts/openclaw/android-wifi-setup.json` | Created with `-Lan`; phone and computer must share a reachable local network |
-| `artifacts/openclaw/android-usb-setup.json` | Phone connected through USB port reversal |
-| `artifacts/openclaw/android-emulator-setup.json` | Owned Android emulator |
+| `artifacts/openclaw/android-wifi-setup.json` | Same reachable Wi-Fi/local network |
+| `artifacts/openclaw/android-usb-setup.json` | Phone with USB port reversal |
+| `artifacts/openclaw/android-emulator-setup.json` | Owned emulator |
 
-Import the appropriate file in the sender, check the selected OpenClaw agent, choose apps, grant usage access and notification permission, then explicitly start sharing. Import only fills setup. The format remains `liveabit.openclaw.connection.v1` with required `agent_id`, matching `[a-z0-9][a-z0-9_-]{0,63}`. An editable **OpenClaw agent** field defaults to `main` and is effective only for the exact OpenClaw hook paths. `/hooks/liveabit` accepts only `main`, matching the server mapping; `/hooks/agent` remains configurable. Changing agents requires the same explicit Start/queue-clearing confirmation as changing endpoints. Saved legacy settings retain `liveabit` and pending wrappers are not retargeted. The display receiver still uses `liveabit.receiver.connection.v1`.
+Install the emulator-tested 0.9.0 APK over the existing app and import the freshly generated liveabit file. Older mapped files selecting main must be replaced. Connection files contain the hook credential: keep them local and outside Git, issue reports and chat.
 
-Generated files belong to the selected agent. Use the emulator-validated [0.8.0 APK](../../artifacts/android-publisher/liveabit-sender-0.8.0-poc.apk) for current main setup. Sender 0.4.0 accepts only earlier liveabit setup; do not combine a main file with the older APK.
+Setup offers exactly **Import receiver file**, **Connect to OpenClaw** and **Edit connection manually**. Import fills the draft fields without starting sharing. Connect to OpenClaw immediately checks the draft address/key/path using authenticated `{}` and accepts only the exact known missing-message HTTP 400 response. Failures appear in Setup and an error dialog. This verifies the connection without activity or model use; it does not prove agent/model execution. With no configured OpenClaw draft, the button provides import/paste/manual setup choices. Manual editing reveals address, key, agent and Wi-Fi/USB help. The agent defaults to liveabit; mapped `/hooks/liveabit` requires it, while legacy `/hooks/agent` accepts a configured allowed agent.
 
-For USB, connect the phone with USB debugging enabled and reverse the helper's reported port before importing the USB file: `adb reverse tcp:<port> tcp:<port>`. Substitute the same actual port in both places. Run `adb reverse --remove tcp:<port>` to remove that mapping when finished.
+Choose Apps to share, enable usage access and receiver warnings, then explicitly Start sharing. Connection checks/imports do not start sharing or clear saved activity. Changing the effective destination, agent, key or apps requires Start and confirmation before discarding unexpired pending activity. Activity has Start/Send now/Stop/status; Settings holds timing and warnings.
 
-These files contain a credential. Keep them local and outside Git, issue reports and chat. The helper retains local backups and preserves unrelated agents/settings. Hook requests keep `deliver: false`, so ordinary hook responses stay local. A separate host-owned policy can authorize a selective WhatsApp nudge through main's communication tools. The old dedicated agent's `tools.deny: ["*"]` and disabled heartbeat belong to its baseline only. OpenClaw CodeMode still exposes JavaScript `exec`/`wait` and `skills.read`; do not claim that either setup has zero tools or prevents all execution.
+For USB, enable debugging and authorize the computer, then reverse the generated port before importing its USB file:
 
-The connection is local. Wi-Fi reachability depends on the computer's gateway binding and firewall and on the two devices being on a network that permits communication. USB remains a direct alternative. No public port, hosted relay or tunnel is required.
+```powershell
+$OpenClawPort = (Get-Content .\artifacts\openclaw\connection.json -Raw | ConvertFrom-Json).port
+.\artifacts\android-sdk\platform-tools\adb.exe -d reverse "tcp:$OpenClawPort" "tcp:$OpenClawPort"
+```
+
+Repeat reversal after reconnecting; remove it with `adb reverse --remove tcp:<port>` when finished. Wi-Fi remains direct: no relay, tunnel or public inbound port is required.
+
+## Personal tasks and selective WhatsApp nudges
+
+Use the existing main OpenClaw conversation to add or update actual personal tasks, including priority, deadline and a concrete next step when known. The installed personal-tasks Skill stores them in the shared native Workboard. Task records stay in OpenClaw; Android neither reads nor exports them. This is ordinary task management, independent of OpenClaw's internal Goal primitive.
+
+For each fresh, meaningful observation, liveabit lists all open, non-archived tasks across agents and reads relevant cards. It considers actual priority, explicit deadline, task status, dependencies and next step. Completed/archived tasks do not justify nudges; blocked work must respect its blocker. No completion-deadline field exists in this Workboard release: explicit `Deadline: ...` and `Next step: ...` values belong in canonical card notes. Execution `scheduledAt` is not a completion deadline. Unknown deadlines remain unknown. Activity never authorizes creating, completing or modifying a task.
+
+Main's task-management Skill respects native edit limits: `workboard_specify` promotes triage/backlog/todo cards to todo and refuses running/review/blocked cards. It uses the dashboard/native update capability for other edits rather than moving a task merely to change its notes or priority.
+
+The dedicated agent uses the user-selected **Sol 6.1 with medium thinking**; [model changes](openclaw-model-settings.md) remain under user control. A gentle WhatsApp nudge is appropriate only when a real pending task and the observation support a useful, actionable suggestion. No open task or insufficient context means silence. Synthetic checks, duplicates and expired observations do not justify a behavioral message.
+
+The existing verified self-chat policy defaults to a **60-minute cooldown** and **22:00–08:00 America/Chicago** quiet hours. Preserve it when setting up liveabit; update its preferences with `.\scripts\configure-openclaw-whatsapp.ps1 -AgentId liveabit` and the timing options in the [delivery guide](openclaw-whatsapp-pairing.md). Without `-SendTest`, this sends no message. Ordinary webhook replies stay local; selective nudges use OpenClaw's native message capability and private fixed self target. Cooldown, quiet hours and duplicate suppression are best-effort agent policy. The Android Receiver is down warning is independent. Earlier WhatsApp connection-check notifications were user-confirmed; real task-grounded coaching from this revision still needs separate observation. [Optional phone trial](openclaw-phone-pilot.md).
 
 ## Wi-Fi troubleshooting
 
-Enabling LAN binding does not verify Windows inbound firewall access. First open the exported computer host and port in the phone's browser, using `http://<host>:<port>/`. An OpenClaw page or an HTTP error proves HTTP reachability; a browser timeout means network, firewall or routing must be checked before connection keys, OAP payloads or model settings. Compare with the computer's `/healthz` check, which tests HTTP liveness without sending activity or calling a model. See [OpenClaw health checks](https://docs.openclaw.ai/gateway/health).
+First compare the exported address/port with the computer's current network. Open `http://<host>:<port>/` from the phone. A page or HTTP error proves reachability; timeout means a network, firewall or routing issue. The computer's `/healthz` endpoint checks gateway liveness without invoking a model. Connect to OpenClaw then checks authentication and the exact hook path. See [OpenClaw health checks](https://docs.openclaw.ai/gateway/health).
 
-If the computer's health check works but the phone times out, check that both devices share reachable Wi-Fi, guest-network isolation or a VPN is not blocking traffic, and Windows Firewall allows the actual bundled OpenClaw Node executable; it can differ from the project's Node executable. Any needed firewall exception requires explicit approval and should cover only that program, the actual TCP port, and the current local subnet and Wi-Fi interface. Windows may require an administrator prompt. Keep the firewall enabled and do not forward the port through the router. [Microsoft's New-NetFirewallRule reference](https://learn.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule) documents these rule conditions. Retry from the phone to establish reachability and then verify the sender's acknowledgement separately.
+If the computer responds but the phone times out, check shared Wi-Fi, guest isolation/VPN and Windows Firewall access for the actual bundled OpenClaw program. Any new firewall exception requires explicit approval and should be limited to the executable, actual TCP port, subnet and interface. Keep the firewall enabled; no router port forwarding is needed. [Microsoft firewall reference](https://learn.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule).
+
+## Historical evidence
+
+The following sections preserve the earlier main/dedicated baselines and their limited claims. Current routing/setup is described above.
 
 ## Existing-agent context and 0.5.0 baseline
 
