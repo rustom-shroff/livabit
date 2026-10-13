@@ -4,6 +4,8 @@ Updated: **2026-10-13**. Current sender: [liveabit Sender 0.11.0](../../artifact
 
 Activity travels directly from Android to the user's installed OpenClaw **liveabit** agent. OpenClaw owns personal tasks, interpretation and phone communication. Main manages the tasks; liveabit uses the shared Workboard task store when activity arrives. The independent display receiver remains available for local inspection and does not forward requests.
 
+**Current reminder route:** [ADR-0023](../decisions/0023-openclaw-companion-reminders.md) replaces liveabit's WhatsApp nudges with local notifications in the official OpenClaw Android companion. [Companion setup](openclaw-companion-notifications.md) uses the paired phone's declared `system.notify` capability through the existing gateway. The sender APK and OAP mapping are unchanged. Earlier WhatsApp evidence below is historical.
+
 ## Native webhook mapping
 
 The installed target is OpenClaw **2026.9.9**, commit **bcfc888**, Windows package **2026.9.900.0**. Use the installed release's behavior when newer online documentation differs.
@@ -23,7 +25,7 @@ Both automatic and manual OpenClaw sends require positive estimated foreground d
 
 The OpenClaw-native hook transform also drops known empty, expired or invalid observation wrappers before agent dispatch, returning HTTP 204. This prevents model use by older senders. A 204 drop is not a successful Android admission response; upgrade Android to avoid sending empty packets in the first place. The empty-object connection check deliberately remains a missing-message HTTP 400 response and invokes no model.
 
-Unknown coverage and nullable, unverified estimates remain explicit. HTTP admission does not prove completed interpretation, valid OAP consumption or a WhatsApp notification. Missing responses can cause retries after admission; OpenClaw's observed in-memory idempotency cache lasts five minutes and does not survive restart. Exactly-once delivery is not promised.
+Unknown coverage and nullable, unverified estimates remain explicit. HTTP admission does not prove completed interpretation, valid OAP consumption or a phone notification. Missing responses can cause retries after admission; OpenClaw's observed in-memory idempotency cache lasts five minutes and does not survive restart. Exactly-once delivery is not promised.
 
 ## Local setup
 
@@ -33,7 +35,7 @@ From the repository root:
 .\scripts\configure-openclaw.ps1 -AgentId liveabit -Lan
 ```
 
-The default agent is now liveabit; the helper configures its dedicated workspace, liveabit Skill, bounded hook mapping and Workboard access. Main receives the personal-tasks Skill and Workboard management access. Unrelated settings, main's authored instructions and both agents' model/thinking choices are preserved. Existing dedicated instructions are retained around the managed liveabit section. Setup copies the existing verified private WhatsApp self-chat policy and delivery state to liveabit if absent, retaining destination/preferences and changing its agent identity. It does not relink WhatsApp or create a new recipient.
+The default agent is now liveabit; the helper configures its dedicated workspace, liveabit Skill, bounded hook mapping and Workboard access. Main receives the personal-tasks Skill and Workboard management access. Unrelated settings, main's authored instructions and both agents' model/thinking choices are preserved. Existing dedicated instructions are retained around the managed liveabit section. Setup no longer copies main's WhatsApp reminder policy. Configure the phone notification destination separately with the companion helper; rerunning task setup retains that destination and delivery state.
 
 Without `-Lan`, setup preserves the existing gateway binding and generates USB/emulator files. With `-Lan`, it also generates Wi-Fi files using the computer's actual address and port. This option makes no router or firewall change. The previously approved scoped Wi-Fi firewall fix and user-confirmed phone admission are recorded [separately](../review/openclaw-phone-delivery-2026-10-12.md).
 
@@ -58,7 +60,7 @@ $OpenClawPort = (Get-Content .\artifacts\openclaw\connection.json -Raw | Convert
 
 Repeat reversal after reconnecting; remove it with `adb reverse --remove tcp:<port>` when finished. Wi-Fi remains direct: no relay, tunnel or public inbound port is required.
 
-## Personal tasks and selective WhatsApp nudges
+## Personal tasks and selective companion reminders
 
 Use the existing main OpenClaw conversation to add or update actual personal tasks, including priority, deadline and a concrete next step when known. The installed personal-tasks Skill stores them in the shared native Workboard. Task records stay in OpenClaw; Android neither reads nor exports them. This is ordinary task management, independent of OpenClaw's internal Goal primitive.
 
@@ -66,9 +68,11 @@ For each fresh, meaningful observation, liveabit lists all open, non-archived ta
 
 Main's task-management Skill respects native edit limits: `workboard_specify` promotes triage/backlog/todo cards to todo and refuses running/review/blocked cards. It uses the dashboard/native update capability for other edits rather than moving a task merely to change its notes or priority.
 
-The dedicated agent uses the user-selected **Sol 6.1 with medium thinking**; [model changes](openclaw-model-settings.md) remain under user control. A gentle WhatsApp nudge is appropriate only when a real pending task and the observation support a useful, actionable suggestion. No open task or insufficient context means silence. Synthetic checks, duplicates and expired observations do not justify a behavioral message.
+The dedicated agent uses the user-selected **Sol 6.1 with medium thinking**; [model changes](openclaw-model-settings.md) remain under user control. A gentle companion notification is appropriate only when a real pending task and the observation support a useful, actionable suggestion. No open task or insufficient context means silence. Synthetic checks, duplicates and expired observations do not justify a behavioral message.
 
-The existing verified self-chat policy defaults to a **60-minute cooldown** and **22:00–08:00 America/Chicago** quiet hours. Preserve it when setting up liveabit; update its preferences with `.\scripts\configure-openclaw-whatsapp.ps1 -AgentId liveabit` and the timing options in the [delivery guide](openclaw-whatsapp-pairing.md). Without `-SendTest`, this sends no message. Ordinary webhook replies stay local; selective nudges use OpenClaw's native message capability and private fixed self target. Cooldown, quiet hours and duplicate suppression are best-effort agent policy. The Android Receiver is down warning is independent. Earlier WhatsApp connection-check notifications were user-confirmed; real task-grounded coaching from this revision still needs separate observation. [Optional phone trial](openclaw-phone-pilot.md).
+For initial migration, run `.\scripts\configure-openclaw-companion.ps1`, then `.\scripts\configure-openclaw.ps1 -AgentId liveabit` as described in the [companion guide](openclaw-companion-notifications.md). The first binds a paired, connected Android phone that advertises `system.notify` and has notification permission, retains timing/delivery state and disables owned legacy WhatsApp reminder policies. The second applies updated agent instructions/tool access and restarts the managed gateway while preserving its binding and models. Later preference updates need only the companion helper. Defaults are a **60-minute cooldown** and **22:00–08:00 America/Chicago** quiet hours. Without `-SendTest`, setup sends no notification. An explicit `-SendTest` requests one passive connection check and is not a behavioral reminder or proof of physical display.
+
+Ordinary webhook replies stay local (`deliver: false`); selective reminders use native `nodes` notification actions for the configured phone. The agent's instructions restrict those actions to status/describe and `system.notify`, but the broader nodes tool is not independently action-restricted by this setup. Cooldown, quiet hours and duplicate suppression are best-effort agent policy. The phone must maintain its gateway connection; this installed route has no verified offline notification queue. The Android Receiver is down warning is independent. Earlier WhatsApp notifications remain historical evidence; companion command acknowledgement and real task-grounded coaching need their own evidence.
 
 ## Wi-Fi troubleshooting
 
@@ -90,9 +94,9 @@ A second native LAN event verified [same-conversation continuity](../../artifact
 
 The final build took 1 minute 32 seconds; lint reported zero errors and ten warnings. APK SHA-256: `fa0214538c6708742951ead442dfe408099ea7fb495c2634ee78e504a71f6c1e`. The exact-byte emulator gate is satisfied for an optional phone trial. Physical-phone delivery, prior-chat context, battery/background timing and formal M2/M3 remain separate claims. Development can continue independently.
 
-## User-owned model and selective phone delivery
+## Earlier model and WhatsApp validation (historical)
 
-The user controls [main's model and thinking level](openclaw-model-settings.md). The requested `openai/gpt-6.1-sol` model completed a separate trusted operator agent run with matching requested/effective/response model and unchanged canonical conversation. Medium thinking is verified in inherited configuration without session/hook overrides; run telemetry did not directly report effort. Activity and WhatsApp helpers do not change the model. Earlier operator-like probes submitted through the untrusted activity hook were not completed model proofs and are excluded from this result.
+The user controls [main's model and thinking level](openclaw-model-settings.md). The requested `openai/gpt-6.1-sol` model completed a separate trusted operator agent run with matching requested/effective/response model and unchanged canonical conversation. Medium thinking is verified in inherited configuration without session/hook overrides; run telemetry did not directly report effort. Activity and delivery helpers preserve the model. The WhatsApp results below are historical; current reminders use the companion route above. Earlier operator-like probes submitted through the untrusted activity hook were not completed model proofs and are excluded from this result.
 
 The official 2026.9.9 WhatsApp plugin is installed, and the account is [linked and connected](../../artifacts/openclaw/whatsapp-login/state.json). The [delivery guide](openclaw-whatsapp-pairing.md) prepares a private host policy fixed to the account's verified own identity. It defaults to a 60-minute cooldown and quiet hours 22:00–08:00 America/Chicago; the user can change those settings. Incoming direct/group chats and read receipts remain disabled. Ordinary hook replies stay local; separately authorized nudges use the Skill and the host policy. Without established goals or enough context, the agent should not send an unsolicited nudge.
 

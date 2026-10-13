@@ -1,0 +1,109 @@
+{
+  "result": "native_companion_notification_user_confirmed",
+  "date": "2026-10-13",
+  "agent_id": "liveabit",
+  "gateway_version": "2026.9.9",
+  "android_companion_version": "2026.9.80",
+  "companion_package": "ai.openclaw.app",
+  "notification_command": "system.notify",
+  "native_tool": "nodes",
+  "selected_phone_paired_connected_and_permitted": true,
+  "fixed_private_node_identity": true,
+  "actual_notification_count": 1,
+  "connection_check_title": "liveabit connection check",
+  "literal_native_ack_and_matching_node_command_verified": true,
+  "phone_notification_user_confirmed": true,
+  "confirmation_source": "User reply: Yes, it appeared",
+  "ordinary_hook_delivery": false,
+  "hook_agent": "liveabit",
+  "hook_session": "agent:liveabit:main",
+  "model_choices_preserved": true,
+  "thinking_choices_preserved": true,
+  "both_reminder_state_files_byte_preserved": true,
+  "cooldown_minutes": 60,
+  "quiet_start_hour": 22,
+  "quiet_end_hour": 8,
+  "time_zone": "America/Chicago",
+  "owned_legacy_whatsapp_policies_disabled": true,
+  "legacy_helper_cannot_restore_whatsapp": true,
+  "global_whatsapp_account_changed": false,
+  "managed_gateway_health_verified": true,
+  "additional_gateway_started": false,
+  "repair_restart_performed": false,
+  "android_apk": "artifacts/android-publisher/liveabit-sender-0.11.0-poc.apk",
+  "android_apk_sha256": "d82254c29584cb45d9472c08da21110085545c25de33c95022b06d27184e09de",
+  "android_apk_changed": false,
+  "android_suite_rerun_for_host_only_change": false,
+  "android_previous_evidence": "docs/review/android-setup-regressions-2026-10-13.json",
+  "native_helper_suites": [
+    {
+      "assertions": 68,
+      "path": "artifacts/openclaw/companion-helper-tests/ae5d9341dddc4fa7b1dccbd5262a6fd0/validation.json",
+      "cases": 19,
+      "powershell_version": "5.1.26100.9549",
+      "real_notifications": 0
+    },
+    {
+      "assertions": 68,
+      "path": "artifacts/openclaw/companion-helper-tests/2254bcdb0161428c85b1d3bb63f05d66/validation.json",
+      "cases": 19,
+      "powershell_version": "7.6.5",
+      "real_notifications": 0
+    }
+  ],
+  "existing_android_wifi_connection_authenticated_probe_passed": true,
+  "activity_connection_probe_started_model": false,
+  "actual_migration_evidence": "artifacts/openclaw/companion-migration.json",
+  "actual_phone_check_evidence": "artifacts/openclaw/companion-notification-check.json",
+  "task_guided_coaching_tested": false,
+  "task_records_changed": false,
+  "protocol_schema_changed": false,
+  "hosted_relay_added": false,
+  "javascript_sender_prototype_created": false,
+  "independent_review": "No production blockers found",
+  "first_live_attempt": {
+    "reason": "Windows managed runtime did not recognize default IANA Chicago timezone",
+    "result": "failed_before_policy_changes",
+    "fix": "Validate Central Standard Time while retaining America/Chicago; actual default tested on both native PowerShell targets"
+  },
+  "source_hash_normalization": "UTF-8 text, CRLF normalized to LF",
+  "source_bindings": [
+    {
+      "path": "scripts/configure-openclaw-companion.ps1",
+      "sha256": "ce3334b32389e8b786c1aa55a4fb49a8fe07f04924e80290e005ffb9e29cace9"
+    },
+    {
+      "path": "scripts/configure-openclaw-task-agent.ps1",
+      "sha256": "48346f06971384fdf0bba41203304d6c9c11f177670e285ac187092fb4b43d71"
+    },
+    {
+      "path": "scripts/configure-openclaw-whatsapp.ps1",
+      "sha256": "21c21e34a228ba6cd903f775348432c464e38a6fbe93e29865b3987c414ce473"
+    },
+    {
+      "path": "scripts/test-openclaw-companion.ps1",
+      "sha256": "80ac66c4377fe04573ed3cb4218ac75b066e6e3e77ac6670bdc0d7e7059b3c5f"
+    },
+    {
+      "path": "integrations/openclaw/activity-agent.md",
+      "sha256": "3107c0a88ea75bc425518573dd69a65bf07b66d086c2a3c8d3ac599cbe3063ef"
+    },
+    {
+      "path": "integrations/openclaw/skills/liveabit/SKILL.md",
+      "sha256": "1fb4c63f437db7a41df9eeaae32b577ad2bcc621ed40ea9e23b68156ff89eac2"
+    },
+    {
+      "path": "integrations/openclaw/skills/personal-tasks/SKILL.md",
+      "sha256": "c8f09d43a39e0ece2099f867b61bc66f2be9921d7a4adba6fd6a9c00035416d3"
+    },
+    {
+      "path": "docs/decisions/0023-openclaw-companion-reminders.md",
+      "sha256": "a3a3efe15522ce6d7ff24b2164ead7167ed9ca731b987a6daa5f299dd85575ca"
+    }
+  ],
+  "limits": [
+    "One real explicit connection-check notification; automatic task-grounded coaching remains separately unproved.",
+    "The Android companion must remain connected to a reachable gateway; offline notification recovery is unverified.",
+    "Interruption controls remain agent policy; the native nodes tool is broader than its instructed actions."
+  ]
+}

@@ -1,5 +1,7 @@
 # OpenClaw WhatsApp pairing and selective delivery
 
+**Historical route:** The user replaced WhatsApp reminders with the official OpenClaw Android companion on **2026-10-13**. Use the [companion notification guide](openclaw-companion-notifications.md). The steps and evidence below describe the earlier integration; current setup disables its owned reminder policies and does not copy them into liveabit. The global WhatsApp account remains linked, and historical evidence is preserved.
+
 **Existing phone checks, 2026-10-11:** Both WhatsApp connection-check messages arrived with a notification, as [confirmed by the user](../review/openclaw-phone-notification-2026-10-11.md). The account is already linked and connected; no new scan is required. These checks are separate from a task-grounded nudge.
 
 Updated: **2026-10-13**. Activity targets dedicated **liveabit** under [ADR-0021](../decisions/0021-task-aware-liveabit-agent.md). Its setup copies the existing verified private self-chat policy and delivery state from main if absent, retains the target/cooldown/quiet hours and changes policy agent ownership to liveabit. Both agents' model choices are preserved. [Current setup](openclaw-direct.md), [optional task-aware phone trial](openclaw-phone-pilot.md), [current evidence](../review/openclaw-task-aware-2026-10-13.md).
