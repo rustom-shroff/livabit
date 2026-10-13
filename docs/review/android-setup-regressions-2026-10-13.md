@@ -1,0 +1,17 @@
+# Android setup regression review
+
+Date: **2026-10-13**. Release **0.11.0-poc**, version code **13**. [Machine-readable evidence](android-setup-regressions-2026-10-13.json), [setup release gate](../../specs/android/test-publisher.md#setup-regression-release-gate).
+
+The reported failures were caused by two implementation and test mistakes. The dedicated agent change rejected retained `/hooks/liveabit` files naming main without compatibility migration, and the generic error hid the reason. The expanded manual editor retained paste/Wi-Fi/USB actions; tests explicitly expected them while the three-option test checked collapsed direct children. Earlier picker coverage used receiver files, and OpenClaw admission configured the engine directly, bypassing the broken import workflow.
+
+The new native tests reproduced both defects on the retained **0.10.0** APK, failing at the expanded button list and the actual retained-file import. The exact **0.11.0** APK then passed **95 native Android 15/API 35 checks**, including current and retained real OpenClaw exports through Android's document picker, actual keyboard visibility, expanded-editor recreation, wrong host-file and malformed-file feedback, blocked sending-worker import, and two real enabled/stopped reboots. SHA-256: `d82254c29584cb45d9472c08da21110085545c25de33c95022b06d27184e09de`; size **162856 bytes**. Build/lint completed with zero errors and eight warnings. Native evidence: `artifacts/android-publisher/run-117f4abd-5a48-4352-bb39-940d138fddba/validation.json`.
+
+The retained export now visibly updates main to liveabit only for the mapped hook, keeping its URL/key and changing only the draft. Generic `/hooks/agent` keeps its selected agent; unrelated mapped agents remain invalid. Imports preserve saved sharing, apps, timing, session, sequence, cursor, pending identities/bodies and outage state. Safe specific errors remain inline and in a dialog; raw JSON/parser contents are never shown. Manual editing has fields only, and the no-config dialog offers import, manual editing and Close. Imports use their own bounded-read worker and reject stale results. Tests start current-file import from distinct draft values so a prior import cannot produce a false pass.
+
+An initial full run was deliberately stopped during the adaptive phase after review found a stale migration assertion and a weak import-completion fixture. Both test issues were corrected before the final build and complete pass. The production APK bytes stayed unchanged. The independent production review found no blockers. The isolated receiver and owned emulator were stopped; the user's receiver and OpenClaw model/configuration were not modified. Private keys, setup exports and personal data remain outside Git; earlier 0.9/0.10 evidence is unchanged.
+
+The final suite confirmed installed OpenClaw admission separately from model execution, task-grounded coaching and WhatsApp notification. Physical-phone behavior, exact background timing, duration precision, full coverage and battery performance remain outside this verification.
+
+## Next steps
+
+Install the tested 0.11.0 APK over the existing app and reuse the retained Wi-Fi setup file if a connection import is needed. Tap Connect to OpenClaw to check the draft, then Start sharing to apply it. Development can continue independently; no approval or required phone test is pending.

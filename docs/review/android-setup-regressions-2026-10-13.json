@@ -1,0 +1,87 @@
+{
+  "result": "native_setup_regressions_fixed_and_verified",
+  "date": "2026-10-13",
+  "version": "0.11.0-poc",
+  "version_code": 13,
+  "apk": "artifacts/android-publisher/liveabit-sender-0.11.0-poc.apk",
+  "apk_sha256": "d82254c29584cb45d9472c08da21110085545c25de33c95022b06d27184e09de",
+  "apk_bytes": 162856,
+  "native_report": "artifacts/android-publisher/run-117f4abd-5a48-4352-bb39-940d138fddba/validation.json",
+  "android_native_checks": 95,
+  "platform": "Android 15/API 35",
+  "red_report": "artifacts/android-publisher/setup-regressions-red-0.10/validation.json",
+  "previous_apk_sha256": "577b0a5cb5274c12038dab5b4bb7a222284928a40c4214d83863e3d19b862fb1",
+  "previous_apk_reproduced_both_reported_failures": true,
+  "actual_current_and_retained_exports_imported_through_android_picker": true,
+  "legacy_migration_scope": "main on exact /hooks/liveabit only, imported draft only; generic /hooks/agent unchanged",
+  "blocked_worker_import_started_from_distinct_draft": true,
+  "exactly_three_connection_actions_expanded_keyboard_and_recreation": true,
+  "import_errors_actionable_inline_and_dialog_without_secret_contents": true,
+  "imported_draft_does_not_change_enabled_apps_connection_or_pending_bytes": true,
+  "installed_openclaw_admission_tested": true,
+  "openclaw_run_id": "7fdcfc77-2009-4819-8ca4-4062aee7f618",
+  "real_reboot_count": 2,
+  "lint_errors": 0,
+  "lint_warnings": 8,
+  "production_review": "independent review: no blockers",
+  "receiver_isolated": true,
+  "receiver_stopped": true,
+  "user_receiver_controlled": false,
+  "owned_emulator_stopped": true,
+  "physical_phone_tested": false,
+  "model_or_agent_settings_changed": false,
+  "intermediary_added": false,
+  "first_full_attempt": {
+    "result": "superseded_test_run_interrupted",
+    "native_report": "artifacts/android-publisher/run-887b4ba9-76b7-479f-978a-b44871a4ec35/validation.json",
+    "reason": "Stopped deliberately during adaptive phase to rebuild corrected migration assertion and strengthen current-file import completion test. Receiver cleanup confirmed."
+  },
+  "source_hash_normalization": "UTF-8 text, CRLF normalized to LF",
+  "source_bindings": [
+    {
+      "sha256": "93221a8cee0a6f17418819d716c7202e9d619a0b63a14f59bd4a448f9724d707",
+      "path": "android/publisher-app/build.gradle"
+    },
+    {
+      "sha256": "1b59df975959e901ca51fa1b6e40b87b7364b253686327ee1205c5798f73ef0b",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ConnectionSetup.java"
+    },
+    {
+      "sha256": "aaf894ca5507cb8f3ea12fb01a581c11a0230819244a914b559928de15e3a087",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java"
+    },
+    {
+      "sha256": "6f0f616d524616c0d797b1950a550a2db35ae91679317ff61aa616ba1a419b86",
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OpenClawWebhook.java"
+    },
+    {
+      "sha256": "c0d80d31a6b4c5ef4898ed79a44556ced39b4446d0e16d040b71854bad9b0651",
+      "path": "android/publisher-app/src/main/res/values/strings.xml"
+    },
+    {
+      "sha256": "8ec22ccfddc9bef631d8b39a4ef4ef179c045f45831e04084ed147da2d16c2db",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/SetupRegressionCases.java"
+    },
+    {
+      "sha256": "edc72ea56b8fc4582a749c41e5d258aa2c813918ae44437ea735ba7538702b55",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/OpenClawContractCases.java"
+    },
+    {
+      "sha256": "13fb7406a83966226bbadd117b3b9550b195d258b4139507eb086e95733855ea",
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java"
+    },
+    {
+      "sha256": "00795b1c686f52ecd3a0d30bf18da18fb05596e6d79b121259132962c79e284b",
+      "path": "scripts/build-android-publisher.ps1"
+    },
+    {
+      "sha256": "29dee8417983e2bb87afcd8a84945e0f793bc17c533908ac3cca8cc7d75207d6",
+      "path": "scripts/test-android-publisher.ps1"
+    }
+  ],
+  "limits": [
+    "Android 15/API 35 project emulator; no physical phone test claimed.",
+    "Installed gateway admission is distinct from coaching/model execution and WhatsApp notification.",
+    "Exact background timing, manufacturer policies, duration precision, complete coverage and battery behavior remain unproved."
+  ]
+}

@@ -5,8 +5,6 @@ import android.app.NotificationManager;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -171,43 +169,6 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(found, "Receiver did not retain older-format event"); engine.stop();
         passed.add("native_legacy_storage_migration_preserves_and_delivers_original_bytes");
     }
-    private void openClawSetupGuides(Context context, DeliveryEngine engine) throws Exception {
-        engine.stop();
-        int port = 62283;
-        String endpoint = "http://127.0.0.1:" + port + "/hooks/liveabit", token = "g".repeat(43);
-        String setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", endpoint)
-            .put("key", token).put("agent_id", "liveabit").put("warning_minutes", 60).toString();
-        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        runOnMainSync(() -> {
-            findButton(activity.getWindow().getDecorView(), "Setup").performClick();
-            findButton(activity.getWindow().getDecorView(), "Edit connection manually").performClick();
-        });
-        try {
-            runOnMainSync(() -> {
-                activity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("OpenClaw setup", setup));
-                findButton(activity.getWindow().getDecorView(), "Paste receiver setup").performClick();
-            });
-            check(((EditText) activity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint)
-                && ((EditText) activity.findViewById(R.id.connection_key)).getText().toString().equals(token)
-                && ((EditText) activity.findViewById(R.id.openclaw_agent)).getText().toString().equals("liveabit"),
-                "OpenClaw paste did not fill the imported destination");
-            check(!engine.snapshot().getBoolean("enabled") && engine.snapshot().getJSONArray("pending").length() == 0,
-                "OpenClaw setup import started sharing");
-            for (int[] guide : new int[][] {
-                {R.string.wifi_help_button, R.string.openclaw_wifi_help},
-                {R.string.usb_help_button, R.string.openclaw_usb_help}
-            }) {
-                String expected = context.getString(guide[1], port);
-                check(expected.contains("OpenClaw") && expected.contains(Integer.toString(port))
-                    && !expected.contains("start-activity-receiver.ps1"), "OpenClaw guide gives test receiver instructions");
-                runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), context.getString(guide[0])).performClick());
-                check(awaitNode(expected, 5000, "org.liveabit.publish") != null,
-                    "Imported OpenClaw endpoint did not select its guide and actual port");
-                clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
-            }
-            passed.add("native_openclaw_paste_without_sharing_and_dynamic_wifi_usb_guides");
-        } finally { runOnMainSync(activity::finish); }
-    }
     private void runCases() throws Exception {
         waitForIdleSync(); // Wait for the target Application.onCreate before reading its native engine.
         Context context = getTargetContext(); DeliveryEngine engine = ((PublisherApplication) context.getApplicationContext()).engine();
@@ -222,7 +183,6 @@ public final class PublisherInstrumentation extends Instrumentation {
             RebootResumeCases.restoreOriginal(context, engine); return;
         }
         if ("openclaw_contract".equals(arguments.getString("phase"))) {
-            openClawSetupGuides(context, engine);
             OpenClawContractCases.run(context, engine, passed); return;
         }
         if ("openclaw_live".equals(arguments.getString("phase"))) {
@@ -243,6 +203,12 @@ public final class PublisherInstrumentation extends Instrumentation {
         }
         if ("setup_connection".equals(arguments.getString("phase"))) {
             uiConnectionCases(context, engine); return;
+        }
+        if ("setup_regression_ui".equals(arguments.getString("phase"))) {
+            SetupRegressionCases.ui(this, context, engine, passed); return;
+        }
+        if ("setup_import_regression".equals(arguments.getString("phase"))) {
+            SetupRegressionCases.importFiles(this, context, engine, arguments, passed); return;
         }
         if ("receiver_continuity".equals(arguments.getString("phase"))) {
             receiverContinuity(); return;
@@ -311,28 +277,14 @@ public final class PublisherInstrumentation extends Instrumentation {
         runOnMainSync(() -> {
             findButton(setupActivity.getWindow().getDecorView(), "Setup").performClick();
             findButton(setupActivity.getWindow().getDecorView(), "Edit connection manually").performClick();
+            ((EditText) setupActivity.findViewById(R.id.receiver_address)).setText(endpoint);
+            ((EditText) setupActivity.findViewById(R.id.connection_key)).setText(token);
         });
-        for (int[] guide : new int[][] { {R.string.wifi_help_button, R.string.wifi_help}, {R.string.usb_help_button, R.string.usb_help} }) {
-            runOnMainSync(() -> findButton(setupActivity.getWindow().getDecorView(), context.getString(guide[0])).performClick());
-            check(awaitNode(context.getString(guide[1]), 5000, "org.liveabit.publish") != null, "Connection guide did not render");
-            clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
-        }
-        passed.add("native_wifi_and_usb_instructions_render");
-        String copiedSetup = setupText;
-        runOnMainSync(() -> {
-            setupActivity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("Receiver setup", copiedSetup));
-            findButton(setupActivity.getWindow().getDecorView(), "Paste receiver setup").performClick();
-        });
-        check(((EditText) setupActivity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint), "Paste did not fill receiver address");
-        check(((EditText) setupActivity.findViewById(R.id.connection_key)).getText().toString().equals(token), "Paste did not fill connection key");
-        check(!engine.snapshot().getBoolean("enabled"), "Import started sharing without user action");
-        runOnMainSync(() -> {
-            setupActivity.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("Invalid setup", "{}"));
-            findButton(setupActivity.getWindow().getDecorView(), "Paste receiver setup").performClick();
-        });
-        check(((EditText) setupActivity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint), "Invalid paste changed connection settings");
+        check(((EditText) setupActivity.findViewById(R.id.receiver_address)).getText().toString().equals(endpoint)
+            && ((EditText) setupActivity.findViewById(R.id.connection_key)).getText().toString().equals(token)
+            && !engine.snapshot().getBoolean("enabled"), "Manual edits changed the saved sharing state");
         runOnMainSync(setupActivity::finish);
-        passed.add("native_paste_fills_setup_without_starting_sharing");
+        passed.add("native_manual_connection_edits_remain_a_draft_without_starting_sharing");
         boolean rejected = false;
         try { DeliveryEngine.validateEndpoint("http://example.com/events"); } catch (IllegalArgumentException error) { rejected = true; }
         check(rejected, "Public cleartext receiver accepted");
@@ -602,12 +554,14 @@ public final class PublisherInstrumentation extends Instrumentation {
             });
             check(awaitNode(context.getString(R.string.openclaw_setup_prompt), 5000, "org.liveabit.publish") != null
                 && awaitNode("Import receiver file", 5000, "org.liveabit.publish") != null
-                && awaitNode("Paste receiver setup", 5000, "org.liveabit.publish") != null
                 && awaitNode("Edit connection manually", 5000, "org.liveabit.publish") != null
+                && awaitNode("Paste receiver setup", 200, "org.liveabit.publish") == null
+                && awaitNode("Connect over Wi-Fi", 200, "org.liveabit.publish") == null
+                && awaitNode("Connect by USB", 200, "org.liveabit.publish") == null
                 && fixture.count() == 2 && engine.snapshot().toString().equals(before),
                 "Missing connection did not offer clean setup actions without starting sharing");
             clickNode(awaitNode("Close", 5000, "org.liveabit.publish")); waitForIdleSync();
-            passed.add("native_connect_missing_configuration_offers_import_paste_manual_without_sharing");
+            passed.add("native_connect_missing_configuration_offers_only_import_and_manual_without_sharing");
         } finally { runOnMainSync(activity::finish); engine.stop(); }
     }
     private String awaitConnectionResult(MainActivity activity) throws Exception {

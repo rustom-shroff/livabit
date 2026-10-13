@@ -32,7 +32,7 @@ final class OpenClawContractCases {
                 "OpenClaw setup changed the connection");
             check(ConnectionSetup.describe(endpoint).startsWith("OpenClaw (liveabit) — USB:"), "OpenClaw connection not identified");
             ConnectionSetup mainSetup = ConnectionSetup.parse(new JSONObject(setup).put("agent_id", "main").toString());
-            check(mainSetup.agentId.equals("main") && ConnectionSetup.describe(endpoint, mainSetup.agentId)
+            check(mainSetup.agentId.equals("main") && !mainSetup.legacyAgentMigrated && ConnectionSetup.describe(endpoint, mainSetup.agentId)
                 .startsWith("OpenClaw (main) — USB:"), "Main agent setup did not retain its routing identity");
             String[] invalid = {
                 new JSONObject(setup).put("agent_id", "Main").toString(),
@@ -153,10 +153,13 @@ final class OpenClawContractCases {
         JSONObject setup = new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT).put("url", mappedEndpoint)
             .put("key", token).put("agent_id", "liveabit");
         ConnectionSetup imported = ConnectionSetup.parse(setup.toString());
-        check(imported.agentId.equals("liveabit") && ConnectionSetup.describe(mappedEndpoint).startsWith("OpenClaw (liveabit)"),
+        check(imported.agentId.equals("liveabit") && !imported.legacyAgentMigrated && ConnectionSetup.describe(mappedEndpoint).startsWith("OpenClaw (liveabit)"),
             "Mapped liveabit setup lost its destination");
+        ConnectionSetup migrated = ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "main").toString());
+        check(migrated.agentId.equals("liveabit") && migrated.legacyAgentMigrated && migrated.url.equals(mappedEndpoint)
+            && migrated.key.equals(token), "Retained mapped main-agent setup was not safely migrated as a draft");
         boolean wrongAgentRefused = false;
-        try { ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "main").toString()); }
+        try { ConnectionSetup.parse(new JSONObject(setup.toString()).put("agent_id", "other_agent").toString()); }
         catch (IllegalArgumentException expected) { wrongAgentRefused = true; }
         check(wrongAgentRefused, "Mapped liveabit setup accepted another agent");
         engine.configure(imported.url, imported.key, "org.liveabit.fixture", 60, imported.agentId);
