@@ -34,6 +34,20 @@ $taskAgentId = $taskSettings.agent_id
 $taskAgent = $taskConfig.agents.entries.PSObject.Properties[$taskAgentId].Value
 $taskWorkspace = $taskAgent.workspace
 if (-not $taskWorkspace -or -not (Test-Path -LiteralPath $taskWorkspace)) { throw 'Configure the selected agent before WhatsApp delivery.' }
+$taskCompanionPolicyPaths = @(
+    (Join-Path $taskWorkspace 'skills/liveabit/references/delivery.json')
+)
+if ($taskConfig.agents.entries.liveabit.workspace) {
+    $taskCompanionPolicyPaths += Join-Path $taskConfig.agents.entries.liveabit.workspace 'skills/liveabit/references/delivery.json'
+}
+foreach ($taskCompanionPolicyPath in @($taskCompanionPolicyPaths | Select-Object -Unique)) {
+    if (Test-Path -LiteralPath $taskCompanionPolicyPath) {
+        $taskCompanionPolicy = Get-Content -LiteralPath $taskCompanionPolicyPath -Raw | ConvertFrom-Json
+        if ($taskCompanionPolicy.format -eq 'liveabit.openclaw.companion-delivery.v1') {
+            throw 'liveabit now uses the Android companion. Use configure-openclaw-companion.ps1; this legacy helper cannot switch delivery back to WhatsApp.'
+        }
+    }
+}
 $taskAgentsBefore = $taskConfig.agents | ConvertTo-Json -Depth 32 -Compress
 $taskMappingId = if ($taskAgentId -eq 'liveabit') { 'liveabit-tasks' } else { 'liveabit-main' }
 $taskMapping = @($taskConfig.hooks.mappings | Where-Object { $_.id -eq $taskMappingId })

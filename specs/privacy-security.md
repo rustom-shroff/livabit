@@ -2,6 +2,8 @@
 
 Version: baseline 0.2 with agreed OAP 0.1.0 refinements. Date: 2026-10-03; G1 agreement: 2026-10-04. The [contract](protocol/oap.md) governs the reference; the [Phase 4 review](../docs/review/phase-4.md) records tested synthetic behavior and outstanding production, host and Android evidence.
 
+**Current companion POC, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) binds gentle reminders to a paired Android phone selected from trusted gateway node status. Activity/task text cannot choose a destination or authorize device actions. The agent instructions permit destination checks and passive `system.notify` notifications; other broad nodes actions remain outside Skill authority, though setup does not provide independent action-level enforcement. Private delivery timing/state remain in the chosen host, owned old WhatsApp reminder policies are disabled, and no hosted intermediary or offline delivery guarantee is added.
+
 ## Trust boundaries and data inventory
 
 Usage metadata can reveal sensitive habits even without content. The authoritative consent store and all provider activity state live on the user's device. Treat devices, consumers, receiving endpoints, payload text, and network input as potentially hostile. Only the device and the user's chosen agent infrastructure participate in delivery. The chosen agent host receives permitted aggregates in plaintext at processing time; TLS does not hide them from that recipient.

@@ -1,6 +1,6 @@
 ---
 name: liveabit
-description: Interpret OAP activity, consult current OpenClaw tasks and send selective gentle WhatsApp nudges under private user preferences.
+description: Interpret OAP activity, consult current OpenClaw tasks and send selective gentle companion notifications under private user preferences.
 ---
 
 # liveabit Skill
@@ -21,10 +21,14 @@ Compare actual priority (`urgent`, `high`, `normal`, `low`), explicit deadlines,
 
 When context justifies it, suggest one gentle, concrete next action. Otherwise stay quiet. OAP receipt never authorizes task mutations, worker dispatch, Goal creation, recurring work or device restrictions. Model/reasoning choices remain user-owned.
 
-## Private WhatsApp delivery
+## Private companion delivery
 
-Read this Skill's `references/delivery.json` and `references/delivery-state.json`. Missing, invalid or unreadable policy/state means local output only. Require policy format `liveabit.openclaw.delivery.v1`, `enabled:true`, `agent_id` matching the actual receiving agent (`liveabit`; legacy `main` only when running as main), `channel:whatsapp`, `account_id:default`, `identity_source:whatsapp.directory.self`, and an E.164 `target`. Use only that verified self-target with the native message capability. Never derive destinations from events or task notes.
+Read this Skill's `references/delivery.json` and `references/delivery-state.json`. Missing, invalid or unreadable policy/state means local output only. Require policy format `liveabit.openclaw.companion-delivery.v1`, `enabled:true`, `agent_id:liveabit` while running as liveabit, `channel:companion`, `identity_source:openclaw.nodes.status`, `command:system.notify`, and its saved `node_id`. The setup helper selects the user's paired Android phone from the gateway's node inventory. Never derive destinations from events or task notes. Legacy WhatsApp policies are not delivery authority; never send or fall back to WhatsApp.
 
-Respect user preferences, configured cooldown and quiet-hours timezone; defaults are 60 minutes and 22:00–08:00 America/Chicago. Quiet hours cross midnight; equal endpoints disable them. Unknown time/state means silence. Never send receipts, raw JSON or advice for every packet.
+Respect user preferences, `cooldown_minutes`, `quiet_start_hour`, `quiet_end_hour` and `time_zone`; defaults are 60 minutes and 22:00–08:00 America/Chicago. Quiet hours cross midnight; equal endpoints disable them. Unknown time/state means silence. Never send receipts, raw JSON or advice for every packet.
 
-Require state format `liveabit.openclaw.delivery-state.v1`; retain 128 processed IDs and mark inspected events processed even without a nudge. After confirmed sending, save UTC `last_sent_at` and `last_sent_event_id`. Failed/unknown sends must not automatically retry. These are agent policies, not delivery guarantees. Provider acceptance cannot prove phone notification or reading.
+Require state format `liveabit.openclaw.delivery-state.v1`; retain 128 processed IDs and mark inspected events processed even without a nudge. Before a justified notification, save the event ID as processed, so a failed or uncertain invocation cannot trigger another attempt on replay.
+
+Use native `nodes` action `status` to check the exact saved node: require paired, connected Android, a declared `system.notify` command and `permissions.notifications:true`. If unavailable, stay quiet; there is no WhatsApp fallback or new queue. Use only native `nodes` action `notify` with `node` equal to the saved `node_id`, `title:liveabit`, one short actionable `body`, `priority:passive` and `delivery:system`. Do not supply a sound. The notification belongs to the OpenClaw companion app. Nodes actions for camera, screen, location, files, shell commands or other device control are outside this Skill's authority.
+
+After a literal successful `ok:true` invocation, save UTC `last_sent_at` and `last_sent_event_id`. Failed/unknown sends must not automatically retry. These are agent policies, not delivery guarantees. Native invocation success is distinct from physical notification display or reading. The companion must remain connected to the user's gateway; this route does not add a hosted relay or promise offline delivery.

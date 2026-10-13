@@ -66,7 +66,7 @@ if (@($mappings | Where-Object {$_.match.path -eq 'liveabit'}).Count) { throw 'A
 $mainKey=if($config.session.mainKey){$config.session.mainKey}else{'main'}
 $session='agent:liveabit:'+ $mainKey
 $mappings+=@{id='liveabit-tasks';match=@{path='liveabit'};action='agent';agentId='liveabit';sessionKey=$session;sessionMode='persistent';name='liveabit';wakeMode='now';messageTemplate='{{message}}';deliver=$false;transform=@{module='liveabit-activity-0.9.0.mjs'}}
-$readTools=@('workboard_list','workboard_read','message','read','write')
+$readTools=@('workboard_list','workboard_read','nodes','read','write')
 $manageTools=@('workboard_list','workboard_read','workboard_create','workboard_specify','workboard_comment','workboard_move','workboard_unblock')
 $skills=@(@($agent.skills)+@('liveabit') | Where-Object {$_} | Select-Object -Unique)
 $mainAlso=@(@($main.tools.alsoAllow)+$manageTools | Where-Object {$_} | Select-Object -Unique)
@@ -126,30 +126,32 @@ if (Test-Path -LiteralPath $agentInstructions) {
 $policyPath=Join-Path $skillDir 'references/delivery.json'
 $statePath=Join-Path $skillDir 'references/delivery-state.json'
 $deliveryConfigured=$false
-function Assert-SelfDeliveryPolicy($value) {
-    if ($value.format -ne 'liveabit.openclaw.delivery.v1' -or $value.enabled -isnot [bool] -or $value.identity_source -ne 'whatsapp.directory.self' -or $value.channel -ne 'whatsapp' -or $value.account_id -ne 'default' -or $value.target -notmatch '^\+[1-9][0-9]{7,14}$') { throw 'The existing WhatsApp self-delivery policy needs review.' }
-}
-if (-not (Test-Path $policyPath)) {
-    $sourcePolicy=Join-Path $main.workspace 'skills/liveabit/references/delivery.json'
-    if (Test-Path $sourcePolicy) {
-        $policy=Get-Content $sourcePolicy -Raw | ConvertFrom-Json
-        Assert-SelfDeliveryPolicy $policy
-        if ($policy.agent_id -ne 'main') { throw 'The source delivery policy targets a different agent.' }
-        $policy.agent_id='liveabit'
-        [IO.File]::WriteAllText($policyPath,($policy | ConvertTo-Json -Depth 12),$utf8)
-        $sourceState=Join-Path $main.workspace 'skills/liveabit/references/delivery-state.json'
-        if (-not (Test-Path $statePath) -and (Test-Path $sourceState)) { Copy-Item $sourceState $statePath }
+# WhatsApp is retired for this integration. Never copy main's old route into
+# liveabit when its policy is absent. The explicit companion helper migrates
+# preferences/state and selects the paired phone before enabling reminders.
+foreach ($legacyWorkspace in @($main.workspace,$workspace)) {
+    $legacyPath=Join-Path $legacyWorkspace 'skills/liveabit/references/delivery.json'
+    if (Test-Path -LiteralPath $legacyPath) {
+        $legacyPolicy=Get-Content -LiteralPath $legacyPath -Raw | ConvertFrom-Json
+        if ($legacyPolicy.format -eq 'liveabit.openclaw.delivery.v1' -and $legacyPolicy.channel -eq 'whatsapp' -and $legacyPolicy.enabled -eq $true) {
+            Copy-Item -LiteralPath $legacyPath -Destination (Join-Path $backups ($stamp+'-'+$(if($legacyWorkspace -eq $workspace){'liveabit'}else{'main'})+'-retired-whatsapp.json'))
+            $legacyPolicy.enabled=$false
+            [IO.File]::WriteAllText($legacyPath,($legacyPolicy | ConvertTo-Json -Depth 12),$utf8)
+        }
     }
 }
 if (Test-Path $policyPath) {
     $policy=Get-Content $policyPath -Raw | ConvertFrom-Json
-    Assert-SelfDeliveryPolicy $policy
     if ($policy.agent_id -ne 'liveabit') { throw 'Dedicated delivery policy targets a different agent.' }
-    if (-not (Test-Path $statePath)) {
+    $companion=$policy.format -eq 'liveabit.openclaw.companion-delivery.v1'
+    $retired=$policy.format -eq 'liveabit.openclaw.delivery.v1' -and $policy.channel -eq 'whatsapp' -and $policy.enabled -eq $false
+    if (-not $companion -and -not $retired) { throw 'Configure companion reminders with configure-openclaw-companion.ps1.' }
+    if ($companion -and ($policy.enabled -isnot [bool] -or $policy.channel -ne 'companion' -or $policy.identity_source -ne 'openclaw.nodes.status' -or $policy.command -ne 'system.notify' -or $policy.node_id -notmatch '^[a-f0-9]{64}$' -or $policy.cooldown_minutes -lt 1 -or $policy.cooldown_minutes -gt 1440 -or $policy.quiet_start_hour -lt 0 -or $policy.quiet_start_hour -gt 23 -or $policy.quiet_end_hour -lt 0 -or $policy.quiet_end_hour -gt 23 -or -not $policy.time_zone)) { throw 'The companion reminder policy needs review.' }
+    if ($companion -and -not (Test-Path $statePath)) {
         $emptyState=@{format='liveabit.openclaw.delivery-state.v1';last_sent_at=$null;last_sent_event_id=$null;processed_event_ids=@()}
         [IO.File]::WriteAllText($statePath,($emptyState | ConvertTo-Json),$utf8)
     }
-    $deliveryConfigured=$true
+    $deliveryConfigured=$companion -and $policy.enabled
 }
 $applied=$patchText | & openclaw config patch --stdin 2>&1
 if ($LASTEXITCODE -ne 0) { throw 'OpenClaw could not apply the task-agent settings.' }
