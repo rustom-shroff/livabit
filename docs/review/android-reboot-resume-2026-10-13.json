@@ -1,0 +1,128 @@
+{
+  "result": "native_android_reboot_resume_verified",
+  "date": "2026-10-13",
+  "version": "0.10.0-poc",
+  "version_code": 12,
+  "apk": "artifacts/android-publisher/liveabit-sender-0.10.0-poc.apk",
+  "apk_sha256": "577b0a5cb5274c12038dab5b4bb7a222284928a40c4214d83863e3d19b862fb1",
+  "apk_bytes": 268532,
+  "native_report": "artifacts/android-publisher/run-7525a95a-3f75-4a13-a85c-4268597b9cff/validation.json",
+  "android_native_checks": 87,
+  "platform": "Android 15/API 35",
+  "sharing_state_persisted": true,
+  "real_reboot_count": 2,
+  "boot_requires_first_unlock": true,
+  "restored_without_manual_activity_launch": true,
+  "automatic_and_outage_jobs_removed_before_enabled_reboot": true,
+  "enabled_state_configuration_stream_cursor_queue_and_outage_preserved": true,
+  "encrypted_connection_used_after_reboot": true,
+  "original_pending_event_identity_and_bytes_acknowledged": true,
+  "stopped_state_remains_off_with_no_jobs_or_requests": true,
+  "custom_timing_preserved": {
+    "screen_off_minutes": 17,
+    "warning_minutes": 73,
+    "send_minutes": 3
+  },
+  "default_send_minutes": 5,
+  "default_screen_off_minutes": 15,
+  "default_warning_minutes": 60,
+  "installed_openclaw_admission_tested": true,
+  "openclaw_run_id": "0ce546cf-7269-4af9-9512-0bfdea10f128",
+  "protocol_version": "0.2.0-draft.2",
+  "draft_one_compatible": true,
+  "protocol_schema_changed": false,
+  "agent_or_model_settings_changed": false,
+  "receiver_isolated": true,
+  "user_receiver_controlled": false,
+  "owned_emulator_stopped": true,
+  "physical_phone_tested": false,
+  "lint_errors": 0,
+  "lint_warnings": 11,
+  "first_attempt": {
+    "reason": "Files.writeString unavailable on Android 15; fixture backup replaced with native file streams",
+    "real_reboots_attempted": 0,
+    "result": "test_fixture_failure",
+    "native_report": "artifacts/android-publisher/run-6d10db95-40ae-4f20-9ec3-a6c68e92e1ee/validation.json"
+  },
+  "foreground_service_added": false,
+  "intermediary_added": false,
+  "direct_boot_credentials_added": false,
+  "javascript_sender_prototype_created": false,
+  "source_hash_normalization": "UTF-8 text, CRLF normalized to LF",
+  "source_bindings": [
+    {
+      "path": "android/publisher-app/build.gradle",
+      "sha256": "d84ab10fb26ec591790f78764aacc479613b88ffe274d8eb3e02330eb1d74988"
+    },
+    {
+      "path": "android/publisher-app/src/main/AndroidManifest.xml",
+      "sha256": "64973ba1b040c9d9bf818b03232ab9800c37a61962b1e65c829d29625073471a"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/StartupReceiver.java",
+      "sha256": "ebae15dafe0b18a47ca235321330795b86ae69e622142ee4866668bf84e7adb0"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherApplication.java",
+      "sha256": "343475d7ae7bd38d66e22acec1cb673f972cce6e1fc2dba47a44683faf1bc050"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/PublisherStore.java",
+      "sha256": "0b4c830def61693ec8d978680ba9dc4cc767892fe3c5ecc1d0c45c481100c2b8"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryEngine.java",
+      "sha256": "cca3e61d3eb9671f7a6336b26682ab0f9e7fce9cbafe5f6c9064bf7028164fce"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/DeliveryJobService.java",
+      "sha256": "6e08e408f08931ca8f0e87bbbe5e0839a8abf1e824e8f54c2d8c9c3221229ea6"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ScreenActivity.java",
+      "sha256": "9f3435899819ad6019f6192c8e8acb42a9ce20abbeedf5d9ae726adaaa793313"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/UsageCollector.java",
+      "sha256": "d5b1f56601494e2ee9c5eeeede299dd607fc60a6f5711db956a670e225fd8613"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/ForegroundContinuity.java",
+      "sha256": "a7ffa32f45321f69f48afd3ac5ddcd7c8b57f38a97a61c1376a91aa6ed3d1ae4"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/OapObservation.java",
+      "sha256": "30e690f590e27069f5a12cc05d0da3be84f5762e818eb7d56eea026a657eedb9"
+    },
+    {
+      "path": "android/publisher-app/src/main/java/org/liveabit/publish/MainActivity.java",
+      "sha256": "2d20cbf2d376d0885cbc4246b12ce4feffc520d15ce295fa269dddd4eba3a1d5"
+    },
+    {
+      "path": "android/publisher-app/src/main/res/values/strings.xml",
+      "sha256": "0481afed5e60a93e5ad5703689c626009e25c06396c31148ed92c33465d2a701"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+      "sha256": "4b0ba936714c3ff20bd2741c9785c43dcbeeac08eabf24ea264e672143bf5541"
+    },
+    {
+      "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/RebootResumeCases.java",
+      "sha256": "c070b7720f1441469c1765648c18ac57b4811f4d212d7cdd2a939f6677d2bfaa"
+    },
+    {
+      "path": "scripts/build-android-publisher.ps1",
+      "sha256": "2a5b41cd8291550b32fa2065ae8294d7e1d17d9031ec791c99fb4c11da95cf74"
+    },
+    {
+      "path": "scripts/test-android-publisher.ps1",
+      "sha256": "b4c2c102fb848fecdac19ade19b519e1258dd905163cfb6bbdd6c139eae2557c"
+    }
+  ],
+  "limits": [
+    "Android 15 project emulator without a PIN; restoration after first unlock, not before.",
+    "Actual delivery job force-triggered after reboot; exact Android background timing and manufacturer policies remain unproved.",
+    "Force stop is an Android stopped state and requires user interaction before background restart.",
+    "No physical-phone, precise-duration, complete-coverage or battery proof is claimed."
+  ]
+}

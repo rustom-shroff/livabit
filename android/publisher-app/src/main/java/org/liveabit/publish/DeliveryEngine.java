@@ -376,7 +376,10 @@ final class DeliveryEngine {
     }
     synchronized void restoreScheduling() throws Exception {
         JSONObject state = store.read();
-        if (!state.getBoolean("enabled")) return;
+        if (!state.getBoolean("enabled")) {
+            cancelAutomatic(); cancelAlert();
+            return;
+        }
         JobScheduler jobs = context.getSystemService(JobScheduler.class);
         JobInfo next = jobs.getPendingJob(state.optInt("next_job_id", PERIODIC_JOB));
         boolean woke = ScreenActivity.interactive(context) && !state.optBoolean("screen_interactive", true);
