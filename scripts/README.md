@@ -1,5 +1,7 @@
 # Validate the OAP contract and reference
 
+For the personal-agent direction, use [configure-openclaw-personal-agent.ps1](configure-openclaw-personal-agent.ps1) after the [foundation tests and setup guide](../integrations/openclaw/personal-agent/README.md). It installs the activity store and guarded tools in the existing OpenClaw host, routes activity to the continuing personal conversation and preserves the companion destination and preferences. The validation commands below continue to cover the independent OAP contract and earlier runtime.
+
 The publisher build/test scripts now target **0.8.0-poc**. Its exact APK passed **63 native Android checks**, including open-session continuation and both observation revisions; [review](../docs/review/android-continuity-2026-10-12.md). Build estimation directly on Android; the desktop receiver is the actual final inspection target, not an implementation prototype.
 
 The Phase 3 artifact checker validates files without opening sockets or calling a model. Schemas resolve entirely from local files after dependencies are installed. The separate Phase 4 recorder runs the synthetic device and final receiver over isolated loopback HTTP; it never reads real usage or operates an intermediary.

@@ -1,6 +1,45 @@
 # System architecture
 
-**Current POC communication path, 2026-10-13:** Android sends meaningful OAP observations directly to the existing gateway's `/hooks/liveabit`, fixed to dedicated liveabit and persistent `agent:liveabit:main` with `deliver: false`. Main manages personal tasks in shared Workboard. liveabit can issue selective local phone notifications through the paired OpenClaw Android companion's `system.notify` node command under [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md). This replaces owned WhatsApp reminder policies, retains timing/delivery state and adds no intermediary or APK change. Native invocation success does not prove physical display; companion connectivity is required and offline recovery is unverified. The October 11 evidence below is historical.
+**Current architecture direction, 2026-10-14:** Android continues to send permitted OAP observations directly to the existing OpenClaw gateway. Under [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md), a bounded durable inbox and retrieval/context/episode tools belong inside that final runtime; the user's continuing main agent interprets the evidence using relevant personal context. The model owns behavioral judgment. Runtime code owns validated facts, identity/retention, explicit permission checks and delivery bookkeeping. The existing companion chat is the first conversational surface; automatic accountability emails are disabled. No standalone coach, relay or new Android packet format is introduced.
+
+## Personal-agent host architecture
+
+```mermaid
+flowchart LR
+  D["Existing Android OAP sender"] --> G["Existing OpenClaw gateway"]
+  subgraph H["User's chosen final agent host"]
+    G --> I["Bounded durable observation inbox"]
+    I --> Q["Factual summaries and query tools"]
+    U["User reports, preferences and Workboard"] --> K["Relevant context with provenance"]
+    Q --> M["Continuing main agent: judgment and conversation"]
+    K --> M
+    E["Episodes, attempts and responses"] <--> M
+    M --> P["Authorized delivery and outcome records"]
+  end
+  P --> A["Existing companion chat or verified notification invitation"]
+  A --> U
+```
+
+The diagram describes target responsibilities, not an end-to-end completion claim. The first implementation increment is durable inbox/query/summary, episode/context tools and a restrictive `liveabit_notify(decisionId)` tool plus tested main-agent migration. Notification source uses the stored question/nudge and exact private destination, with runtime timing checks and an atomic one-attempt reservation; separate tests and installed-session evidence are required. Reply linkage, automatic post-admission processing recovery, follow-up scheduling and repeated-attempt adaptation remain separate work in the [PA specification](personal-agent-intervention.md). A writing tool for episodes is not a scheduler; a persistent session is not a complete event archive.
+
+| Component | Responsibility | Evidence boundary |
+| --- | --- | --- |
+| PA-C1 | Validate and durably admit permitted immutable observations; preserve original time and uncertainty, deduplicate and bound retention | Inbox/restart/conflict tests and installed gateway ingress |
+| PA-C2 | Retrieve bounded relevant windows and factual summaries with provenance, gaps and truncation | Query/summary fixtures; no distraction or emotion classifier |
+| PA-C3 | Maintain user-owned context and corrections, distinguish user reports from hypotheses and retrieve relevant Workboard context | Context tools and actual accessible host context |
+| PA-C4 | Model-owned choice, optional feelings inquiry, contextual persuasion and reconsideration | Observed conversations/scenarios; no automatic pressure escalation |
+| PA-C5 | Record episodes, choices, attempts, user responses and unknown outcomes | Durable record tools first; lifecycle and reply linkage separately tested |
+| PA-C6 | Enforce explicit channel/destination/timing authority, reserve delivery and record failure/uncertainty | Separate delivery/recovery checks; chat, invocation, display and response are distinct |
+
+Accepted observations remain in the final chosen host. A local embedded database is allowed here; a separately operated store or forwarding process violates the direct topology. Retrieve selected evidence for reasoning rather than requiring the model to retain every packet in prompt context. Keep factual summaries auditable and avoid repeated counting of retries or overlapping observations. Rich personal context never flows back to Android.
+
+Behavioral interpretation remains flexible: runtime code must not decide that an app, duration or attempt count establishes a harmful habit. The agent may ask about feelings, use an explicit report to revise a hypothesis, suggest a smaller action, change timing or reconsider the goal. Mechanical limits come only from explicit permissions/preferences and resource/reliability budgets.
+
+## Preserved OAP and integration architecture
+
+The dated POC descriptions below preserve tested implementations. ADR-0024 governs the current personal-agent direction; historical main/liveabit/WhatsApp routing is not a claim about the newly installed configuration.
+
+**Previous POC communication path, 2026-10-13:** Android sent meaningful observations directly to `/hooks/liveabit`, fixed to dedicated liveabit and persistent `agent:liveabit:main` with `deliver: false`. Main managed Workboard tasks; selected reminders used the paired companion's `system.notify` command under [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md). Native invocation success did not establish physical display or offline recovery.
 
 **Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../docs/review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](../docs/integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
 
@@ -65,7 +104,7 @@ The helper installs liveabit Skill in main's existing workspace and merges neces
 
 Native UI displays the selected agent and derives Wi-Fi/USB help from the actual endpoint/port. Legacy settings remain liveabit and queued wrappers are not rewritten; switching endpoint/agent requires explicit Start and pending-activity confirmation. The exact 0.5.0 APK passed 37 Android 15/API 35 checks and native main admission, with separate completed main output and additional emulator-to-host-LAN admission. Physical-phone activity delivery remains untested. No intermediary or new agent account is introduced.
 
-## Current selective-delivery development
+## Historical selective-delivery development
 
 Sender 0.6.0 changes the fixed introduction for newly constructed hook requests to clarify ordinary local replies versus separately authorized host-policy nudges. Persisted pending bytes remain unchanged. `deliver: false` prevents automatic hook announcements; main's communication tools can separately use its private Skill policy to send selectively to the linked WhatsApp account's verified own identity. Incoming direct/group chats remain disabled. Default 60-minute cooldown and 22:00–08:00 America/Chicago quiet hours are editable best-effort agent instructions, with no unsolicited nudge when goals/context are missing. Provider send acknowledgement is verified for the explicit own-chat check; phone receipt and notification for the checks are user-confirmed; selective coaching remains unproved. The exact final 0.6.0 APK passed all 37 native checks, including live delivery. A separate main-agent private-policy/native-message check succeeded; phone receipt and notification for the checks are user-confirmed. Goal-grounded nudges are ready for a real-activity trial.
 
@@ -223,4 +262,4 @@ Public OpenAI MCP plugins ordinarily need stable reachable HTTPS; MCP Events add
 
 Mark incompatible hosts unsupported/deferred. Do not introduce a free serverless relay, public proxy, desktop forwarder, third-party tunnel or shared project credential to pass a milestone. No delivery-service subscription is required by the software; existing agent/device/network arrangements are separate.
 
-The active direction is native Android -> OpenClaw's mapped webhook -> the existing main agent and configured canonical conversation under ADR-0018, with separately authorized selective communication through its own WhatsApp channel. Development can continue independently; the linked/connected account needs no new phone scan. The main mapping and exact 0.5.0 APK have their [own evidence](../docs/review/openclaw-main-agent-2026-10-11.md); dedicated-agent 0.4.0 remains separate. Preserve historical [Grok](../docs/integration-drafts/grok-bot-local-setup.md), [Muse](../docs/review/meta-muse-direct-dialogue-2026-10-08.md) and ChatGPT work without transferring authentication/session assumptions. Collector precision/coverage and Linux stay deferred. The separate inspector has no publication path; the sender does. Formal M2/M3 still need full acceptance evidence, physical measurements and approved release thresholds.
+The current direction is native Android -> existing OpenClaw ingress/durable host-local tools -> the continuing main personal agent under ADR-0024, with the companion chat first and automatic accountability emails disabled. The first foundation, conversational delivery and behavior-change evaluation retain separate evidence gates. Preserve the [0.5.0 main mapping](../docs/review/openclaw-main-agent-2026-10-11.md), dedicated-agent 0.4.0, later liveabit/companion POC, historical [Grok](../docs/integration-drafts/grok-bot-local-setup.md), [Muse](../docs/review/meta-muse-direct-dialogue-2026-10-08.md) and ChatGPT results without transferring their assumptions. Collector precision/coverage and Linux stay deferred. Formal M2/M3 still need full acceptance evidence, physical measurements and approved release thresholds.

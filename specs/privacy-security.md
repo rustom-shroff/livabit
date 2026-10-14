@@ -1,8 +1,33 @@
 # Privacy and security
 
+**Current personal-agent boundary, 2026-10-14:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) authorizes rich personal context and ongoing support inside the user's existing OpenClaw host. Main owns the relationship; Android remains a source of permitted activity only. The [PA requirements](personal-agent-intervention.md#privacy-and-control-requirements) supplement the stable OAP privacy requirements. Behavioral judgment belongs to the model, while factual admission/retention and explicit permission/delivery checks belong to runtime code. Companion chat is first; automatic accountability emails remain disabled.
+
+## Personal context and intervention controls
+
+User-supplied feelings, values, commitments, career plans and constraints can be relevant to support. They do not become additional Android collection fields. Retrieve only authorized available host context, retain source/time and corrections, and distinguish user reports from the agent's interpretations. A usage observation does not attest a feeling, intention, cause or mental-health condition. Missing context stays unknown; the agent may ask an optional question in the existing chat.
+
+| Host-local record | Allowed use | Required control |
+| --- | --- | --- |
+| Accepted OAP inbox and derived summaries | Recall permitted original windows and factual estimates with uncertainty | Finite retention/query budgets, immutable identity, durable deduplication and explicit truncation/gaps |
+| Personal context and corrections | Support the user's continuing relationship and relevant reasoning | Provenance, authorized host access, user correction/deletion and distinction between reports and hypotheses |
+| Intervention episodes | Recall advice, attempts, user responses and unknown outcomes | No diagnosis or invented outcome; avoid sensitive details in routine diagnostics |
+| Delivery reservations/outcomes | Enforce approved destination/timing and diagnose failures | Independent runtime permission checks, bounded useful lifetime and explicit uncertain-send state |
+
+These records stay in the user's chosen final host, with no centralized upload, project dashboard, provider-side personal-memory copy or separate relay. The first foundation includes restrictive notification source: `liveabit_notify` takes a stored decision ID and cannot accept alternate text, destination or channel. Runtime checks/reservation must pass separate tests and installed-session verification. Installing record tools does not prove that all deletion, policy-enforcement or reply-linkage requirements have passed. Setup connects no new calendar/email source.
+
+Contextual persuasion may use the user's own stated motivations and requested support style. It must remain truthful, respect refusal/pauses and allow changes of mind. Repeated attempts do not grant wider authority or automatically justify harsher pressure. The agent can ask about obstacles or reconsider the goal; it cannot use inferred vulnerabilities to shame the user, invent consequences or contact others. User preferences for directness/persistence are host context, not blanket authority for device restrictions or third-party messages.
+
+Companion chat is the first conversational surface. Native notification previews may expose sensitive context on a lock screen; the runtime must apply the user's approved destination and preview preferences. Verify actual installed chat capability before claiming unsolicited chat delivery. A successful `system.notify` invocation is separate from a delivered chat, displayed notification or user response. Automatic accountability email is disabled, and this increment configures no third-party accountability destination. Future contact requires explicit recipient, purpose, privacy and delivery authority from the user.
+
+Host-side pause/correction/deletion and Android sharing controls are separate operations. Stopping Android sharing prevents new device operations but cannot erase host copies already received. Removing controlled host records must describe residual transcripts, provider retention and backup limits accurately. Never place real feelings, private context, packets or destinations in public fixtures, logs or source control. Credentials remain outside all observation/context records.
+
+The enabled plugin prunes at startup, on store operations and every 60 seconds while valid settings and an available gateway permit its retention service to run. The installed service is loaded; physical deletion at every timer boundary is not independently claimed. Plugin disablement, invalid settings or a stopped/unavailable gateway can prevent cleanup, which resumes when those prerequisites are restored. The restrictive notification tool independently enforces its own private destination/preferences. Main's preserved native tools retain their normal scopes, so disabling automatic accountability email in settings/workflow is not a claim that every existing outbound capability has been technically isolated.
+
+## Preserved OAP privacy baseline
+
 Version: baseline 0.2 with agreed OAP 0.1.0 refinements. Date: 2026-10-03; G1 agreement: 2026-10-04. The [contract](protocol/oap.md) governs the reference; the [Phase 4 review](../docs/review/phase-4.md) records tested synthetic behavior and outstanding production, host and Android evidence.
 
-**Current companion POC, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) binds gentle reminders to a paired Android phone selected from trusted gateway node status. Activity/task text cannot choose a destination or authorize device actions. The agent instructions permit destination checks and passive `system.notify` notifications; other broad nodes actions remain outside Skill authority, though setup does not provide independent action-level enforcement. Private delivery timing/state remain in the chosen host, owned old WhatsApp reminder policies are disabled, and no hosted intermediary or offline delivery guarantee is added.
+**Historical companion POC, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) bound reminders to a paired phone selected from trusted gateway status. Agent instructions permitted passive `system.notify` and destination checks, while the broad nodes tool lacked independent action-level enforcement. The new PA design requires runtime enforcement, with separate implementation evidence. Earlier companion invocation evidence retains its original scope.
 
 ## Trust boundaries and data inventory
 
