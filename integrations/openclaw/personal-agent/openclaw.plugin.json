@@ -1,0 +1,15 @@
+{
+  "id": "liveabit-personal-agent",
+  "name": "Liveabit personal-agent evidence",
+  "version": "0.1.0",
+  "description": "Host-local OAP evidence and growing conversation episodes. No relay or external email sender.",
+  "activation": { "onStartup": true },
+  "contracts": { "tools": ["liveabit_context", "liveabit_record_decision", "liveabit_record_feedback", "liveabit_notify"] },
+  "toolMetadata": {
+    "liveabit_context": { "optional": true },
+    "liveabit_record_decision": { "optional": true },
+    "liveabit_record_feedback": { "optional": true },
+    "liveabit_notify": { "optional": true }
+  },
+  "configSchema": { "type": "object", "additionalProperties": false, "properties": {} }
+}

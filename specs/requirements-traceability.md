@@ -1,6 +1,40 @@
 # Requirements traceability
 
-**Companion reminder route, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) continues TASK-P5-001/002 and TASK-P6-F04 through the [companion helper](../scripts/configure-openclaw-companion.ps1), [task setup](../scripts/configure-openclaw-task-agent.ps1), [liveabit Skill](../integrations/openclaw/skills/liveabit/SKILL.md) and [companion guide](../docs/integration-drafts/openclaw-companion-notifications.md). Selected reminders invoke `system.notify` on a paired, connected Android node with declared command and notification permission. The private companion policy retains timing and delivery state, including its bounded processed-event IDs; owned legacy WhatsApp policies are disabled and no longer copied. Shared Workboard tasks, user-owned models, persistent `deliver: false` hook mapping and sender 0.11.0 remain unchanged. No hosted relay, OAP revision or new acceptance identifier is introduced.
+**Current direction, 2026-10-14:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) introduces a separate PA requirement/task/acceptance namespace for ongoing personal-agent support. The original 33 OAP rows and 29 AC mappings remain unchanged in identity and scope. The first implementation is host-local durable evidence/context tools and tested live main-agent migration; later conversation, persuasion, reconsideration and delivery orchestration require their own evidence. Companion chat is first and automatic accountability emails are disabled.
+
+## Personal-agent requirements
+
+The [PA specification](personal-agent-intervention.md) is normative for these requirements. PA-C components are defined in [the architecture](system-architecture.md#personal-agent-host-architecture); TASK-PA work is defined in [the roadmap](../docs/project-roadmap.md#personal-agent-work). Mapping is a work/evidence obligation, not a claim of completed implementation or acceptance.
+
+| Requirement | Component | Specification area | Task | Acceptance |
+| --- | --- | --- | --- | --- |
+| PA-FR-001 | PA-C3, PA-C4 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-002 | PA-AC-01 |
+| PA-FR-002 | PA-C1 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001 | PA-AC-02 |
+| PA-FR-003 | PA-C2 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001 | PA-AC-03 |
+| PA-FR-004 | PA-C3 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning), [records](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-003 | PA-AC-04 |
+| PA-FR-005 | PA-C4 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-003 | PA-AC-05, PA-AC-06, PA-AC-15 |
+| PA-FR-006 | PA-C4 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-003 | PA-AC-05 |
+| PA-FR-007 | PA-C5 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-004 | PA-AC-08 |
+| PA-FR-008 | PA-C4, PA-C5 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-004 | PA-AC-07 |
+| PA-FR-009 | PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-002, TASK-PA-005 | PA-AC-09 |
+| PA-FR-010 | PA-C1, PA-C4, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-003, TASK-PA-005 | PA-AC-10 |
+| PA-FR-011 | PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages), [channel](personal-agent-intervention.md#channel-and-control) | TASK-PA-005 | PA-AC-11 |
+| PA-FR-012 | PA-C1, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-005 | PA-AC-12 |
+| PA-PR-001 | PA-C1, PA-C3, PA-C5 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-006 | PA-AC-14 |
+| PA-PR-002 | PA-C1, PA-C3, PA-C6 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-003, TASK-PA-005 | PA-AC-04, PA-AC-11 |
+| PA-PR-003 | PA-C3, PA-C4, PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-003, TASK-PA-005 | PA-AC-05, PA-AC-07, PA-AC-11 |
+| PA-PR-004 | PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-002, TASK-PA-005 | PA-AC-13 |
+| PA-PR-005 | PA-C1, PA-C3, PA-C5 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-006 | PA-AC-14 |
+| PA-NFR-001 | PA-C1 through PA-C6 | [Architecture](system-architecture.md#personal-agent-host-architecture) | TASK-PA-001, TASK-PA-002 | PA-AC-01, PA-AC-15; retained AC-29 topology audit |
+| PA-NFR-002 | PA-C1, PA-C2, PA-C4, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-001, TASK-PA-003, TASK-PA-005 | PA-AC-11, PA-AC-15 |
+| PA-NFR-003 | PA-C1, PA-C2, PA-C3 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-006 | PA-AC-03, PA-AC-14 |
+| PA-NFR-004 | All PA components | [Evidence status](personal-agent-intervention.md#delivery-increments-and-evidence-status) | TASK-PA-006, TASK-PA-007 | PA-AC-09, PA-AC-15 |
+
+## Preserved OAP development associations
+
+The dated associations below retain their original scope and tested agent/channel configuration. ADR-0024 governs current personal-agent work; none of these historical results passes the new PA conversation/adaptation cases.
+
+**Historical companion reminder route, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) continued TASK-P5-001/002 and TASK-P6-F04 through the [companion helper](../scripts/configure-openclaw-companion.ps1), [task setup](../scripts/configure-openclaw-task-agent.ps1), [liveabit Skill](../integrations/openclaw/skills/liveabit/SKILL.md) and [companion guide](../docs/integration-drafts/openclaw-companion-notifications.md). Selected reminders invoked `system.notify` on a paired, connected Android node with declared command and notification permission. The private policy retained timing/delivery state; no hosted relay or OAP revision was introduced.
 
 This prepares existing OAP-FR-013/014, OAP-NFR-009 and OAP-PR-005/006/008 associations and AC-22/23/24/29 within actual evidence in the [companion review](../docs/review/openclaw-companion-2026-10-13.md). Paired/connected status and native invocation acknowledgement do not establish physical display, task-grounded coaching, offline notification recovery or completed M2/M3. Quiet hours/cooldown and permitted nodes actions remain best-effort agent instructions; the broad nodes tool is not independently action-restricted. Frozen WhatsApp and APK results retain their original historical scopes.
 

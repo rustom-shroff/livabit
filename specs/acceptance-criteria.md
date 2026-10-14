@@ -1,6 +1,22 @@
 # Acceptance criteria
 
-**Current POC route, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) replaces WhatsApp reminders with native local notifications in the paired OpenClaw Android companion. The dedicated liveabit agent and shared Workboard tasks under ADR-0021 remain. The [companion review](../docs/review/openclaw-companion-2026-10-13.md) records status/capability, invocation and model-preservation evidence separately; command acknowledgement is not physical display or a full task-coaching pass. Sender 0.11.0 stays unchanged. All 29 AC IDs and formal M2/M3 conditions retain their scopes. The October 11 paragraphs below preserve historical results, not the current reminder destination.
+**Current personal-agent acceptance, 2026-10-14:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) adds separate [PA-AC-01 through PA-AC-15](personal-agent-intervention.md#acceptance-cases) for durable evidence, continuing-agent context, feelings inquiry, contextual persuasion, repeated-attempt reconsideration, explicit runtime permissions and companion conversation. Automatic accountability emails are disabled. The first host-local foundation and live main-agent migration must be tested and evidenced separately from the full relationship/intervention loop. No PA test passes merely because an OAP packet was admitted.
+
+## Personal-agent evidence gates
+
+| Gate | Required evidence | Completion boundary |
+| --- | --- | --- |
+| PA foundation | PA-AC-01/02/03 and implemented portions of PA-AC-04/08/11/12/14/15: durable inbox/query/summary/context/episode checks, restrictive stored-decision notification, source audit, installed tools and trusted main-session mapping | Record exact implemented subset, versions and live application; notification source requires independent preference/reservation tests, with no end-to-end conversation or persuasion claim |
+| PA conversation | PA-AC-04/05/06/08/09/10: actual supported companion surface, optional feelings inquiry, user reports/corrections and diagnosable choices | Chat, notification invocation, physical display and replies have separate evidence |
+| PA adaptation | PA-AC-07/08/15: multi-turn episodes and model-owned changes after repeated attempts | Counter/storage fixtures do not demonstrate reconsideration or usefulness |
+| PA runtime control | PA-AC-10/11/12/13/14: independent permission/destination enforcement, opted-out/quiet/offline/uncertain-send recovery, disabled accountability email and bounded retention | A Skill instruction alone does not satisfy enforcement or recovery |
+| PA usefulness | User assessment of relevance, burden, response and outcomes over time | Future evidence; no lasting behavior-change guarantee |
+
+All 33 OAP requirement IDs, 29 AC IDs and M1/M2/M3 conditions below retain their scopes. PA cases supplement them rather than reusing or retiring IDs. The historical main/liveabit/WhatsApp/companion reviews remain evidence only for their tested versions and surfaces.
+
+## Preserved integration evidence
+
+**Previous POC route, 2026-10-13:** [ADR-0023](../docs/decisions/0023-openclaw-companion-reminders.md) replaced WhatsApp reminders with local companion notifications from dedicated liveabit. The [companion review](../docs/review/openclaw-companion-2026-10-13.md) records status/capability and invocation; acknowledgement is not physical display or task-coaching evidence. Sender 0.11.0 was unchanged.
 
 **Phone confirmation, 2026-10-11:** The user reported that both WhatsApp connection-check messages arrived with a notification. [Confirmation](../docs/review/openclaw-phone-notification-2026-10-11.md). Use the existing tested 0.6.0 APK for the [real-activity phone trial](../docs/integration-drafts/openclaw-phone-pilot.md); its bytes are unchanged.
 
