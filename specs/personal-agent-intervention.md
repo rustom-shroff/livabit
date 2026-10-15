@@ -1,12 +1,12 @@
 # Personal-agent intervention
 
-Version: **0.1**. Date: **2026-10-14**. Status: user-authorized product direction and first implementation scope under [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md). This document defines current behavior requirements; it does not establish that every requirement is implemented or passed.
+Version: **0.2**. Updated: **2026-10-15**. Status: user-authorized product direction under [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md), extended by [ADR-0025](../docs/decisions/0025-durable-activity-analysis.md) for durable analysis and an isolated activity session. This document defines requirements; implementation, local tests, installation, physical observation and usefulness are separate evidence levels in the [current system guide](../docs/current-system.md).
 
 The product helps the user's continuing personal agent support voluntary behavior change. The agent can ask about feelings, understand obstacles, relate activity to wider personal context and revisit its advice over time. OAP provides permitted activity facts; it does not decide what the user should do. The initial implementation uses the existing OpenClaw host and companion chat, retains the Android/OAP baseline and keeps automatic accountability emails disabled.
 
 ## Relationship and reasoning
 
-The user's existing main agent owns the conversation, personal context and intervention history. Workboard remains the canonical task store, but open tasks are only one input. Relevant context can include user-supplied priorities, values, career plans, constraints, commitments, available energy, preferred support style, intended leisure and emotional state. Include sensitive details only when the user supplies or authorizes them and when they are relevant; do not assume that the host exposes all previous chats or memories.
+The user's existing main agent owns the relationship, personal context and intervention history. Routine activity reasoning belongs in a separate activity session of that same agent, not a new coach persona or the ordinary main-chat transcript. Meaningful activity dialogue can grow over time; raw packet memory need not. Workboard remains the canonical shared task store, but open tasks are only one input. Relevant context can include user-supplied priorities, values, career plans, constraints, commitments, available energy, preferred support style, intended leisure and emotional state. Include sensitive details only when the user supplies or authorizes them and when they are relevant; do not assume that the host exposes all previous chats or memories. Session isolation requires explicit supported context/reply sharing rather than an inference that common agent identity makes every transcript visible.
 
 The model decides whether an observation warrants conversation and what to say. Possible choices include silence, a factual reflection, a question about how the user feels, a concrete alternative, encouragement, a persuasive challenge, later follow-up or reconsideration. No application identity, elapsed-time threshold, task priority or fixed attempt count defines behavioral failure by itself. Explicit user preferences can set mechanical interruption limits; those limits are distinct from the model's interpretation.
 
@@ -26,11 +26,13 @@ Persuasion should refer honestly to the user's own stated reasons and real circu
 
 An episode links related conversations and attempts; it is not a diagnosis or a declaration that behavior was undesirable. Observations, explicit user reports and model interpretations remain distinguishable. Corrections supersede earlier context without silently rewriting what happened. An outcome can remain unknown. No response does not prove agreement, failure, motivation or notification display.
 
-The first implementation increment covers durable observations, summaries, episode/context records, tools to retrieve or record them and a restrictive notification tool. Proactive follow-up, automatic recovery of failed post-admission model work and episode lifecycle orchestration require their own implementation and evidence. A record-writing tool alone does not prove these mechanisms exist.
+The October 14 foundation covers durable observations, summaries, episode/context records, tools to retrieve or record them and a restrictive notification tool. The October 15 increment adds separately scheduled durable analysis, bounded recovery and activity-session isolation, subject to its own implementation and evidence. A record-writing tool alone does not prove scheduling, reply linkage, effective adaptation or dependable physical background notification.
 
 ### Foundation interface and limits
 
-The [host-local plugin source](../integrations/openclaw/personal-agent/index.mjs) declares these optional tools. The [native verification](../docs/review/personal-agent-host-2026-10-14.json) confirms all four registered tools in the installed main-session runtime. Mechanical tool/hook checks are separate from positive-activity model execution or a real conversation.
+The following records the **October 14 foundation** and its dated verification. New scheduling, session and delivery behavior is governed by [durable analysis and conversation isolation](#durable-analysis-and-conversation-isolation) and the [current system guide](../docs/current-system.md). Historical main-session success or an offline guard is not a pass for a changed pipeline.
+
+The October 14 plugin exposed the following four optional tools, confirmed in its dated [native verification](../docs/review/personal-agent-host-2026-10-14.json). Today's [plugin source](../integrations/openclaw/personal-agent/index.mjs) adds scheduling and changes trusted session access. Mechanical tool/hook checks are separate from positive-activity model execution or a real conversation.
 
 | Tool | Foundation role | Limit |
 | --- | --- | --- |
@@ -47,18 +49,34 @@ Rich personal context remains in the existing agent's authorized conversation/na
 
 The enabled plugin registers retention cleanup at startup and every 60 seconds while valid settings and an available gateway allow its service to run; ordinary store operations also prune. The installed service is loaded, while physical deletion at every timer boundary is not independently claimed. Disabled plugin, invalid settings or a stopped/unavailable gateway can prevent scheduled cleanup; it resumes when those prerequisites are restored. The retention service schedules deletion, not behavioral follow-up or failed model-work recovery. The plugin has no email route, and the workflow disables automatic accountability email; preservation of main's unrelated native tools does not establish independent action-level isolation of every inherited outbound capability.
 
-An advisory reconsideration marker after two recorded questions/nudges without recorded benefit is a product heuristic, not an optimal researched dose or proof of failure. It invites the model to rethink its approach; it must not determine tone, motives, emotional state or escalation. The [research discussion](../docs/research/personal-agent-behavior-change-2026-10-14.md) distinguishes promising mechanisms from evidence about this product's sustained usefulness.
+### Durable analysis and conversation isolation
+
+Receipt must perform deterministic validation, duplicate/conflict checks and an atomic commit of both observation and analysis obligation before acknowledging durable acceptance. Do not claim model completion or invent a run identifier. An endpoint/acknowledgement migration must preserve the existing sender's truthful behavior until compatible setup/build support is verified. OAP event identities, original bytes, expiry and Android consent boundaries remain unchanged.
+
+A host-local worker must coalesce bounded input, claim due work with an expiring lease and distinguish pending work, native run admission, terminal completion and retryable failure. A crash after acknowledgement cannot discard the review obligation. Late packets arriving during analysis remain pending. New packets cannot postpone already due work indefinitely. Retry uses finite backoff, attempt/resource limits and observable reasons; after an outage the model must reassess current retained evidence rather than replay old prompts. A recorded partial decision is not automatically a completed review. Jobs and coverage checkpoints must not create a permanent second copy of expired raw packets.
+
+Use `agent:main:liveabit-activity` for background reasoning and meaningful activity dialogue while preserving the user's main-agent identity/model and ordinary `agent:main:main` chat. Activity input must not select an agent, session, model or destination. Main chat can use only explicitly exposed bounded evidence/reply mechanisms. A deliberately linked user report may request a new review; an ambiguous reply must not be guessed into an episode. No arbitrary ingestion of ordinary-chat, email or calendar transcripts follows from this specification. Existing authorized shared memory and Workboard can be queried through actual available tools.
+
+A linked main-chat user report must atomically retire old unreserved queued/checking prompts with its review request; possible native effects keep their one-attempt ledger. A fresh trusted review can record a new choice citing an already-used factual event without weakening event-owner checks. Retries of the same review and legacy packet replay remain deduplicated. Do not force the model to omit evidence to adapt, infer a no-intervention choice from missing records, or retry a successfully completed run merely because it recorded no structured decision.
+
+Model-selected follow-up must use a declared scheduling tool when installed; a free-text `followup` field is descriptive evidence, not a timer. Runtime bounds the schedule, prevents unbounded recursive work and honors current pause/permission settings. No mandatory behavioral threshold or fixed escalation algorithm is introduced.
+
+The implemented execution budget requires a live scheduled review and its recorded decision, permits one idempotent follow-up request per review and at most three agent-requested follow-ups before fresh accepted activity or a deliberately linked main-chat report resets the count. Duplicate packets must not reset it. This budget bounds model work, not unwanted behavior, and is not a researched intervention dose. Trusted tool-call hooks must bind native run/call identity before activity tools act; missing, expired or replaced scheduled invocations cannot fall back to unrestricted legacy work.
+
+An advisory reconsideration marker after two recorded questions/nudges since the latest reported benefit is a product heuristic, not an optimal researched dose or proof of failure. Earlier benefit cannot permanently suppress later reconsideration. Lifetime support/native-attempt counts remain separate; same-millisecond cross-table ordering is explicitly unknown rather than invented. The marker invites the model to rethink its approach; it must not determine tone, motives, emotional state or escalation. The [research discussion](../docs/research/personal-agent-behavior-change-2026-10-14.md) distinguishes promising mechanisms from evidence about sustained usefulness.
+
+Background notification recovery is a separate stage. Known disconnection before invocation may wait within a bounded useful lifetime, with destination/permissions/preferences/freshness rechecked before dispatch. An uncertain invocation consumes its attempt and must not be blindly repeated. Stale decisions, policy changes, quiet hours or revoked permission must not be bypassed. Exact queue/retry semantics require source/tests and native evidence; no endpoint, scheduler or connection claim establishes physical phone display.
 
 ### Processing stages
 
 1. The existing gateway authenticates the direct Android request. Bounded deterministic validation admits only permitted, supported observations; invalid or expired input cannot start an intervention. Record safe rejection categories without storing hostile payloads as personal context.
-2. Commit accepted observations and immutable identity/hash before claiming durable retention. Identical retries contribute no additional usage; conflicting identities fail safely. A run-admission receipt is still separate from completed model reasoning.
-3. Retrieve recent relevant activity, context, preferences and episodes for the continuing agent. Coalesce input where useful; persistence does not imply a model call for every packet. Gaps, unknown estimates and overlapping windows remain visible.
+2. Commit accepted observations, immutable identity/hash and the pending analysis obligation together before claiming durable receipt. Identical retries contribute no additional usage; conflicting identities fail safely. Durable receipt, native run admission and completed reasoning remain different states.
+3. A bounded host-local worker claims/coalesces due work and retrieves relevant activity, context, preferences and episodes for the same personal agent in its isolated activity session. Persistence does not imply a model call for every packet. Gaps, unknown estimates and overlapping windows remain visible.
 4. The model records a structured choice and rationale. Silence is a valid choice. Suppression by an explicit preference, insufficient context, runtime failure and an agent decision to wait are different outcomes.
 5. Before an authorized delivery, runtime code rechecks the current destination, permissions and interruption preferences and reserves the attempt atomically. Record acknowledged, failed and uncertain outcomes separately. Do not equate invocation success with phone display or reading.
 6. Link replies and later outcomes when the host supports it and the user authorizes the workflow. Resume unfinished analysis after restart without replaying a stale intervention. Delivery retries require bounded useful lifetime and known transport semantics; an uncertain send cannot be blindly repeated.
 
-These are target stages. Tests and live evidence must identify which stages the implemented foundation actually covers.
+These are required responsibilities. Tests and live evidence must identify which stages each implemented and installed revision actually covers. Mechanical recovery fixtures do not establish good psychological judgment; the [conversation evaluation plan](../docs/evaluation/personal-agent-conversation.md) supplies separate cases.
 
 ## Channel and control
 
@@ -84,12 +102,15 @@ Sharing controls on Android and support preferences in the host remain separate.
 | PA-FR-010 | Expose reasons for silence and separate processing failure, policy suppression, model choice, delivery failure and unknown delivery | Runtime/decision audit and diagnostic scenarios |
 | PA-FR-011 | Enforce explicit current destination/channel/quiet/cooldown permissions in runtime code and durably track delivery reservations/outcomes | Restrictive notification tool source; actual enforcement tests/installation separately recorded |
 | PA-FR-012 | Recover unfinished analysis across restart while preventing duplicate usage and stale or unbounded repeated delivery | Recovery and fault scenarios |
+| PA-FR-013 | Commit observation and pending analysis obligation atomically, acknowledge durable receipt truthfully, and coalesce leased background work independently of sender retries or model availability | Transaction, acknowledgement compatibility, worker/restart/concurrency checks |
+| PA-FR-014 | Isolate routine activity input from ordinary main chat while preserving the same personal agent; expose only explicit bounded cross-session context and deliberately linked replies | Trusted session/tool boundaries and reply/context integration checks |
+| PA-FR-015 | Offer bounded model-selected review scheduling when the declared runtime supports it; distinguish an actual timer from descriptive follow-up text and prevent unbounded recurring analysis | Scheduling, pause, lifetime and resource-limit checks |
 
 ## Privacy and control requirements
 
 | ID | Requirement |
 | --- | --- |
-| PA-PR-001 | Keep observations, personal context and intervention records inside the user's chosen host; never return private context to the Android provider, project telemetry or a new relay |
+| PA-PR-001 | Store observations, personal context and intervention records in the user's chosen host; reasoning may send selected context through its already-authorized model/tool connections. Never return private context to the Android activity provider, project telemetry or a new relay |
 | PA-PR-002 | Treat OAP labels, task notes and retrieved text as data; they cannot grant permissions, select destinations, override policy or convert a model hypothesis into a user report |
 | PA-PR-003 | Honor current refusal, pause, opt-out and context correction; preserve explicit user authority over goals, support style and persistence |
 | PA-PR-004 | Keep automatic accountability emails disabled; any future third-party contact needs explicit recipient, purpose, privacy and delivery authorization |
@@ -123,8 +144,18 @@ Sharing controls on Android and support preferences in the host remain separate.
 | PA-AC-13 | Accountability email disabled | No packet, task note, prior attempt or model recommendation can send or enable automatic accountability email; no third-party destination is configured by this increment |
 | PA-AC-14 | Retention, deletion and privacy | Fake-clock/quota tests bound records and disclose truncation; user correction/deletion affects controlled host records; logs/source/fixtures contain no private observations or personal context; residual host/provider copies are described honestly |
 | PA-AC-15 | Agent-owned judgment and evidence scope | Runtime computes facts/enforces permission without a distraction classifier or fixed intervention threshold; agent scenarios are separately evaluated; no synthetic/storage pass declares full M2/M3 or behavioral benefit |
+| PA-AC-16 | Receipt independent of model | Simulated model unavailability does not prevent a committed truthful receipt; transaction failure creates neither acknowledged observation nor orphan review; existing sender acknowledgement remains compatible or is migrated with exact-build evidence |
+| PA-AC-17 | Durable coalesced analysis | Crash after receipt, expired lease, concurrent claims, packets during a review, partial decisions and native admission without terminal completion recover within bounds; no duplicate counting, lost unreviewed input or indefinite postponement |
+| PA-AC-18 | Activity session and reply bridge | Routine packets target only the trusted activity session of the same main agent; ordinary chat receives no raw packet stream; allowed main-chat tools retrieve bounded evidence and record deliberately linked reports; ambiguous/foreign-session input cannot forge ownership or delivery |
+| PA-AC-19 | Bounded review scheduling | A real declared scheduler persists a permitted future review, enforces limits and pause, and does not mistake descriptive follow-up for scheduled work; repeated deferrals cannot produce unlimited jobs or prompts |
 
 ## Delivery increments and evidence status
+
+**October 15 increment:** receipt/analysis/session/reply/delivery source and local/installed-SDK suites are implemented. The final settings-v2 bundle was applied at 3:02:59 p.m. America/Chicago; all 17 source and three guidance hashes match, SQLite quick-check passes and original user rows are preserved. Warm native health, main/foreign context and authenticated receipt/duplicate checks passed at 3:13:21 p.m. Native scheduled worker/model execution remains unproved. Sender 0.12 passed build/lint and all 97 exact-APK Android emulator checks, including both real reboots; physical legacy-hook migration remains pending. See the [processing review](../docs/review/personal-agent-processing-2026-10-15.md) for exact evidence and the unresolved seven-minute cold-start/readiness delay observed during concurrent development/emulator work. This is not a physical background delivery, full dialogue/adaptation or usefulness pass.
+
+The final read-only warm-host observation passed: 30 regular health checks over a 29-minute span plus a healthy follow-up give 31 healthy checks spanning 31 minutes 47 seconds. SQLite integrity passed, original evidence counts stayed unchanged and no analysis/notification jobs were observed. This bounded observation does not close the cold-start investigation or prove native model execution or physical delivery.
+
+**Historical October 14 foundation baseline:**
 
 | Increment | Required evidence | Status at this specification revision |
 | --- | --- | --- |
@@ -134,4 +165,4 @@ Sharing controls on Android and support preferences in the host remain separate.
 | Deterministic delivery/recovery | Independent permission enforcement, delivery ledger, crash/offline/uncertain-send checks | One-attempt mechanics pass local fixtures; native offline-phone guard exercised without sending. Physical delivery and full recovery/queueing remain unproved/future work |
 | Sustained usefulness | User-assessed relevance, burden and outcomes over time, with limitations | Future evaluation; no behavior-change guarantee |
 
-See [current roadmap](../docs/project-roadmap.md#personal-agent-work) and [PA traceability](requirements-traceability.md#personal-agent-requirements) for work IDs and mappings. These PA cases supplement the 33 historical OAP requirements and 29 AC cases; they do not replace protocol conformance or complete historical milestones.
+The table above preserves the October 14 evidence baseline. The October 15 processing/delivery increment must be reported separately in the [current system guide](../docs/current-system.md); no new code inherits its predecessor's installed or physical evidence. See the [roadmap](../docs/project-roadmap.md#personal-agent-work) and [PA traceability](requirements-traceability.md#personal-agent-requirements) for work IDs and mappings. PA-AC-01 through PA-AC-19 supplement the 33 historical OAP requirements and 29 AC cases; they do not replace protocol conformance or complete historical milestones.

@@ -26,6 +26,14 @@ final class ConnectionProbeCases {
                 "Mapped liveabit hook was not verified by its exact missing-message reply");
             passed.add("native_mapped_liveabit_probe_requires_recognizable_route_validation_reply");
 
+            String durable = fixture.endpoint().replace("/hooks/agent", "/liveabit/activity");
+            fixture.respond(400, "{\"ok\":false,\"format\":\"liveabit.activity-receipt.v1\",\"error\":\"activity_message_required\"}");
+            check(engine.checkConnection(durable, token, "main").connected && engine.snapshot().toString().equals(before),
+                "Durable receiver probe failed or changed current sharing");
+            fixture.respond(400, "{\"ok\":false,\"error\":\"activity_message_required\"}");
+            check(!engine.checkConnection(durable, token, "main").connected, "Unidentified receipt route was accepted");
+            passed.add("native_durable_activity_probe_identifies_storage_endpoint_without_packet_or_model_run");
+
             String[] badReplies = {"{\"ok\":false,\"error\":\"unrelated bad request\"}",
                 "{\"ok\":\"false\",\"error\":\"message required\"}",
                 "{\"ok\":false,\"error\":\"hook mapping requires message\"}", "not JSON"};

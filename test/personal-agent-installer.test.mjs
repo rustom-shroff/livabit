@@ -146,7 +146,10 @@ function fixture(t, mode = 'success') {
   write(paths.guide, '# Personal assistant\r\nKeep my custom guidance.\r\n');
   write(paths.skill, 'Original personal skill bytes.\r\n');
   write(paths.workflow, 'Original personal workflow bytes.\r\n');
-  write(paths.settings, '{"synthetic_prior_settings":true}\n');
+  write(paths.settings, JSON.stringify({ format: 'liveabit.personal-agent.settings.v1', enabled: true,
+    agentId: 'main', mainKey: 'main', sessionKey: 'agent:main:main',
+    databasePath: join(stateDir, 'plugins', 'liveabit-personal-agent', 'activity.sqlite'),
+    timeZone: 'America/Chicago', historyDays: 30, episodeDays: 90, accountabilityEmailsEnabled: false }));
   write(paths.transform, '// Original owned transform bytes.\n');
   write(paths.workboard, 'Synthetic Workboard bytes that setup must preserve.');
   write(paths.transcript, '{"synthetic":"personal conversation remains intact"}\n');
@@ -215,7 +218,7 @@ test('real installer preserves personal state and migrates only the activity rou
   const route = after.hooks.mappings[1];
   assert.equal(route.id, 'liveabit-personal');
   assert.equal(route.agentId, 'main');
-  assert.equal(route.sessionKey, 'agent:main:main');
+  assert.equal(route.sessionKey, 'agent:main:liveabit-activity');
   assert.equal(route.sessionMode, 'persistent');
   assert.equal(route.deliver, false);
   assert.equal(after.hooks.allowRequestSessionKey, false);
@@ -232,6 +235,9 @@ test('real installer preserves personal state and migrates only the activity rou
   assert.equal(readFileSync(f.paths.skill, 'utf8'), skill);
   assert.equal(readFileSync(f.paths.workflow, 'utf8'), workflow);
   assert.equal(json(f.paths.settings).accountabilityEmailsEnabled, false);
+  assert.equal(json(f.paths.settings).format, 'liveabit.personal-agent.settings.v2');
+  assert.equal(json(f.paths.settings).mainSessionKey, 'agent:main:main');
+  assert.deepEqual(json(f.paths.settings).legacyEpisodeSessionKeys, ['agent:main:main']);
   for (const name of ['workboard', 'transcript', 'unrelated']) assert.deepEqual(bytes(f.paths[name]), f.original[name]);
   assert.ok(existsSync(join(f.stateDir, 'plugins', 'liveabit-personal-agent', 'activity.sqlite')));
   assert.ok(f.calls().every(argv => ['config', 'nodes', 'plugins'].includes(argv[0])));
@@ -365,7 +371,7 @@ test('prepared inventory permits native apply with the gateway stopped and never
   const result = f.run(undefined, ['--use-prepared-inventory']);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(JSON.parse(result.stdout.trim()).configured, true);
-  assert.equal(json(f.paths.config).hooks.mappings.at(-1).sessionKey, 'agent:main:main');
+  assert.equal(json(f.paths.config).hooks.mappings.at(-1).sessionKey, 'agent:main:liveabit-activity');
   assert.ok(f.calls().slice(priorCalls).every(argv => argv[0] !== 'nodes'));
 });
 

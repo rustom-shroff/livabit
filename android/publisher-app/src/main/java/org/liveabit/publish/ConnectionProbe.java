@@ -47,7 +47,8 @@ final class ConnectionProbe {
             JSONObject response;
             try { response = new JSONObject(new String(body, StandardCharsets.UTF_8)); }
             catch (Exception malformed) { return failure("The server returned an unexpected connection-check response."); }
-            if (Boolean.FALSE.equals(response.opt("ok")) && knownMissingMessage(url, response.opt("error")))
+            if (Boolean.FALSE.equals(response.opt("ok")) && knownMissingMessage(url, response.opt("error"))
+                && (!OpenClawWebhook.isReceiptEndpoint(url) || OpenClawWebhook.RECEIPT_FORMAT.equals(response.opt("format"))))
                 return new Result(true, "OpenClaw connection verified — address, webhook and connection key are working.");
             return failure("The server returned an unexpected connection-check response.");
         } catch (SocketTimeoutException timeout) {
@@ -57,6 +58,7 @@ final class ConnectionProbe {
         } finally { if (request != null) request.disconnect(); }
     }
     private static boolean knownMissingMessage(String url, Object error) {
+        if (OpenClawWebhook.isReceiptEndpoint(url)) return "activity_message_required".equals(error);
         return OpenClawWebhook.isMainEndpoint(url) ? "hook mapping requires message".equals(error)
             : "message required".equals(error);
     }

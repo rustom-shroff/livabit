@@ -1,6 +1,6 @@
 # Personal-agent support for unwanted device use
 
-Date: 2026-10-14
+Date: 2026-10-14. Updated: **2026-10-15**. This is an evidence discussion, not a claim that Livabit reproduces a published intervention or has demonstrated sustained benefit.
 
 ## Product hypothesis
 
@@ -30,8 +30,14 @@ After two support attempts in the same episode without evidence of benefit, the 
 
 Do not hardcode a psychological classification tree. Deterministic infrastructure should own observable facts, permissions, deduplication, time and delivery constraints. Host-computed summaries anchor usage claims; the model must not generate daily totals by adding packets, assume complete coverage or confuse foreground duration with attention. The growing conversation preserves meaning and continuity while structured records support accurate recall and outcome review.
 
-The implementation routes activity into the existing personal conversation while preserving its configured model and authorized personal tools. It adds no calendar/email connectors and begins journaling newly received observations, without backfilling old transcripts. When the runtime is available, the agent records its intended decision and prompt, then `liveabit_notify` enforces the private companion route, freshness, timing and one atomic attempt. Outcomes are separate feedback; a native invocation does not prove display or reading. Legacy JSON and direct native-node delivery remain a fallback only for installations without this runtime.
+The product keeps the existing personal agent and its user-selected model while separating routine activity analysis from ordinary chat. The [current system guide](../current-system.md) distinguishes implementation, installation and observation; the [processing decision](../decisions/0025-durable-activity-analysis.md) defines durable scheduling and the isolated activity conversation. No calendar/email connector or old-transcript backfill follows from installing the activity runtime. Decisions and user reports are recorded through declared tools; notification transport outcomes are runtime evidence. A native invocation does not prove display or reading. Older installations without this runtime retain their separately documented legacy limits.
 
 Automatic accountability emails and device restrictions remain disabled. The examined primary sources do not validate a gentle-to-harsh-to-email ladder. A separately authorized accountability arrangement could be explored as supportive human help, with defined recipients, thresholds and disclosure scope. A configured sending tool alone is not authority to invoke it.
 
 Evaluation should compare useful goal follow-through, perceived control, unwanted sessions, sustained engagement and the user's assessment of helpfulness, alongside estimated app time. Test whether rich personal context and revised interventions improve these outcomes over generic reminders. Reduced minutes, eloquent prompts or fewer visible alerts alone do not demonstrate the intended behavioral change.
+
+## MindShift: what we take from it
+
+The [authors' full paper, sections 4.1–4.3 and 8.4](https://arxiv.org/html/2309.16639v2) makes an important distinction: use intent and momentary mental state were self-reported, rather than reliably inferred from telemetry. Goals and preferred habits were collected during setup. Its interface offered continuing or quitting and feedback on the intervention. Understanding, comforting, evoking and scaffolding habits supplied alternative persuasion strategies. The five-week, 25-person study supports further investigation; it does not validate Livabit's personal-agent architecture, long-term effects or an automatic escalation ladder.
+
+Livabit's adaptation is a product hypothesis: ask naturally when intent or feeling would change the advice; retrieve authorized commitments and evolving goals; keep meaningful dialogue; remember previous approaches and their reported outcomes; then let the user's model choose the next response. We do not copy a fixed emotional taxonomy, require self-report on every packet, collect location, or assume scheduled work is always preferable to rest. Reconsidering after two attempts is our evaluation heuristic. It is not a dose established by MindShift. See the [conversation evaluation plan](../evaluation/personal-agent-conversation.md) for the scenarios and evidence required before claiming these behaviors work.

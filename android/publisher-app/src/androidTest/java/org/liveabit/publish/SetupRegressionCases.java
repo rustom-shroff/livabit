@@ -41,8 +41,18 @@ final class SetupRegressionCases {
                 "Manual editing did not reveal the connection fields");
             assertConnectionOptions(activity);
             passed.add("native_expanding_manual_connection_keeps_exactly_three_actions");
+            // Android requires window focus as well as editor focus before an
+            // implicit IME request. Launch completion alone does not prove it.
+            boolean[] windowFocused = {false};
+            long focusDeadline = SystemClock.elapsedRealtime() + 5000;
+            do {
+                test.runOnMainSync(() -> windowFocused[0] = activity.hasWindowFocus());
+                if (!windowFocused[0]) Thread.sleep(50);
+            } while (!windowFocused[0] && SystemClock.elapsedRealtime() < focusDeadline);
+            check(windowFocused[0], "Manual keyboard test window never received focus");
+            test.runOnMainSync(() -> activity.findViewById(R.id.receiver_address).requestFocus());
+            test.waitForIdleSync();
             test.runOnMainSync(() -> {
-                activity.findViewById(R.id.receiver_address).requestFocus();
                 context.getSystemService(InputMethodManager.class).showSoftInput(activity.findViewById(R.id.receiver_address), InputMethodManager.SHOW_IMPLICIT);
             });
             test.waitForIdleSync();
@@ -120,11 +130,17 @@ final class SetupRegressionCases {
                     ((EditText) activity.findViewById(R.id.openclaw_agent)).setText("main");
                 });
                 importFile(test, activity, "liveabit-current-openclaw-wifi.json");
-                awaitImported(test, activity, arguments.getString("wifi_url"), arguments.getString("wifi_key"), "liveabit");
+                awaitImported(test, activity, arguments.getString("wifi_url"), arguments.getString("wifi_key"), arguments.getString("wifi_agent", "liveabit"));
                 check(!worker.isDone(), "Import was queued behind the active sharing worker");
                 assertRetained(before, engine.snapshot());
             } finally { release.countDown(); worker.get(5000, TimeUnit.MILLISECONDS); }
             passed.add("actual_picker_imports_generated_openclaw_wifi_file_without_waiting_for_sharing");
+            if (OpenClawWebhook.isReceiptEndpoint(arguments.getString("wifi_url"))) {
+                check(fields(activity)[2].equals(arguments.getString("wifi_agent"))
+                    && !status(activity).contains("Older OpenClaw setup updated"),
+                    "Current durable receipt file was incorrectly migrated to the legacy agent");
+                passed.add("actual_picker_imports_current_durable_receipt_file_with_personal_agent_identity");
+            }
             passed.add("actual_openclaw_file_import_preserves_enabled_selection_and_pending_bytes");
 
             String[] draft = fields(activity);
@@ -161,8 +177,9 @@ final class SetupRegressionCases {
                 "stream_id", "recipient_id", "subscription_id", "scope_revision", "cursor", "sequence", "pending", "failure_since", "failure_elapsed"})
             check(String.valueOf(before.get(field)).equals(String.valueOf(after.get(field))), "Import changed saved sharing field: " + field);
     }
-    private static MainActivity open(Instrumentation test, Context context) {
+    private static MainActivity open(Instrumentation test, Context context) throws Exception {
         MainActivity activity = (MainActivity) test.startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        PublisherInstrumentation.awaitWindowFocus(test, activity);
         test.runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
         return activity;
     }
@@ -218,11 +235,36 @@ final class SetupRegressionCases {
             && activity.findViewById(R.id.import_receiver).isEnabled(), "Import failed without a persistent result and error dialog");
     }
     private static void closeError(Instrumentation test) throws Exception { clickNode(test, awaitNode(test, "Close", 5000, "org.liveabit.publish")); }
-    private static void clickNode(Instrumentation test, AccessibilityNodeInfo node) {
+    private static void clickNode(Instrumentation test, AccessibilityNodeInfo node) throws Exception {
         check(node != null, "Required native UI action was absent");
-        AccessibilityNodeInfo clickable = node;
-        while (!clickable.isClickable() && clickable.getParent() != null) clickable = clickable.getParent();
-        check(clickable.performAction(AccessibilityNodeInfo.ACTION_CLICK), "Native UI click failed"); test.waitForIdleSync();
+        String label = node.getText() != null ? node.getText().toString() : String.valueOf(node.getContentDescription());
+        String packageName = String.valueOf(node.getPackageName());
+        long deadline = SystemClock.elapsedRealtime() + 5000;
+        do {
+            AccessibilityNodeInfo root = test.getUiAutomation().getRootInActiveWindow();
+            if (root != null && packageName.equals(String.valueOf(root.getPackageName()))) {
+                for (AccessibilityNodeInfo current : root.findAccessibilityNodeInfosByText(label)) {
+                    if (!label.equalsIgnoreCase(String.valueOf(current.getText()))
+                            && !label.equalsIgnoreCase(String.valueOf(current.getContentDescription()))) continue;
+                    AccessibilityNodeInfo clickable = current;
+                    while (clickable != null && !clickable.isClickable()) clickable = clickable.getParent();
+                    // The picker can expose both a Downloads heading and its
+                    // actionable drawer row. Try each exact match, not only the
+                    // first text node or a non-clickable window ancestor.
+                    if (clickable == null) continue;
+                    // DocumentsUI also exposes off-screen downloaded files.
+                    // Scroll their row into view and requery the changed tree.
+                    if (!current.isVisibleToUser() || !clickable.isVisibleToUser()) {
+                        clickable.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.getId());
+                        test.waitForIdleSync();
+                    } else if (clickable.isEnabled() && clickable.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                        test.waitForIdleSync(); return;
+                    }
+                }
+            }
+            Thread.sleep(100);
+        } while (SystemClock.elapsedRealtime() < deadline);
+        throw new AssertionError("Native UI click failed: " + label);
     }
     private static AccessibilityNodeInfo awaitNode(Instrumentation test, String text, long timeout, String packageName) throws Exception {
         long deadline = SystemClock.elapsedRealtime() + timeout;

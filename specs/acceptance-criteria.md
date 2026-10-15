@@ -1,6 +1,6 @@
 # Acceptance criteria
 
-**Current personal-agent acceptance, 2026-10-14:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) adds separate [PA-AC-01 through PA-AC-15](personal-agent-intervention.md#acceptance-cases) for durable evidence, continuing-agent context, feelings inquiry, contextual persuasion, repeated-attempt reconsideration, explicit runtime permissions and companion conversation. Automatic accountability emails are disabled. The first host-local foundation and live main-agent migration must be tested and evidenced separately from the full relationship/intervention loop. No PA test passes merely because an OAP packet was admitted.
+**Current personal-agent acceptance, 2026-10-15:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) and [ADR-0025](../docs/decisions/0025-durable-activity-analysis.md) define separate [PA-AC-01 through PA-AC-19](personal-agent-intervention.md#acceptance-cases) for durable evidence/analysis, isolated continuing-agent context, optional feelings inquiry, contextual persuasion, repeated-attempt reconsideration and controlled companion delivery. Automatic accountability emails remain disabled. Code, local tests, installation, native execution and physical display/replies need separate evidence. No PA case passes merely because a packet was admitted or a prompt was installed.
 
 ## Personal-agent evidence gates
 
@@ -10,9 +10,13 @@
 | PA conversation | PA-AC-04/05/06/08/09/10: actual supported companion surface, optional feelings inquiry, user reports/corrections and diagnosable choices | Chat, notification invocation, physical display and replies have separate evidence |
 | PA adaptation | PA-AC-07/08/15: multi-turn episodes and model-owned changes after repeated attempts | Counter/storage fixtures do not demonstrate reconsideration or usefulness |
 | PA runtime control | PA-AC-10/11/12/13/14: independent permission/destination enforcement, opted-out/quiet/offline/uncertain-send recovery, disabled accountability email and bounded retention | A Skill instruction alone does not satisfy enforcement or recovery |
+| PA independent analysis | PA-AC-16/17/19: atomic receipt/job, truthful compatible acknowledgement, coalescing/leases/restart/model-terminal-state checks and bounded model-selected review | No fabricated run ID, exactly-once promise, or completion inferred from admission/partial record tools |
+| PA session/reply isolation | PA-AC-18: trusted activity session of same main agent, limited main-chat evidence/feedback bridge, foreign-session denial and ambiguity/provenance handling | Common agent identity does not prove access to all transcripts; reply linkage needs actual evidence |
 | PA usefulness | User assessment of relevance, burden, response and outcomes over time | Future evidence; no lasting behavior-change guarantee |
 
 All 33 OAP requirement IDs, 29 AC IDs and M1/M2/M3 conditions below retain their scopes. PA cases supplement them rather than reusing or retiring IDs. The historical main/liveabit/WhatsApp/companion reviews remain evidence only for their tested versions and surfaces.
+
+Use the [conversation evaluation scenarios](../docs/evaluation/personal-agent-conversation.md) for PA-AC-04/05/06/07/08/15. Instruction-regression tests ensure important workflow requirements remain documented; they do not execute or score a real model conversation. Physical background notification checks require the companion closed/backgrounded, screen off, network loss/return and current permission/battery settings on a named device/OS. Simulated offline/reconnect and native command acknowledgement cannot substitute for that evidence.
 
 ## Preserved integration evidence
 

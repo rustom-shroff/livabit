@@ -1,0 +1,519 @@
+{
+  "format": "liveabit.android-sender.validation.v1",
+  "result": "pass",
+  "date": "2026-10-15",
+  "generated_at": "2026-10-15T20:36:21.8852599Z",
+  "app": {
+    "package": "org.liveabit.publish",
+    "version_name": "0.12.0-poc",
+    "version_code": 14,
+    "min_sdk": 35,
+    "target_sdk": 37,
+    "compile_sdk": 37,
+    "apk": {
+      "path": "artifacts/android-publisher/liveabit-sender-0.12.0-poc.apk",
+      "sha256": "6be85585a1825647fdf61244dfea2a657d726d2a635a0d7d67c0f72128b3eb2a",
+      "bytes": 163968
+    },
+    "installed_apk": {
+      "path": "artifacts\\android-publisher\\run-466f0749-0fb2-4c82-b8c4-8e804cc3353a\\installed-sender.apk",
+      "sha256": "6be85585a1825647fdf61244dfea2a657d726d2a635a0d7d67c0f72128b3eb2a",
+      "bytes": 163968
+    },
+    "installed_bytes_match": true
+  },
+  "instrumentation": {
+    "package": "org.liveabit.publish.test",
+    "runner": "org.liveabit.publish.PublisherInstrumentation",
+    "variant": "debugAndroidTest",
+    "declared_version_name": null,
+    "declared_version_code": null,
+    "min_sdk": 35,
+    "target_sdk": 37,
+    "apk": {
+      "path": "android/publisher-app/build/outputs/apk/androidTest/debug/publisher-app-debug-androidTest.apk",
+      "sha256": "e54451f5059ba105cd61c5caa54975b7990506df136c7f84731fd1bcb46aabcd",
+      "bytes": 164648
+    },
+    "installed_apk": {
+      "path": "artifacts\\android-publisher\\run-466f0749-0fb2-4c82-b8c4-8e804cc3353a\\installed-tests.apk",
+      "sha256": "e54451f5059ba105cd61c5caa54975b7990506df136c7f84731fd1bcb46aabcd",
+      "bytes": 164648
+    },
+    "installed_bytes_match": true
+  },
+  "build": {
+    "result": "pass",
+    "lint_result": "pass",
+    "report": {
+      "path": "artifacts/implementation-2026-10-15/android-final-common-focus-build.txt",
+      "sha256": "9a75a8defa96e7782316876c664700d19860251e60ed280226707d00c9d7c7d3",
+      "bytes": 6538
+    },
+    "product_source_changed_by_final_test_driver_repairs": false
+  },
+  "emulator": {
+    "avd": "liveabit-api35-test",
+    "serial": "emulator-5580",
+    "platform": "Android 15",
+    "api": 35,
+    "system_image": "system-images;android-35;default;x86_64",
+    "image_revision": 2,
+    "image_extension_level": 13,
+    "abi": "x86_64",
+    "image_system_img_sha256": "8d7b29ad96c15adb663a5a8ced7f3ea40552019626f6a4420c54dc061f569970",
+    "emulator_version": "37.2.12",
+    "emulator_build_id": "16428233",
+    "emulator_binary_sha256": "653dfa9797ea524723c3eef98fd532776de9a056a1de2ef389dce782ab92037d",
+    "cpu_acceleration": "on",
+    "graphics": "software",
+    "started_at": "2026-10-15T19:11:23.6444414Z",
+    "start_script": {
+      "path": "scripts/start-android-emulator.ps1",
+      "sha256": "567eb8c67b7219575e1c897446f771f621d017c0a9df837f77bab20d0bc44b8f",
+      "bytes": 4636
+    },
+    "verified_process_start": {
+      "name": "emulator.exe",
+      "created_at": "2026-10-15T19:11:23.546103Z",
+      "command_has_owned_avd": true,
+      "command_has_owned_port": true,
+      "command_has_no_window": true,
+      "command_has_no_snapshot": true,
+      "command_has_wipe_data": true,
+      "command_has_software_gpu": true,
+      "only_owned_avd_inspected": true
+    },
+    "project_owned_avd_only": true,
+    "fresh_data_wipe_verified_in_start_command": true,
+    "host_os_settings_changed": false,
+    "personal_activity_used": false
+  },
+  "full_suite": {
+    "result": "pass",
+    "completed_at": "2026-10-15T20:31:48.2111455Z",
+    "check_count": 97,
+    "raw_report": {
+      "path": "artifacts\\android-publisher\\run-466f0749-0fb2-4c82-b8c4-8e804cc3353a\\validation.json",
+      "sha256": "5e826cabbcf9bca1b217c6d71fa1320695898eb2c387d2b464643240c7554ca5",
+      "bytes": 9047
+    },
+    "checks": [
+      "default_one_hour_warning",
+      "native_canonical_json_unicode_integer_and_byte_limits",
+      "real_receiver_setup_import_and_invalid_setup_rejection",
+      "configured_connection_description",
+      "native_manual_connection_edits_remain_a_draft_without_starting_sharing",
+      "native_setup_and_key_storage",
+      "actual_android_usage_to_receiver_and_matching_ack",
+      "actual_oap_observation_envelope_and_canonical_wire_digest",
+      "actual_receiver_schema_and_semantic_rejections_from_android",
+      "wrong_event_ack_is_refused",
+      "repeat_start_preserves_pending_session_and_outage_timer",
+      "durable_pending_bytes_retry_and_receiver_deduplication",
+      "configurable_one_minute_real_time_android_outage_notification",
+      "recovery_clears_pending_and_outage_notification",
+      "stop_sharing_clears_pending_and_jobs",
+      "real_receiver_rejects_bad_key_with_clear_status",
+      "native_setup_change_cancel_retains_and_confirm_clears_pending",
+      "real_connection_failure_has_clear_status",
+      "native_connection_screen_opens",
+      "native_legacy_storage_migration_preserves_and_delivers_original_bytes",
+      "actual_receiver_accepts_draft_two_continuation_with_zero_new_transitions",
+      "actual_receiver_preserves_draft_one_validation_and_acceptance",
+      "native_adaptive_defaults_five_minute_send_fifteen_minute_idle",
+      "native_adaptive_upgrade_preserves_original_queue_and_outage",
+      "native_configurable_one_off_job_and_atomic_timing_update",
+      "real_screen_off_cutoff_blocks_network_and_retains_pending_bytes",
+      "native_screen_off_history_recovers_without_broadcast_cache",
+      "actual_idle_job_rechecks_without_network_traffic",
+      "real_screen_on_resumes_identical_pending_request",
+      "actual_automatic_job_skips_empty_observations_without_outage",
+      "actual_automatic_job_sends_fresh_selected_app_activity",
+      "stop_cancels_both_adaptive_job_slots",
+      "native_open_session_continues_without_repeating_transitions_or_previous_duration",
+      "native_cross_window_pause_closes_session_and_following_idle_stays_unknown",
+      "native_initial_empty_and_unmatched_pause_do_not_invent_usage",
+      "native_internal_activity_overlap_and_same_timestamp_ambiguity",
+      "native_screen_boundaries_clip_foreground_and_never_become_transitions",
+      "native_continuity_resets_on_gaps_boot_clock_changes_and_age_limit",
+      "native_continuity_selected_package_redaction",
+      "actual_android_usage_source_establishes_open_session_and_acknowledges_it",
+      "actual_persisted_continuation_sends_a_new_window_with_no_new_transitions",
+      "actual_android_pause_stops_subsequent_empty_automatic_requests",
+      "native_stop_erases_foreground_continuity",
+      "native_meaningful_gate_requires_positive_duration_not_transition_counts",
+      "native_manual_openclaw_send_skips_empty_and_advances_cursor_without_false_outage",
+      "native_legacy_zero_unknown_queue_is_removed_without_model_run_or_sequence_rewrite",
+      "native_meaningful_pending_retry_preserves_identity_bytes_and_outage_while_collection_is_quiet",
+      "native_quiet_period_still_retries_prior_meaningful_packet_and_clears_outage",
+      "native_openclaw_connection_probe_verifies_auth_route_without_activity_or_state_changes",
+      "native_mapped_liveabit_probe_requires_recognizable_route_validation_reply",
+      "native_durable_activity_probe_identifies_storage_endpoint_without_packet_or_model_run",
+      "native_probe_rejects_arbitrary_errors_admission_responses_and_redirects",
+      "native_connection_probe_flags_key_route_and_server_failures_immediately",
+      "native_invalid_connection_draft_is_flagged_before_network",
+      "native_connection_probe_flags_unreachable_server_without_starting_sharing",
+      "native_connection_probe_flags_unresponsive_server_timeout_without_state_changes",
+      "native_setup_connect_openclaw_verifies_immediately_without_starting_sharing",
+      "native_setup_connection_key_failure_is_visible_in_dialog_and_status",
+      "native_setup_unreachable_openclaw_is_visible_in_dialog_and_status",
+      "native_connect_missing_configuration_offers_only_import_and_manual_without_sharing",
+      "native_expanding_manual_connection_keeps_exactly_three_actions",
+      "native_manual_connection_keyboard_does_not_reintroduce_extra_actions",
+      "native_expanded_manual_editor_recreation_keeps_exactly_three_actions",
+      "native_missing_configuration_dialog_offers_only_import_manual_and_close",
+      "native_activity_setup_settings_tabs_keep_connection_key_off_home",
+      "native_setup_has_three_connection_options_and_activity_omits_setup_shortcut",
+      "native_settings_save_and_validation_preserve_pending_delivery",
+      "native_settings_tab_and_values_survive_activity_recreation",
+      "actual_picker_migrates_retained_main_agent_wifi_export_without_changing_saved_sharing",
+      "actual_picker_imports_generated_openclaw_wifi_file_without_waiting_for_sharing",
+      "actual_picker_imports_current_durable_receipt_file_with_personal_agent_identity",
+      "actual_openclaw_file_import_preserves_enabled_selection_and_pending_bytes",
+      "actual_picker_wrong_host_file_shows_actionable_error_and_preserves_draft_and_pending_bytes",
+      "actual_picker_malformed_secret_bearing_file_reports_safe_error_without_changing_saved_state",
+      "actual_picker_receiver_setup_still_imports_without_applying_draft_or_clearing_pending_bytes",
+      "actual_android_document_picker_imports_receiver_setup",
+      "force_stop_reopen_restores_jobs_and_preserves_pending_session",
+      "actual_android_jobscheduler_delivery",
+      "rendered_android_activity_screen_with_separate_setup_settings",
+      "denied_notification_permission_is_reported",
+      "native_openclaw_setup_and_destination_constraints",
+      "actual_android_collector_direct_hook_body_auth_and_idempotency",
+      "native_openclaw_legacy_agent_migration_preserves_queued_body",
+      "native_openclaw_requires_literal_ok_and_nonempty_run_id",
+      "native_openclaw_http_refusal_durable_retry_and_admission_recovery",
+      "native_openclaw_mapped_liveabit_hook_and_gateway_owned_session_route",
+      "native_openclaw_main_agent_routing_and_switch_pending_fence",
+      "native_openclaw_invalid_agent_preserves_current_sharing",
+      "native_openclaw_confirmed_agent_switch_creates_fresh_queue",
+      "native_openclaw_durable_receipt_requires_exact_event_hash_and_literal_storage_ack_without_run_id",
+      "native_reboot_fixture_saves_meaningful_pending_activity_and_custom_configuration",
+      "native_reboot_fixture_cancels_all_publisher_jobs_to_isolate_startup_restoration",
+      "real_reboot_preserves_enabled_connection_timing_selection_queue_identity_bytes_and_outage",
+      "real_boot_restores_cancelled_delivery_and_outage_jobs_without_opening_publisher",
+      "actual_post_reboot_job_acknowledges_original_pending_event_with_encrypted_connection",
+      "native_stop_preserves_setup_and_cancels_jobs_before_stopped_reboot",
+      "real_reboot_keeps_stopped_sharing_off_and_preserves_setup_without_jobs_or_packets"
+    ],
+    "executed_source_hashes": [
+      {
+        "path": "scripts/test-android-publisher.ps1",
+        "sha256": "c92d23cfde21eaa1bb00d7b258190511c245abb8a8dece0dcfa2fd192e565f14",
+        "bytes": 35447
+      },
+      {
+        "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/PublisherInstrumentation.java",
+        "sha256": "b0738e1c0e98cc67698da76938edc3e2fb937d019041a9bb7ff14998ba72919c",
+        "bytes": 51789
+      },
+      {
+        "path": "android/publisher-app/src/androidTest/java/org/liveabit/publish/SetupRegressionCases.java",
+        "sha256": "6f8bc566587a66330ec73d3bb21bee8832e827414787372046ee9a031ca5cd53",
+        "bytes": 21624
+      },
+      {
+        "path": "artifacts/android-publisher/liveabit-sender-0.12.0-poc.apk",
+        "sha256": "6be85585a1825647fdf61244dfea2a657d726d2a635a0d7d67c0f72128b3eb2a",
+        "bytes": 163968
+      },
+      {
+        "path": "android/publisher-app/build/outputs/apk/androidTest/debug/publisher-app-debug-androidTest.apk",
+        "sha256": "e54451f5059ba105cd61c5caa54975b7990506df136c7f84731fd1bcb46aabcd",
+        "bytes": 164648
+      }
+    ],
+    "isolated_receiver": true,
+    "real_android_usage_query": true,
+    "actual_http_sender_to_local_reference_receiver": true,
+    "actual_android_outage_notification_with_one_minute_setting": true,
+    "default_warning_minutes": 60,
+    "default_send_minutes": 5,
+    "default_screen_off_minutes": 15
+  },
+  "receipt_and_setup_contracts": {
+    "actual_document_picker": true,
+    "connection_file_source": "Isolated synthetic current and retained legacy fixtures matching exporter formats",
+    "current_path": "/liveabit/activity",
+    "current_agent": "main",
+    "current_agent_preserved": true,
+    "retained_legacy_path": "/hooks/liveabit",
+    "retained_legacy_agent": "main",
+    "retained_legacy_import_agent": "liveabit",
+    "retained_pending_identity_and_bytes_preserved": true,
+    "current_receipt_requires_exact_event_id_and_wire_sha256_and_literal_durable_ack": true,
+    "current_receipt_requires_run_id": false,
+    "legacy_nonempty_run_id_ack_still_tested": true,
+    "malformed_secret_and_wrong_host_files_rejected_without_state_or_secret_leak": true,
+    "live_installed_openclaw_export_file_tested": false
+  },
+  "reboots": {
+    "real_reboot_count": 2,
+    "enabled": {
+      "boot_after": 4,
+      "boot_before": 3,
+      "real_reboot": true,
+      "manually_opened_publisher": false
+    },
+    "stopped": {
+      "boot_after": 5,
+      "boot_before": 4,
+      "real_reboot": true,
+      "manually_opened_publisher": false
+    },
+    "enabled_cancelled_jobs_restored_without_opening_publisher": true,
+    "enabled_original_pending_identity_and_bytes_acknowledged_with_saved_encrypted_connection": true,
+    "stopped_observed_sharing_remained_off": true,
+    "stopped_observed_pending_and_outage_remained_empty": true,
+    "stopped_no_new_packets": true,
+    "stopped_saved_configuration_retained": true,
+    "stopped_settlement": {
+      "maximum_wait_seconds": 60,
+      "elapsed_ms": 29075,
+      "observation_count": 11,
+      "transient_job_313_waiting_observed": true,
+      "last_waiting_sample_elapsed_ms": 25312,
+      "first_all_absent_sample_elapsed_ms": 27212,
+      "two_final_all_absent_samples": true,
+      "meaning": "Bounded observed job-state settlement; not a direct assertion of StartupReceiver callback completion",
+      "observations": [
+        {
+          "elapsed_ms": 3660,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 6004,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 8088,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 10260,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 12771,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 16025,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 19072,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 22094,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 25312,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "waiting"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 27212,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "unknown(u0a148/jid313)\nCould not find job 313 in package org.liveabit.publish / user 0"
+          },
+          "sharing_enabled": false
+        },
+        {
+          "elapsed_ms": 29075,
+          "jobs": {
+            "310": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+            "311": "unknown(u0a148/jid311)\nCould not find job 311 in package org.liveabit.publish / user 0",
+            "313": "unknown(u0a148/jid313)\nCould not find job 313 in package org.liveabit.publish / user 0"
+          },
+          "sharing_enabled": false
+        }
+      ]
+    },
+    "private_fixture_configuration_restored": true
+  },
+  "post_suite_host_parser": {
+    "result": "pass",
+    "check_count": 12,
+    "checks": [
+      "captured_restored_automatic_job",
+      "captured_missing_owned_job",
+      "reject_unknown_command",
+      "reject_unknown_package",
+      "reject_wrong_job_identity",
+      "reject_wrong_package_detail",
+      "reject_wrong_user_identity",
+      "reject_unrelated_unknown_trailer",
+      "reject_empty_success",
+      "reject_failed_positive_looking_response",
+      "all_saved_positive_and_stopped_reboot_observations_replayed",
+      "live_owned_emulator_missing_job_contract"
+    ],
+    "saved_text_observations_replayed": 35,
+    "saved_text_replay_exit_status": "Positive reports imply successful original read; absence replays infer23 from the independently captured exact native format. Per-observation native exit codes were not recorded by the full suite.",
+    "independently_captured_live_absence_exit_code": 23,
+    "live_owned_emulator_tested": true,
+    "apk_bytes_unchanged": true,
+    "full_apk_suite_repeated_for_parser_only": false,
+    "report": {
+      "path": "artifacts/implementation-2026-10-15/android-job-state-parser-validation.json",
+      "sha256": "4135bdb20021941d2e2e7043e8e1cfc6c455d64e2648c11404e0c1f1907d318b",
+      "bytes": 651
+    },
+    "source_files": [
+      {
+        "path": "scripts/android-publisher-job-state.ps1",
+        "sha256": "bfdadf2e33a78796a3fe99b19ad9bd5ed078d273554666414b16e4aefed24f88",
+        "bytes": 940
+      },
+      {
+        "path": "scripts/test-android-job-state-parser.ps1",
+        "sha256": "64cacca40551a6ce21f61faf93e0eade8fa2ccbb53470755b63fa01e31bfc4c4",
+        "bytes": 4130
+      },
+      {
+        "path": "test/fixtures/android-job-state-output.json",
+        "sha256": "f90d594e65b459b6e37e5fe1c4081529c665112dd5508fc1f1a36cfa8ef31d02",
+        "bytes": 738
+      },
+      {
+        "path": "scripts/test-android-publisher.ps1",
+        "sha256": "a884227125c37fc1d513c7c6d8715bdfa38dce04ccd01eac5ddea135e333b08f",
+        "bytes": 35438
+      }
+    ]
+  },
+  "retained_failures": [
+    {
+      "evidence": {
+        "path": "artifacts/android-publisher/run-2c11902b-6520-41e8-909f-a0b3af03a103/setup-import-regression.txt",
+        "sha256": "572b8ce5f0bba34926d9da7e6efdacf5bb47221c72cd52e85e91ebd0c4183534",
+        "bytes": 590
+      },
+      "issue": "DocumentsUI offscreen downloaded-file click failed; exact-match visible-row and ACTION_SHOW_ON_SCREEN driver repair retained all functional/privacy assertions"
+    },
+    {
+      "evidence": {
+        "path": "artifacts/android-publisher/run-9ebda3f9-9598-48d0-ab66-2fa23144a38a/validation.json",
+        "sha256": "1de76d8bd189a3b67524f4504f58d4fbfa73f93708334fc1f7b1b3c9bd2bc878",
+        "bytes": 139
+      },
+      "issue": "Fixed five-second stopped-reboot assertion preceded observed native boot settlement; replaced with bounded disabled/no-packet/job-absence observation"
+    },
+    {
+      "evidence": {
+        "path": "artifacts/android-publisher/run-67732940-5fad-47ca-a500-318aeebaaac8/native-tests.txt",
+        "sha256": "d92fd89cab3485588cfa3a932a489ca61817f170a744773976e2900f2d6a0e92",
+        "bytes": 966
+      },
+      "issue": "Change-confirmation UI assertion failed while a retained System UI ANR modal owned input focus"
+    },
+    {
+      "evidence": {
+        "path": "artifacts/android-publisher/run-b6286f27-2b9a-4c17-a1ad-37d8895bf2f7/native-tests.txt",
+        "sha256": "ca343cfcdb3034de2507646be99f87cea4b2fb3016e633f2e3eed17d099e5fb1",
+        "bytes": 363
+      },
+      "issue": "New window-focus precondition rejected the same unhealthy emulator before further UI checks"
+    }
+  ],
+  "test_driver_repairs": {
+    "scope": "Host scripts and Android instrumentation only",
+    "shared_launch_window_focus_and_idle_guard": true,
+    "real_window_and_editor_focus_before_keyboard_assertion": true,
+    "exact_matching_clickable_picker_rows_scrolled_into_view": true,
+    "initial_wake_unlock_and_focus_precondition_recorded": true,
+    "system_ui_anr_diagnosis": {
+      "path": "artifacts/implementation-2026-10-15/emulator-system-ui-anr-focus.json",
+      "sha256": "7c0406e33fa2359ed43c49d8665640a2f02fe3836b2e2e5f5531eede542b292b",
+      "bytes": 615
+    },
+    "system_ui_recovered_only_on_owned_emulator": true,
+    "no_product_assertions_removed": true,
+    "observed_boot_wait_bounded_to_seconds": 60,
+    "host_absence_parser_hardened_after_full_pass": true
+  },
+  "cleanup": {
+    "isolated_receiver_stopped": true,
+    "user_receiver_controlled": false,
+    "emulator": {
+      "generated_at": "2026-10-15T20:34:59.0654584Z",
+      "owned_avd": "liveabit-api35-test",
+      "serial": "emulator-5580",
+      "avd_identity_verified_before_stop": true,
+      "graceful_stop_requested": true,
+      "launcher_process_exited": true,
+      "physical_phone_controlled": false
+    }
+  },
+  "scope_limits": {
+    "physical_phone_tested": false,
+    "physical_phone_app_changed": false,
+    "installed_openclaw_admission_tested": false,
+    "scheduled_native_model_execution_tested": false,
+    "real_user_activity_used": false,
+    "physical_companion_background_nudge_delivery_tested": false,
+    "accountability_email_sent": false,
+    "exact_background_timing_proven": false,
+    "oem_battery_and_doze_delivery_proven": false,
+    "limits": [
+      "One project emulator and local final receiver. No Grok account or real personal activity.",
+      "One-minute real-time notification tested; default one-hour value checked rather than waiting an hour.",
+      "JobScheduler delivery force-triggered; exact background timing and battery behavior remain OS-dependent.",
+      "Real reboot checks unlock an Android 15 emulator without a PIN; force-stop still requires the user to reopen the app, as enforced by Android.",
+      "Screen-off suppression exercised with a one-minute setting and real screen power; fifteen-minute default checked without waiting fifteen minutes.",
+      "Receipt and legacy-hook replies were supplied by isolated Android test endpoints; this report does not prove native OpenClaw receipt persistence or a completed model run.",
+      "The actual Android notification exercised here is the sender receiver-health warning on the emulator; coaching notification delivery to a physical companion was not tested.",
+      "Job-state parsing and its captured fixtures are pinned to Android15/API35 user0 output. Future CLI formats fail closed until reviewed."
+    ]
+  }
+}

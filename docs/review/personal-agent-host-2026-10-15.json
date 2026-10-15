@@ -1,0 +1,126 @@
+{
+  "format": "liveabit.personal-agent.host-verification.v1",
+  "observed_at": "2026-10-15T20:13:21.676Z",
+  "plugin_version": "0.2.0",
+  "installed_source_sha256": {
+    "installer.mjs": "72a874ab4c4c771b550c477b9479cc5cf1208bc5a0c487d4d0700af27a7bf643",
+    "store.mjs": "f6bdbd1b0ab8445d5f70ac7745e793c6e9acb4258c12050815a8996c8f7f94c3",
+    "analysis-store.mjs": "cf1c5ffdb0832bce1ab70569c5c47ba02f0c66417d12106a444cb0d5c1022c99",
+    "openclaw.plugin.json": "81c096c3341d25ef668fb46a2351c553384ed1ac95521670aaa24e87241dd769",
+    "runtime.mjs": "ead7f84be9f25cfa3f633e9c43e23028764cd6bbbc15ef1f11a5ca718c952c4a",
+    "configuration.mjs": "cd09ad5f31170860a61b967e93540c165a4b4cc2b42446e8b4e6ee09d18cf297",
+    "invocation.mjs": "b760e644e51d030b8c5a74c0532dd4572efac0ce4e2a65f68e1f1fadee5b887f",
+    "delivery-store.mjs": "300ebad0d1806c2018c714d8addd6eb43bcd3519f6abb0e4332e51b28c4def95",
+    "ingress.mjs": "f88908338528e97bd0e21a1f5b6fb2fc46c5cf08c6c6f2197d5e8d27f9801c88",
+    "conversation.mjs": "d9248791a7a7fbf508057a7a55e35e0cd4aa8fa14125fe2042f18391a35f1819",
+    "notification.mjs": "0d740a0875bd42f75022c7e775b919d3a9ef2c091e1e6310fa9a937e119034e1",
+    "observation.mjs": "17c47542520199e896e7f336f2c4011a74d2501b77a3ba33d83d1819da13674b",
+    "background.mjs": "da565c1f6cdaec03cb7789ebf675aa0273992845d4a21150cbf044ed28bfc442",
+    "package.json": "8cf96a53c706b7649234d3f892af5eb66b0a9c47aa93ba2ac71f700ce14fd842",
+    "receipt.mjs": "bd67319511d0283e0120dc5ccae3c259cd2375fa20fcbc0eafe58ef20b6a435f",
+    "index.mjs": "725dedfe933d4749f585d75e2d8ff66fdc9f604db75a9a5a64e875487045acb1",
+    "analysis.mjs": "4f05d26be7e08b51506231d1211171ac8ebbc133d89e99ecc9b0014b899f7d02"
+  },
+  "installed_guidance_sha256": {
+    "skill_sha256": "f43084cd5b063221b72d8ca21f32c2d2c0afd0a3236c7a85017911753c4539f1",
+    "guide_sha256": "2c319664a6420752cc8cde250a48334340bcf86bb8fa8d56aa6052e66adc1322",
+    "workflow_sha256": "614cf8fa7893f75d713c3136ae6f6a48a46cad3f3872b4821e86f791d14c1b2f"
+  },
+  "installed_sources_and_guidance_match": true,
+  "main_session": "agent:main:main",
+  "activity_session": "agent:main:liveabit-activity",
+  "analysis_enabled": true,
+  "accountability_emails_enabled": false,
+  "http_health_status": 200,
+  "sqlite_integrity": "ok",
+  "application_table_count": 10,
+  "original_rows_preserved": true,
+  "probes": {
+    "receipt_rejects_unauthenticated": true,
+    "receipt_missing_message": true,
+    "main_context_http_status": 200,
+    "main_context_transport_code": null,
+    "main_context_ok": true,
+    "foreign_context_denied": true,
+    "foreign_context_http_status": 404,
+    "empty_receipt_http_status": 200,
+    "empty_receipt_transport_code": null,
+    "empty_receipt_error": null,
+    "durable_empty_receipt": true,
+    "durable_duplicate_receipt": true,
+    "synthetic_empty_row_removed": true
+  },
+  "node_tests": {
+    "failed": 0,
+    "passed": 504,
+    "existing_skips": 1,
+    "total": 505
+  },
+  "native_sdk_source_contract": {
+    "passed": 7,
+    "model_run": false
+  },
+  "verification_effects": {
+    "physical_phone_changed": false,
+    "scheduled_model_requests": 0,
+    "real_notifications_requested": 0,
+    "native_vendor_code_changed": false,
+    "real_emails_requested": 0,
+    "synthetic_activity": "empty estimates only, removed by exact generated identity and hash"
+  },
+  "availability": {
+    "native_process_started_at": "2026-10-15T20:05:53.34Z",
+    "first_observed_health_200": "2026-10-15T20:12:54.516Z",
+    "credentials_changed": false,
+    "stale_sidecars_preserved": 3,
+    "managed_start_readiness_timeout": true,
+    "cold_start_delay_remains": true,
+    "unrelated_process_changed": false
+  },
+  "stability_observation": {
+    "status": "passed",
+    "regular_samples": 30,
+    "regular_health_200": 30,
+    "regular_health_failures": 0,
+    "regular_first_at": "2026-10-15T20:12:54.516Z",
+    "regular_last_at": "2026-10-15T20:41:54.578Z",
+    "regular_latency_min_ms": 6.0,
+    "regular_latency_max_ms": 306.0,
+    "follow_up_at": "2026-10-15T20:44:41.99Z",
+    "follow_up_http_health_status": 200,
+    "first_to_follow_up_seconds": 1907.474,
+    "final_sqlite_integrity": "ok",
+    "original_evidence_counts_unchanged": true,
+    "no_runtime_jobs_observed": true,
+    "verification_model_or_notification_requests": 0,
+    "limitation": "Warmed-host read-only health and database observation under this development workload; no claim of native model lifecycle or physical background delivery."
+  },
+  "limitations": [
+    "Native scheduled model-to-tool execution was not exercised.",
+    "Physical companion background delivery, display, reading and real reply linkage remain unverified.",
+    "Physical sender retains the compatible legacy endpoint until APK and private setup migration.",
+    "Cold-start availability and systemic native lock probing remain upstream concerns.",
+    "No behavioral or clinical efficacy established."
+  ],
+  "companion_inventory": {
+    "checked_at": "2026-10-15T20:27:41.1868023Z",
+    "inventory_available": true,
+    "configured_node_count": 1,
+    "paired": true,
+    "connected": false,
+    "last_advertised_notification_permission": true,
+    "last_advertised_passive_notification_capability": true,
+    "phone_installation_or_power_state_inferred": false,
+    "notification_requested": false
+  },
+  "live_android_presence": {
+    "checked_at": "2026-10-15T20:33:40.661Z",
+    "method": "presence.query",
+    "devices_only": true,
+    "truncated": false,
+    "tracked_android_node_sessions": 0,
+    "tracked_android_ui_or_non_node_connections": 0,
+    "operator_node_split_observed": false,
+    "limitation": "Current tracked normal UI/node sockets only; excludes ephemeral backend/probe modes and does not establish the phone UI, power state or disconnection cause."
+  }
+}
