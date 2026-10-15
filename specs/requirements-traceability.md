@@ -1,6 +1,6 @@
 # Requirements traceability
 
-**Current direction, 2026-10-14:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) introduces a separate PA requirement/task/acceptance namespace for ongoing personal-agent support. The original 33 OAP rows and 29 AC mappings remain unchanged in identity and scope. The first implementation is host-local durable evidence/context tools and tested live main-agent migration; later conversation, persuasion, reconsideration and delivery orchestration require their own evidence. Companion chat is first and automatic accountability emails are disabled.
+**Current direction, 2026-10-15:** [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) introduces ongoing personal-agent support; [ADR-0025](../docs/decisions/0025-durable-activity-analysis.md) adds durable independent analysis and conversation isolation. PA requirements supplement the original 33 OAP rows and 29 AC mappings without changing their identities or scopes. The [system guide](../docs/current-system.md) and [conversation evaluation plan](../docs/evaluation/personal-agent-conversation.md) distinguish code, mechanical tests and observed judgment/usefulness. Companion chat is first; automatic accountability emails remain disabled.
 
 ## Personal-agent requirements
 
@@ -14,20 +14,23 @@ The [PA specification](personal-agent-intervention.md) is normative for these re
 | PA-FR-004 | PA-C3 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning), [records](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-003 | PA-AC-04 |
 | PA-FR-005 | PA-C4 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-003 | PA-AC-05, PA-AC-06, PA-AC-15 |
 | PA-FR-006 | PA-C4 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-003 | PA-AC-05 |
-| PA-FR-007 | PA-C5 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-004 | PA-AC-08 |
+| PA-FR-007 | PA-C5, PA-C8 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-004, TASK-PA-009 | PA-AC-08, PA-AC-18 |
 | PA-FR-008 | PA-C4, PA-C5 | [Relationship](personal-agent-intervention.md#relationship-and-reasoning) | TASK-PA-004 | PA-AC-07 |
 | PA-FR-009 | PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-002, TASK-PA-005 | PA-AC-09 |
-| PA-FR-010 | PA-C1, PA-C4, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-003, TASK-PA-005 | PA-AC-10 |
+| PA-FR-010 | PA-C1, PA-C4, PA-C6, PA-C7 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-003, TASK-PA-005, TASK-PA-008, TASK-PA-010 | PA-AC-10, PA-AC-17 |
 | PA-FR-011 | PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages), [channel](personal-agent-intervention.md#channel-and-control) | TASK-PA-005 | PA-AC-11 |
-| PA-FR-012 | PA-C1, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-005 | PA-AC-12 |
+| PA-FR-012 | PA-C1, PA-C6, PA-C7 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-005, TASK-PA-008, TASK-PA-010 | PA-AC-12, PA-AC-17 |
+| PA-FR-013 | PA-C1, PA-C7 | [Durable analysis](personal-agent-intervention.md#durable-analysis-and-conversation-isolation) | TASK-PA-008 | PA-AC-16, PA-AC-17 |
+| PA-FR-014 | PA-C3, PA-C4, PA-C8 | [Conversation isolation](personal-agent-intervention.md#durable-analysis-and-conversation-isolation) | TASK-PA-009 | PA-AC-18 |
+| PA-FR-015 | PA-C4, PA-C7 | [Durable analysis](personal-agent-intervention.md#durable-analysis-and-conversation-isolation) | TASK-PA-008 | PA-AC-19 |
 | PA-PR-001 | PA-C1, PA-C3, PA-C5 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-006 | PA-AC-14 |
 | PA-PR-002 | PA-C1, PA-C3, PA-C6 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-003, TASK-PA-005 | PA-AC-04, PA-AC-11 |
 | PA-PR-003 | PA-C3, PA-C4, PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-003, TASK-PA-005 | PA-AC-05, PA-AC-07, PA-AC-11 |
 | PA-PR-004 | PA-C6 | [Channel and control](personal-agent-intervention.md#channel-and-control) | TASK-PA-002, TASK-PA-005 | PA-AC-13 |
 | PA-PR-005 | PA-C1, PA-C3, PA-C5 | [Privacy](privacy-security.md#personal-context-and-intervention-controls) | TASK-PA-001, TASK-PA-006 | PA-AC-14 |
-| PA-NFR-001 | PA-C1 through PA-C6 | [Architecture](system-architecture.md#personal-agent-host-architecture) | TASK-PA-001, TASK-PA-002 | PA-AC-01, PA-AC-15; retained AC-29 topology audit |
-| PA-NFR-002 | PA-C1, PA-C2, PA-C4, PA-C6 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-001, TASK-PA-003, TASK-PA-005 | PA-AC-11, PA-AC-15 |
-| PA-NFR-003 | PA-C1, PA-C2, PA-C3 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-006 | PA-AC-03, PA-AC-14 |
+| PA-NFR-001 | PA-C1 through PA-C8 | [Architecture](system-architecture.md#personal-agent-host-architecture) | TASK-PA-001, TASK-PA-002, TASK-PA-008, TASK-PA-009 | PA-AC-01, PA-AC-15; retained AC-29 topology audit |
+| PA-NFR-002 | PA-C1, PA-C2, PA-C4, PA-C6, PA-C7, PA-C8 | [Processing stages](personal-agent-intervention.md#processing-stages) | TASK-PA-001, TASK-PA-003, TASK-PA-005, TASK-PA-008, TASK-PA-009 | PA-AC-11, PA-AC-15, PA-AC-18 |
+| PA-NFR-003 | PA-C1, PA-C2, PA-C3, PA-C7 | [State and evidence](personal-agent-intervention.md#state-and-evidence) | TASK-PA-001, TASK-PA-006, TASK-PA-008 | PA-AC-03, PA-AC-14, PA-AC-19 |
 | PA-NFR-004 | All PA components | [Evidence status](personal-agent-intervention.md#delivery-increments-and-evidence-status) | TASK-PA-006, TASK-PA-007 | PA-AC-09, PA-AC-15 |
 
 ## Preserved OAP development associations

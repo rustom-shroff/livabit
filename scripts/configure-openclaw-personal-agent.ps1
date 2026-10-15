@@ -2,7 +2,7 @@ param([ValidatePattern('^[a-z][a-z0-9_-]{0,63}$')][string]$AgentId = 'main', [sw
 $ErrorActionPreference='Stop'
 $taskRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $taskPlugin=Join-Path $taskRoot 'integrations/openclaw/personal-agent'
-$taskFiles=@('package.json','openclaw.plugin.json','index.mjs','ingress.mjs','runtime.mjs','observation.mjs','store.mjs','notification.mjs','configuration.mjs','installer.mjs')
+$taskFiles=@('package.json','openclaw.plugin.json','index.mjs','ingress.mjs','runtime.mjs','observation.mjs','store.mjs','analysis-store.mjs','analysis.mjs','background.mjs','receipt.mjs','conversation.mjs','invocation.mjs','notification.mjs','delivery-store.mjs','configuration.mjs','installer.mjs')
 $taskPayload=@{agent_id=$AgentId;files=@{}}
 foreach($taskFile in $taskFiles){$taskPayload.files[$taskFile]=[Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $taskPlugin $taskFile)))}
 $taskPayload.guide=[Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $taskRoot 'integrations/openclaw/activity-agent.md')))

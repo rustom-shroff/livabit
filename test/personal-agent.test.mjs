@@ -310,6 +310,53 @@ test('episode counters and reconsideration retain attempts outside the bounded n
   assert.equal(later.reconsider_approach, false, 'a retained benefit report disappeared with narrative truncation');
 });
 
+test('an old helpful report does not hide later unsuccessful support in a continuing episode', t => {
+  const f = fixture(t), first = f.use(store => decision(store));
+  f.clock.now++;
+  const helpful = f.use(store => store.recordFeedback({ ...OWNER, episodeId: first.episode_id,
+    decisionId: first.decision_id, kind: 'user_report', outcome: 'helpful', report: 'That helped earlier.' }));
+  f.clock.now++;
+  f.use(store => decision(store, { episodeId: first.episode_id }));
+  f.clock.now++;
+  f.use(store => decision(store, { episodeId: first.episode_id, approach: 'offer a different next step' }));
+  f.use(store => store.recordFeedback({ ...OWNER, episodeId: first.episode_id,
+    kind: 'user_report', outcome: 'unhelpful', report: 'That suggestion is not helping now.' }));
+  for (let index = 0; index < 13; index++) {
+    f.clock.now++;
+    f.use(store => decision(store, { episodeId: first.episode_id, action: 'reflect', prompt: undefined }));
+  }
+  const later = f.use(store => store.episodes(OWNER.agentId, OWNER.sessionKey)[0]);
+  assert.equal(later.recorded_attempts, 3, 'lifetime attempt count is retained');
+  assert.equal(later.recorded_attempts_since_benefit, 2);
+  assert.equal(later.latest_benefit_report.id, helpful.feedback_id);
+  assert.equal(later.reconsider_approach, true, 'historic benefit must not permanently suppress reconsideration');
+  assert(later.decisions.every(item => item.action === 'reflect'), 'counters use the full ledger, not displayed decisions');
+  f.clock.now++;
+  f.use(store => store.recordFeedback({ ...OWNER, episodeId: first.episode_id,
+    kind: 'observed_behavior', outcome: 'intentional_stop', report: 'Intentional stop was reported.' }));
+  const reset = f.use(store => store.episodes(OWNER.agentId, OWNER.sessionKey)[0]);
+  assert.equal(reset.recorded_attempts, 3);
+  assert.equal(reset.recorded_attempts_since_benefit, 0);
+  assert.equal(reset.reconsider_approach, false);
+  assert.equal(reset.notification_attempts, 0, 'recorded support never becomes independent delivery proof');
+});
+
+test('same-millisecond support and benefit preserve unknown ordering rather than inventing attempts since benefit', t => {
+  const f = fixture(t), first = f.use(store => decision(store));
+  f.use(store => store.recordFeedback({ ...OWNER, episodeId: first.episode_id, kind: 'user_report', outcome: 'helpful' }));
+  f.use(store => decision(store, { episodeId: first.episode_id }));
+  const ambiguous = f.use(store => store.episodes(OWNER.agentId, OWNER.sessionKey)[0]);
+  assert.equal(ambiguous.recorded_attempts, 2);
+  assert.equal(ambiguous.same_time_attempts_with_unknown_order, 2);
+  assert.equal(ambiguous.recorded_attempts_since_benefit, 0);
+  assert.equal(ambiguous.reconsider_approach, false);
+  f.clock.now++;
+  f.use(store => decision(store, { episodeId: first.episode_id }));
+  f.clock.now++;
+  const later = f.use(store => decision(store, { episodeId: first.episode_id }));
+  assert.equal(later.reconsider_approach, true);
+});
+
 test('episode retention deletes its decisions and feedback on the next supported cleanup after restart', t => {
   const f = fixture(t, { episodeDays: 1 }), a = f.use(store => decision(store));
   f.use(store => store.recordFeedback({ ...OWNER, episodeId: a.episode_id, kind: 'user_report', outcome: 'intentional_use' }));
@@ -593,12 +640,17 @@ test('plugin binds tools to trusted configured context and rechecks guards befor
   const previous = process.env.OPENCLAW_STATE_DIR;
   process.env.OPENCLAW_STATE_DIR = f.root;
   t.after(() => { if (previous === undefined) delete process.env.OPENCLAW_STATE_DIR; else process.env.OPENCLAW_STATE_DIR = previous; });
-  const registrations = [], services = [];
+  const registrations = [], services = [], routes = [], hooks = new Map();
   plugin.register({ registerTool: (factory, options) => registrations.push({ factory, options }),
     registerService: service => services.push(service), logger: { warn: () => {} },
+    registerHttpRoute: route => routes.push(route),
+    on: (name, handler) => hooks.set(name, handler),
     runtime: { nodes: { list: async () => ({ nodes: [] }) } } });
-  assert.equal(registrations.length, 4);
-  assert.equal(services.length, 1);
+  assert.equal(registrations.length, 5);
+  assert.equal(services.length, 2);
+  assert.equal(routes.length, 1);
+  assert.equal(routes[0].path, '/liveabit/activity');
+  assert.equal(routes[0].auth, 'plugin');
   for (const registration of registrations) {
     assert.equal(registration.options.optional, true);
     assert.equal(registration.factory.contextVersion, 2);
@@ -613,12 +665,16 @@ test('plugin binds tools to trusted configured context and rechecks guards befor
   assert.equal(tool.executionMode, 'sequential');
   const args = { agentId: 'other', sessionKey: 'agent:other:main', topic: 'Owned topic',
     action: 'reflect', approach: 'clarify', rationale: 'User context is required.' };
+  const bind = callId => hooks.get('before_tool_call')({ toolName: 'liveabit_record_decision', params: args },
+    { ...OWNER, toolName: 'liveabit_record_decision', toolCallId: callId, runId: 'synthetic-legacy-run' });
+  bind('call-one');
   const first = tool.execute('call-one', args).details;
   assert.equal(first.recorded, true);
   assert.equal(f.use(store => store.episodes(OWNER.agentId, OWNER.sessionKey).length), 1);
   assert.equal(f.use(store => store.episodes('other', 'agent:other:main').length), 0);
   assert(guards >= 2);
   valid = false;
+  bind('call-two');
   assert.throws(() => tool.execute('call-two', args), /revoked/);
   valid = true;
   const replaced = { ...f.settings, agentId: 'other', sessionKey: 'agent:other:main' };
@@ -626,4 +682,29 @@ test('plugin binds tools to trusted configured context and rechecks guards befor
   assert.throws(() => tool.execute('call-three', args), /invocation_unavailable/);
   writeFileSync(settingsPath, JSON.stringify(f.settings));
   assert.equal(JSON.parse(readFileSync(settingsPath)).accountabilityEmailsEnabled, false);
+});
+
+test('native hook cancellation fences an in-flight notification even while the tool factory authority remains current', async t => {
+  const f = fixture(t, { now: Date.now() });
+  mkdirSync(join(f.root, 'liveabit-personal-agent'));
+  writeFileSync(join(f.root, 'liveabit-personal-agent', 'settings.json'), JSON.stringify(f.settings));
+  const previous = process.env.OPENCLAW_STATE_DIR; process.env.OPENCLAW_STATE_DIR = f.root;
+  t.after(() => { if (previous === undefined) delete process.env.OPENCLAW_STATE_DIR; else process.env.OPENCLAW_STATE_DIR = previous; });
+  const made = f.use(store => decision(store)), hooks = new Map(), registrations = [];
+  let inventory, invoked = 0;
+  const waiting = new Promise(resolve => { inventory = resolve; });
+  plugin.register({ registerTool: (factory, options) => registrations.push({ factory, options }),
+    registerService() {}, registerHttpRoute() {}, on: (name, handler) => hooks.set(name, handler), logger: { warn() {} },
+    runtime: { nodes: { list: async () => waiting, invoke: async () => { invoked++; } } } });
+  const controller = new AbortController(), callId = 'cancelled-notification';
+  const context = { ...OWNER, sessionId: 'synthetic-session', assertInvocationCurrent() {} };
+  const hookContext = { ...context, toolName: 'liveabit_notify', toolCallId: callId, runId: 'legacy-native-run', abortSignal: controller.signal };
+  hooks.get('before_tool_call')({ toolName: 'liveabit_notify', params: { decisionId: made.decision_id } }, hookContext);
+  const tool = registrations.find(item => item.options.name === 'liveabit_notify').factory.create(context);
+  const sending = tool.execute(callId, { decisionId: made.decision_id });
+  controller.abort(); inventory({ nodes: [eligibleNode(f.policy.node_id)] });
+  await assert.rejects(sending, /invocation_unavailable/);
+  assert.equal(invoked, 0);
+  assert.equal(f.use(store => store.db.prepare('SELECT COUNT(*) AS n FROM notifications').get().n), 0);
+  assert.equal(f.use(store => store.db.prepare('SELECT reason FROM notification_jobs WHERE decision_id=?').get(made.decision_id).reason), 'cancelled_before_invocation');
 });

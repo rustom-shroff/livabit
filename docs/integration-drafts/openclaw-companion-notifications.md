@@ -1,4 +1,26 @@
-# Gentle reminders in the OpenClaw Android companion
+# Notifications and conversation in the OpenClaw Android companion
+
+**Current direction, 2026-10-15:** the user's main personal agent provides ongoing support under [ADR-0024](../decisions/0024-personal-agent-behavior-change.md) and [ADR-0025](../decisions/0025-durable-activity-analysis.md). The [current system guide](../current-system.md) and [runtime setup](../../integrations/openclaw/personal-agent/README.md) govern current installation. The October 13 dedicated-agent commands below are preserved history and must not overwrite a newer personal-agent configuration.
+
+The **OpenClaw companion app** (`ai.openclaw.app`) displays intervention notifications and provides the existing chat. The **Livabit sender app** observes permitted activity and sends it to the gateway. They have independent background paths: successful activity receipt does not prove that the companion is connected or able to show a notification.
+
+## Current background-delivery design
+
+The new host-side implementation stores a notification intent before checking phone inventory. An exact saved Android phone that is still paired, declares `system.notify` and reports notification permission can wait briefly if disconnected. Missing identity, ambiguity, lost pairing, missing permission or changed policy cannot authorize a delayed send. The model supplies a stored decision ID, never an alternate destination or replacement message.
+
+Pending intents have a useful lifetime no longer than 15 minutes from decision creation, supporting observation end or original event expiry, whichever comes first. Connectivity checks back off from 30 seconds to at most four minutes, with at most eight checks. Only pre-invocation unavailability can be retried. A durable reservation before native invocation prevents blind replay after an uncertain acknowledgement or crash. A newer queued prompt supersedes an older unreserved queued/checking prompt for the same owner; quiet hours, cooldown and current permissions are rechecked before dispatch. Implementation and local test evidence are separate from native installation and physical background behavior.
+
+This queue cannot wake a stopped or unreachable app, repair an Android foreground service or keep the gateway computer awake. A phone being on and the app being installed do not establish a connected node. When the computer is stopped, host work waits; if a suggestion expires, it must not be replayed as a stale nudge on return. Automatic accountability email and alternate-channel fallback remain disabled.
+
+The read-only diagnostic below reports app version, stopped state, notification permission, foreground-service state and battery exemption when a permitted ADB-connected phone is available. It changes no settings and returns a safe unavailable result when no device is connected. It cannot prove physical display or long-term background reliability.
+
+```powershell
+node scripts/inspect-companion-background.mjs
+```
+
+Verify a real companion notification while the UI is closed/backgrounded, screen off and ordinary battery settings are in effect; repeat across network loss/return and gateway restart. Record the exact device/OS/app version and distinguish native acknowledgement from visible display and user reply. No connected device or physical pass should be invented from a fixture. See the [conversation/physical evaluation plan](../evaluation/personal-agent-conversation.md#physical-and-integration-checks-still-separate).
+
+## Preserved October 13 companion setup
 
 Updated: **2026-10-13**. Current reminder route under [ADR-0023](../decisions/0023-openclaw-companion-reminders.md). The official app is [OpenClaw on Google Play](https://play.google.com/store/apps/details?id=ai.openclaw.app&hl=en_US), package `ai.openclaw.app`.
 

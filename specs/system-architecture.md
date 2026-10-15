@@ -1,17 +1,20 @@
 # System architecture
 
-**Current architecture direction, 2026-10-14:** Android continues to send permitted OAP observations directly to the existing OpenClaw gateway. Under [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md), a bounded durable inbox and retrieval/context/episode tools belong inside that final runtime; the user's continuing main agent interprets the evidence using relevant personal context. The model owns behavioral judgment. Runtime code owns validated facts, identity/retention, explicit permission checks and delivery bookkeeping. The existing companion chat is the first conversational surface; automatic accountability emails are disabled. No standalone coach, relay or new Android packet format is introduced.
+**Current architecture direction, 2026-10-15:** Android sends permitted OAP observations directly to the existing OpenClaw gateway. [ADR-0024](../docs/decisions/0024-personal-agent-behavior-change.md) establishes the personal-agent relationship; [ADR-0025](../docs/decisions/0025-durable-activity-analysis.md) separates durable receipt from leased/coalesced analysis in an isolated activity session of that same main agent. SQLite remains embedded in the final host. The model owns behavioral judgment; runtime code owns factual admission, durable scheduling, retention and explicit delivery controls. Companion chat is first and automatic accountability emails remain disabled. The [current system guide](../docs/current-system.md) records the final installed bundle/native checks separately from model execution, physical migration and behavioral evidence.
 
 ## Personal-agent host architecture
 
 ```mermaid
 flowchart LR
-  D["Existing Android OAP sender"] --> G["Existing OpenClaw gateway"]
+  D["Compatible Android OAP sender"] --> G["Existing OpenClaw gateway"]
   subgraph H["User's chosen final agent host"]
-    G --> I["Bounded durable observation inbox"]
+    G --> I["Atomic SQLite commit: observation + analysis obligation"]
+    I --> ACK["Durable receipt to phone"]
+    I --> W["Bounded worker: coalesce, lease, retry"]
     I --> Q["Factual summaries and query tools"]
     U["User reports, preferences and Workboard"] --> K["Relevant context with provenance"]
-    Q --> M["Continuing main agent: judgment and conversation"]
+    W --> M["Same main agent: isolated activity conversation"]
+    Q --> M
     K --> M
     E["Episodes, attempts and responses"] <--> M
     M --> P["Authorized delivery and outcome records"]
@@ -20,7 +23,7 @@ flowchart LR
   A --> U
 ```
 
-The diagram describes target responsibilities, not an end-to-end completion claim. The first implementation increment is durable inbox/query/summary, episode/context tools and a restrictive `liveabit_notify(decisionId)` tool plus tested main-agent migration. Notification source uses the stored question/nudge and exact private destination, with runtime timing checks and an atomic one-attempt reservation; separate tests and installed-session evidence are required. Reply linkage, automatic post-admission processing recovery, follow-up scheduling and repeated-attempt adaptation remain separate work in the [PA specification](personal-agent-intervention.md). A writing tool for episodes is not a scheduler; a persistent session is not a complete event archive.
+The diagram describes the new receipt path's responsibilities, not an end-to-end completion claim. The October 15 installed host implements independent analysis, activity-session isolation, deliberate reply/context sharing, bounded future reviews and notification recovery. The physical phone still uses compatible legacy per-packet admission until validated APK/setup migration; the [current-system diagram](../docs/current-system.md#receipt-analysis-and-delivery) shows both paths. An invented run ID is not a receipt. Native HTTP/source checks do not prove scheduled model execution, physical display or useful adaptation. The October 14 foundation's inbox/query/episode evidence remains dated to its own version. A record-writing tool is not a scheduler; a persistent session is not a complete archive.
 
 | Component | Responsibility | Evidence boundary |
 | --- | --- | --- |
@@ -30,8 +33,12 @@ The diagram describes target responsibilities, not an end-to-end completion clai
 | PA-C4 | Model-owned choice, optional feelings inquiry, contextual persuasion and reconsideration | Observed conversations/scenarios; no automatic pressure escalation |
 | PA-C5 | Record episodes, choices, attempts, user responses and unknown outcomes | Durable record tools first; lifecycle and reply linkage separately tested |
 | PA-C6 | Enforce explicit channel/destination/timing authority, reserve delivery and record failure/uncertainty | Separate delivery/recovery checks; chat, invocation, display and response are distinct |
+| PA-C7 | Persist analysis obligations with receipt, coalesce/lease work, retry bounded failures and track reviewed input | Crash/transaction/claim/concurrency/native-terminal-state checks; no model-per-packet or exactly-once promise |
+| PA-C8 | Isolate the activity session and expose deliberate bounded evidence/reply sharing with main chat | Exact trusted session/tool access, provenance and ambiguity checks; no automatic transcript inheritance |
 
 Accepted observations remain in the final chosen host. A local embedded database is allowed here; a separately operated store or forwarding process violates the direct topology. Retrieve selected evidence for reasoning rather than requiring the model to retain every packet in prompt context. Keep factual summaries auditable and avoid repeated counting of retries or overlapping observations. Rich personal context never flows back to Android.
+
+The phone's private `sender.json` is a bounded retry/settings file, distinct from the host's plugin-created `activity.sqlite` database. The SQLite engine is supplied by the Node.js runtime, not a separate database service or standard OpenClaw activity store. Per-app window data is stored as JSON within event rows; daily estimates are derived on read. Native transcripts and provider copies have their own retention, so database pruning cannot claim to erase conversational copies. The configured model may run remotely even though storage is local. See [data inventory and limits](../docs/current-system.md#data-and-database).
 
 Behavioral interpretation remains flexible: runtime code must not decide that an app, duration or attempt count establishes a harmful habit. The agent may ask about feelings, use an explicit report to revise a hypothesis, suggest a smaller action, change timing or reconsider the goal. Mechanical limits come only from explicit permissions/preferences and resource/reliability budgets.
 

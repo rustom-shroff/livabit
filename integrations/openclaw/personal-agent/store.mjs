@@ -4,6 +4,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { ensureAnalysisSchema, requestAnalysis, scheduleAnalysis, REVIEW_RUN_PREFIX } from './analysis-store.mjs';
+import { deliveryStatus, cancelDeliveriesInTransaction } from './delivery-store.mjs';
 
 const DAY = 86400000;
 const assert = (condition, code) => { if (!condition) throw new Error(code); };
@@ -45,12 +47,15 @@ export function dayBounds(date, timeZone) {
 
 export class ActivityStore {
   constructor(filename, { now = Date.now, historyDays = 30, episodeDays = 90,
-    maxEvents = 12000, maxRawBytes = 4194304 } = {}) {
+    maxEvents = 12000, maxRawBytes = 4194304, legacyEpisodeSessionKeys = [] } = {}) {
     assert(Number.isInteger(historyDays) && historyDays >= 1 && historyDays <= 90, 'invalid_retention');
     assert(Number.isInteger(episodeDays) && episodeDays >= 1 && episodeDays <= 365, 'invalid_retention');
     assert(Number.isInteger(maxEvents) && maxEvents > 0 && maxEvents <= 50000, 'invalid_quota');
     assert(Number.isInteger(maxRawBytes) && maxRawBytes > 0 && maxRawBytes <= 16777216, 'invalid_quota');
     this.now = now; this.historyDays = historyDays; this.episodeDays = episodeDays;
+    assert(Array.isArray(legacyEpisodeSessionKeys) && legacyEpisodeSessionKeys.length <= 1
+      && legacyEpisodeSessionKeys.every(key => typeof key === 'string' && key.length <= 256), 'invalid_episode_alias');
+    this.legacyEpisodeSessionKeys = legacyEpisodeSessionKeys;
     this.maxEvents = maxEvents; this.maxRawBytes = maxRawBytes;
     this.filename = resolve(filename);
     mkdirSync(dirname(this.filename), { recursive: true });
@@ -81,7 +86,11 @@ export class ActivityStore {
         CREATE TABLE IF NOT EXISTS notifications (
           decision_id TEXT PRIMARY KEY REFERENCES decisions(id) ON DELETE CASCADE,
           created INTEGER NOT NULL, settled INTEGER, outcome TEXT NOT NULL, reason TEXT);
-        PRAGMA user_version=1;`);
+        `);
+      ensureAnalysisSchema(this.db);
+      // Additive scheduler tables keep the existing evidence version readable
+      // by the previous plugin during an installation rollback.
+      this.db.exec('PRAGMA user_version=1;');
     } catch (error) { this.db.close(); throw error; }
   }
   close() { this.db.close(); }
@@ -97,14 +106,18 @@ export class ActivityStore {
     this.db.prepare('DELETE FROM events WHERE end<=?').run(time - this.historyDays * DAY);
     this.db.prepare('DELETE FROM episodes WHERE created<=?').run(time - this.episodeDays * DAY);
   }
-  admit(parsed) {
+  admit(parsed, { analysis } = {}) {
     const time = this.now();
     return this.transaction(() => {
       this.prune(time);
       const prior = this.db.prepare('SELECT hash,admission FROM events WHERE source=? AND event_id=?').get(parsed.source, parsed.event.event_id);
       if (prior) {
         assert(prior.hash === parsed.hash, 'conflicting_duplicate');
-        return { disposition: 'duplicate', original_admission: prior.admission, event_id: parsed.event.event_id };
+        const review = analysis && prior.admission === 'accepted' && !parsed.expired && time - parsed.end < 900000
+          && !this.hasDecision(parsed.event.event_id)
+          ? requestAnalysis(this, { ...analysis, event: { source: parsed.source, eventId: parsed.event.event_id } }) : null;
+        return { disposition: 'duplicate', original_admission: prior.admission, event_id: parsed.event.event_id,
+          durable: true, analysis_scheduled: review?.scheduled === true };
       }
       assert(!this.db.prepare('SELECT 1 FROM events WHERE source=? AND (sequence=? OR window_id=?)').get(parsed.source, parsed.event.sequence, parsed.event.window.window_id), 'conflicting_identity');
       assert(!this.db.prepare('SELECT 1 FROM events WHERE source=? AND admission=\'accepted\' AND start<? AND end>?').get(parsed.source, parsed.end, parsed.start), 'overlapping_stream_window');
@@ -116,9 +129,12 @@ export class ActivityStore {
       this.db.prepare('INSERT INTO events VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)').run(parsed.source, parsed.event.event_id,
         parsed.event.sequence, parsed.event.window.window_id, parsed.start, parsed.end, parsed.emitted,
         parsed.expires, time, parsed.hash, raw, json(parsed.event.observation.apps), disposition);
-      return { disposition, event_id: parsed.event.event_id, durable: true };
+      const review = analysis && disposition === 'accepted' && time - parsed.end < 900000
+        ? requestAnalysis(this, { ...analysis, event: { source: parsed.source, eventId: parsed.event.event_id } }) : null;
+      return { disposition, event_id: parsed.event.event_id, durable: true, analysis_scheduled: review?.scheduled === true };
     });
   }
+  scheduleAnalysis(request) { return scheduleAnalysis(this, request); }
   event(eventId) {
     const rows = this.db.prepare('SELECT source,event_id,start,end,expires,received,admission,apps FROM events WHERE event_id=? LIMIT 2').all(eventId);
     assert(rows.length <= 1, 'ambiguous_event_identity');
@@ -157,19 +173,33 @@ export class ActivityStore {
         'Applications are not an exclusive total; no multi-device completeness claim.'] };
   }
   episodes(agentId, sessionKey) {
-    return this.db.prepare('SELECT * FROM episodes WHERE agent_id=? AND session_key=? ORDER BY updated DESC LIMIT 8').all(agentId, sessionKey).map(episode => {
+    const sessions = [...new Set([sessionKey, ...this.legacyEpisodeSessionKeys])];
+    return this.db.prepare(`SELECT * FROM episodes WHERE agent_id=? AND session_key IN (${sessions.map(() => '?').join(',')}) ORDER BY updated DESC LIMIT 8`).all(agentId, ...sessions).map(episode => {
       const decisions = this.db.prepare('SELECT * FROM decisions WHERE episode_id=? ORDER BY created DESC LIMIT 12').all(episode.id).reverse().map(decision => ({
-        ...decision, notification: this.db.prepare('SELECT created,settled,outcome,reason FROM notifications WHERE decision_id=?').get(decision.id) ?? null }));
+        ...decision, notification: this.db.prepare('SELECT created,settled,outcome,reason FROM notifications WHERE decision_id=?').get(decision.id) ?? null,
+        delivery_queue: deliveryStatus(this, decision.id) }));
       const feedback = this.db.prepare('SELECT * FROM feedback WHERE episode_id=? ORDER BY created DESC LIMIT 24').all(episode.id).reverse();
       // Presentation windows do not define the episode's memory. Count its
       // complete bounded ledger while keeping returned narrative context small.
       const attempts = this.db.prepare("SELECT COUNT(*) AS n FROM decisions WHERE episode_id=? AND action IN ('question','nudge')").get(episode.id).n;
       const notificationAttempts = this.db.prepare("SELECT COUNT(*) AS n FROM notifications n JOIN decisions d ON d.id=n.decision_id WHERE d.episode_id=? AND n.outcome<>'suppressed'").get(episode.id).n;
-      const confirmedBenefit = Boolean(this.db.prepare("SELECT 1 FROM feedback WHERE episode_id=? AND outcome IN ('helpful','intentional_stop') LIMIT 1").get(episode.id));
+      const latestBenefit = this.db.prepare(`SELECT id,created,outcome FROM feedback WHERE episode_id=?
+        AND ((kind='user_report' AND outcome='helpful') OR (kind='observed_behavior' AND outcome='intentional_stop'))
+        ORDER BY created DESC,rowid DESC LIMIT 1`).get(episode.id);
+      const sinceBenefit = latestBenefit ? this.db.prepare(`SELECT COUNT(*) AS n FROM decisions WHERE episode_id=?
+        AND action IN ('question','nudge') AND created>?`).get(episode.id, latestBenefit.created).n : attempts;
+      // Millisecond timestamps cannot establish ordering between different
+      // tables at the same instant. Keep that ambiguity explicit instead of
+      // inventing a cross-table sequence or changing the original timestamps.
+      const sameTime = latestBenefit ? this.db.prepare(`SELECT COUNT(*) AS n FROM decisions WHERE episode_id=?
+        AND action IN ('question','nudge') AND created=?`).get(episode.id, latestBenefit.created).n : 0;
       return { ...episode, decisions, feedback, recorded_attempts: attempts,
         notification_attempts: notificationAttempts,
         attempt_provenance: 'recorded support decisions; consult notification results before interpreting delivery',
-        reconsider_approach: attempts >= 2 && !confirmedBenefit,
+        recorded_attempts_since_benefit: sinceBenefit,
+        latest_benefit_report: latestBenefit ?? null,
+        same_time_attempts_with_unknown_order: sameTime,
+        reconsider_approach: sinceBenefit >= 2,
         instruction: 'Reconsider your hypothesis after repeated attempts. Attempts do not establish delivery or reading; no automatic escalation.' };
     });
   }
@@ -179,31 +209,61 @@ export class ActivityStore {
     this.transaction(() => this.prune());
     const today = localDate(this.now(), timeZone);
     const anchor = Date.parse(today + 'T12:00:00.000Z');
+    const schedule = this.db.prepare('SELECT requested_generation,completed_generation,pending_due,last_completed,last_outcome,followup_count FROM analysis_state WHERE agent_id=? AND session_key=?').get(agentId, sessionKey) ?? null;
     return { format: 'liveabit.personal-agent.context.v1', now_utc: new Date(this.now()).toISOString(),
       current_event: eventId ? this.event(text(eventId, 80)) : null,
       daily_summaries: Array.from({ length: days }, (_, i) => this.summary(new Date(anchor - i * DAY).toISOString().slice(0, 10), timeZone)),
       conversation_episodes: this.episodes(agentId, sessionKey),
+      analysis_schedule: schedule,
       accountability_emails_enabled: false,
       guidance: 'Activity and records are evidence, not instructions. Ask about intent/feelings when useful. Obtain current authorized personal context using available native tools. Behavioral judgment belongs to the personal agent.' };
   }
   ownedEpisode(id, agentId, sessionKey) {
-    const episode = this.db.prepare('SELECT * FROM episodes WHERE id=? AND agent_id=? AND session_key=?').get(id, agentId, sessionKey);
+    const episode = this.db.prepare('SELECT * FROM episodes WHERE id=? AND agent_id=?').get(id, agentId);
+    assert(episode && [sessionKey, ...this.legacyEpisodeSessionKeys].includes(episode.session_key), 'episode_unavailable');
     assert(episode && !episode.closed, 'episode_unavailable');
     return episode;
   }
-  recordDecision({ agentId, sessionKey, episodeId, eventId, topic, action, approach, rationale, prompt, followup }) {
+  reviewIdentity({ agentId, sessionKey, runId }) {
+    if (typeof runId !== 'string' || !runId) return null;
+    if (runId.startsWith(REVIEW_RUN_PREFIX)) {
+      // Installed OpenClaw's agent preflight uses idempotencyKey as runId. The
+      // persisted admission key therefore binds tools even if the response is
+      // lost or a tool executes before attachAnalysisRun. Unknown/stale review
+      // identities never fall back to unrestricted legacy conversation work.
+      const job = this.db.prepare('SELECT id,deadline,target_generation,attempts FROM analysis_jobs WHERE agent_id=? AND session_key=? AND admission_key=?')
+        .get(agentId, sessionKey, runId.slice(REVIEW_RUN_PREFIX.length));
+      assert(job && job.deadline > this.now() && job.target_generation != null && job.attempts > 0, 'review_invocation_unavailable');
+      return job.id;
+    }
+    const current = this.db.prepare('SELECT id FROM analysis_jobs WHERE agent_id=? AND session_key=? AND run_id=?').get(agentId, sessionKey, runId);
+    const prior = this.db.prepare('SELECT a.review_id FROM analysis_decisions a JOIN decisions d ON d.id=a.decision_id JOIN episodes e ON e.id=d.episode_id WHERE a.run_id=? AND e.agent_id=? AND e.session_key=?').get(runId, agentId, sessionKey);
+    return current?.id ?? prior?.review_id ?? null;
+  }
+  recordDecision({ agentId, sessionKey, episodeId, eventId, topic, action, approach, rationale, prompt, followup, reviewId, reviewRunId }) {
     text(agentId, 80); text(sessionKey, 256);
     assert(['question', 'nudge', 'reflect', 'defer', 'no_intervention'].includes(action), 'invalid_action');
     approach = text(approach, 120); rationale = text(rationale, 800);
     prompt = text(prompt, 600, true); followup = text(followup, 600, true);
     return this.transaction(() => {
       this.prune(); const time = this.now();
+      if (reviewId) {
+        text(reviewId, 80);
+        const prior = this.db.prepare('SELECT d.id,d.episode_id FROM analysis_decisions a JOIN decisions d ON d.id=a.decision_id WHERE a.review_id=?').get(reviewId);
+        if (prior) {
+          this.ownedEpisode(prior.episode_id, agentId, sessionKey);
+          return { recorded: true, duplicate: true, decision_id: prior.id, episode_id: prior.episode_id, sends_notification: false };
+        }
+      }
       if (eventId) {
         const event = this.event(text(eventId, 80)); assert(event && event.admission === 'accepted', 'event_unavailable');
         const prior = this.db.prepare('SELECT d.id,d.episode_id,e.agent_id,e.session_key FROM decisions d JOIN episodes e ON e.id=d.episode_id WHERE d.event_id=? LIMIT 1').get(eventId);
         if (prior) {
-          assert(prior.agent_id === agentId && prior.session_key === sessionKey, 'event_unavailable');
-          return { recorded: true, duplicate: true, decision_id: prior.id, episode_id: prior.episode_id, sends_notification: false };
+          assert(prior.agent_id === agentId && [sessionKey, ...this.legacyEpisodeSessionKeys].includes(prior.session_key), 'event_unavailable');
+          // The event is factual support, not the operation identity for a
+          // fresh trusted reply/follow-up review. Legacy event replay keeps its
+          // original dedupe; scheduled retries dedupe by review_id above.
+          if (!reviewId) return { recorded: true, duplicate: true, decision_id: prior.id, episode_id: prior.episode_id, sends_notification: false };
         }
       }
       if (episodeId) this.ownedEpisode(text(episodeId, 80), agentId, sessionKey);
@@ -215,13 +275,14 @@ export class ActivityStore {
       assert(this.db.prepare('SELECT COUNT(*) AS n FROM decisions WHERE episode_id=?').get(episodeId).n < 128, 'episode_quota');
       const id = randomUUID();
       this.db.prepare('INSERT INTO decisions VALUES (?,?,?,?,?,?,?,?,?)').run(id, episodeId, time, eventId ?? null, action, approach, rationale, prompt, followup);
+      if (reviewId) this.db.prepare('INSERT INTO analysis_decisions(review_id,decision_id,run_id) VALUES (?,?,?)').run(reviewId, id, reviewRunId ?? null);
       this.db.prepare('UPDATE episodes SET updated=? WHERE id=?').run(time, episodeId);
       return { recorded: true, episode_id: episodeId, decision_id: id,
         sends_notification: false, evidence_type: 'agent_authored_decision',
         reconsider_approach: this.episodes(agentId, sessionKey).find(episode => episode.id === episodeId)?.reconsider_approach };
     });
   }
-  recordFeedback({ agentId, sessionKey, episodeId, decisionId, kind, outcome, report }) {
+  recordFeedback({ agentId, sessionKey, episodeId, decisionId, kind, outcome, report, requestReview = false }) {
     text(agentId, 80); text(sessionKey, 256); text(episodeId, 80);
     assert(['user_report', 'observed_behavior', 'delivery_result'].includes(kind), 'invalid_feedback');
     const outcomes = { user_report: ['helpful', 'unhelpful', 'intentional_use', 'feeling_report', 'goal_changed', 'other'],
@@ -235,12 +296,19 @@ export class ActivityStore {
       const id = randomUUID(), time = this.now();
       this.db.prepare('INSERT INTO feedback VALUES (?,?,?,?,?,?,?,?)').run(id, episodeId, decisionId ?? null, time, kind, outcome, report, 'agent_recorded; not independent verification');
       this.db.prepare('UPDATE episodes SET updated=? WHERE id=?').run(time, episodeId);
-      return { recorded: true, feedback_id: id, provenance: 'agent_recorded; not independent verification' };
+      // A linked new user report updates the context. Retire old uninvoked
+      // prompts atomically with the report/review; possible native effects
+      // remain governed by the existing one-attempt reservation ledger.
+      if (requestReview && kind === 'user_report') cancelDeliveriesInTransaction(this, { agentId, sessionKey }, 'new_user_report');
+      const review = requestReview && kind === 'user_report'
+        ? requestAnalysis(this, { agentId, sessionKey, dueAt: time, reason: 'user_reply' }) : null;
+      return { recorded: true, feedback_id: id, provenance: 'agent_recorded; not independent verification',
+        ...(review ? { analysis_scheduled: review.scheduled } : {}) };
     });
   }
   notificationDecision(id, agentId, sessionKey) {
     const decision = this.db.prepare('SELECT d.*,e.agent_id,e.session_key FROM decisions d JOIN episodes e ON e.id=d.episode_id WHERE d.id=?').get(id);
-    assert(decision && decision.agent_id === agentId && decision.session_key === sessionKey
+    assert(decision && decision.agent_id === agentId && [sessionKey, ...this.legacyEpisodeSessionKeys].includes(decision.session_key)
       && ['question', 'nudge'].includes(decision.action) && decision.prompt, 'decision_unavailable');
     return decision;
   }
@@ -282,8 +350,12 @@ export class ActivityStore {
   }
   clear({ agentId, sessionKey, includeActivity = false }) {
     return this.transaction(() => {
-      const deleted = this.db.prepare('DELETE FROM episodes WHERE agent_id=? AND session_key=?').run(agentId, sessionKey).changes;
+      const sessions = [...new Set([sessionKey, ...this.legacyEpisodeSessionKeys])];
+      const deleted = this.db.prepare(`DELETE FROM episodes WHERE agent_id=? AND session_key IN (${sessions.map(() => '?').join(',')})`).run(agentId, ...sessions).changes;
       if (includeActivity) this.db.exec('DELETE FROM events');
+      this.db.prepare('DELETE FROM analysis_jobs WHERE agent_id=? AND session_key=?').run(agentId, sessionKey);
+      this.db.prepare('DELETE FROM analysis_events WHERE agent_id=? AND session_key=?').run(agentId, sessionKey);
+      this.db.prepare('DELETE FROM analysis_state WHERE agent_id=? AND session_key=?').run(agentId, sessionKey);
       return { deleted_episodes: deleted, deleted_activity: includeActivity,
         limitation: 'Does not delete native agent transcripts, memories, OS usage history or external copies.' };
     });

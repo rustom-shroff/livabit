@@ -2,6 +2,8 @@
 
 Date: **2026-10-14**. Status: **Accepted for implementation by the user's instruction**. Reorients the product around the user's existing personal agent. Supersedes ADR-0021's dedicated task-reminder agent as the current product direction and extends ADR-0023's companion route. Their tested results remain historical evidence. OAP, Android consent, direct delivery and all existing stable requirement/acceptance IDs retain their scopes.
 
+**Extension, 2026-10-15:** [ADR-0025](0025-durable-activity-analysis.md) separates durable receipt from model execution and moves routine activity to an isolated session of the same main agent. References below to the initial main-conversation route and future recovery describe this decision's October 14 foundation scope. Consult the [current system guide](../current-system.md) for the latest source, installation and evidence boundaries.
+
 ## Context
 
 Phone observations reaching an agent do not establish that the agent used them, remembered an earlier conversation or delivered a useful intervention. A Skill and a persistent conversation provide instructions and context, but neither is a durable processing ledger, complete personal history or guaranteed delivery mechanism. The previous scheme kept only a bounded list of processed event IDs and best-effort agent delivery state; it could remain silent without explaining which stage prevented contact.

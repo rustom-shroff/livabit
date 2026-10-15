@@ -226,7 +226,7 @@ public final class PublisherInstrumentation extends Instrumentation {
             engine.configure(endpoint, token, "org.liveabit.fixture", 60); passed.add("background_job_configured"); return;
         }
         if ("file_import".equals(arguments.getString("phase"))) {
-            var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            var activity = openPublisher(context);
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
             runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Import receiver file").performClick());
             AccessibilityNodeInfo file = awaitNode("liveabit-emulator-setup.json", 1500);
@@ -273,7 +273,7 @@ public final class PublisherInstrumentation extends Instrumentation {
         check(ConnectionSetup.describe("http://127.0.0.1:8765/events").startsWith("USB:"), "USB connection not identified");
         check(ConnectionSetup.describe("").equals("No receiver configured"), "Empty setup shown as connected");
         passed.add("configured_connection_description");
-        var setupActivity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        var setupActivity = openPublisher(context);
         runOnMainSync(() -> {
             findButton(setupActivity.getWindow().getDecorView(), "Setup").performClick();
             findButton(setupActivity.getWindow().getDecorView(), "Edit connection manually").performClick();
@@ -387,14 +387,19 @@ public final class PublisherInstrumentation extends Instrumentation {
             && engine.snapshot().getJSONArray("pending").length() > 0, "Incorrect key failure not displayed or retained");
         passed.add("real_receiver_rejects_bad_key_with_clear_status");
         JSONObject beforeSwitch = engine.snapshot();
-        var switchActivity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        var switchActivity = openPublisher(context);
+        awaitWindowFocus(switchActivity);
+        check(engine.pendingToClear("http://127.0.0.1:1/events", token, "org.liveabit.fixture", 60) > 0,
+            "Connection-change fixture no longer has retained activity requiring confirmation");
         runOnMainSync(() -> {
             findButton(switchActivity.getWindow().getDecorView(), "Setup").performClick();
             findButton(switchActivity.getWindow().getDecorView(), "Edit connection manually").performClick();
             ((EditText) switchActivity.findViewById(R.id.receiver_address)).setText("http://127.0.0.1:1/events");
             ((EditText) switchActivity.findViewById(R.id.connection_key)).setText(token);
-            findButton(switchActivity.getWindow().getDecorView(), "Start sharing").performClick();
+            Button start = findButton(switchActivity.getWindow().getDecorView(), "Start sharing");
+            check(start != null && start.isEnabled() && start.performClick(), "Connection-change Start sharing action did not execute");
         });
+        waitForIdleSync();
         check(awaitNode("Change sharing setup?", 5000, "org.liveabit.publish") != null, "Changed setup cleared activity without confirmation");
         clickNode(awaitNode("Cancel", 5000, "org.liveabit.publish")); waitForIdleSync();
         check(engine.snapshot().getString("stream_id").equals(beforeSwitch.getString("stream_id"))
@@ -417,7 +422,7 @@ public final class PublisherInstrumentation extends Instrumentation {
             && engine.snapshot().getJSONArray("pending").length() > 0, "Disconnected receiver failure not displayed or retained");
         passed.add("real_connection_failure_has_clear_status");
         engine.stop();
-        var activity = startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        var activity = openPublisher(context);
         check(activity != null, "Native connection screen failed to open"); runOnMainSync(activity::finish);
         passed.add("native_connection_screen_opens");
         engine.updateAlert(60);
@@ -425,7 +430,7 @@ public final class PublisherInstrumentation extends Instrumentation {
     }
     private void uiPages(Context context, DeliveryEngine engine, String endpoint, String token) throws Exception {
         engine.stop(); engine.updateTiming(5, 15, 60);
-        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        var activity = openPublisher(context);
         try {
             check(activity.findViewById(R.id.activity_page).isShown() && !activity.findViewById(R.id.setup_page).isShown()
                 && !activity.findViewById(R.id.settings_page).isShown() && !activity.findViewById(R.id.connection_key).isShown(),
@@ -491,7 +496,7 @@ public final class PublisherInstrumentation extends Instrumentation {
     private void uiConnectionCases(Context context, DeliveryEngine engine) throws Exception {
         engine.stop();
         String token = "u".repeat(43);
-        var activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        var activity = openPublisher(context);
         runOnMainSync(() -> findButton(activity.getWindow().getDecorView(), "Setup").performClick());
         String before = engine.snapshot().toString();
         try (var fixture = new OpenClawContractCases.HookFixture()) {
@@ -601,6 +606,24 @@ public final class PublisherInstrumentation extends Instrumentation {
         }
         return null;
     }
+    private MainActivity openPublisher(Context context) throws Exception {
+        MainActivity activity = (MainActivity) startActivitySync(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        awaitWindowFocus(activity);
+        return activity;
+    }
+    static void awaitWindowFocus(Instrumentation test, android.app.Activity activity) throws Exception {
+        boolean[] focused = {false};
+        long deadline = SystemClock.elapsedRealtime() + 5000;
+        do {
+            test.runOnMainSync(() -> focused[0] = activity.hasWindowFocus());
+            if (!focused[0]) Thread.sleep(50);
+        } while (!focused[0] && SystemClock.elapsedRealtime() < deadline);
+        check(focused[0], "Native test activity did not receive window focus");
+        test.waitForIdleSync();
+    }
+    private void awaitWindowFocus(android.app.Activity activity) throws Exception {
+        awaitWindowFocus(this, activity);
+    }
     private void cycle(DeliveryEngine engine, boolean collect) throws Exception {
         // Use the same serial Android worker as the UI and JobService, including already-dispatched jobs.
         ((PublisherApplication) getTargetContext().getApplicationContext()).worker.submit(() -> engine.cycle(collect))
@@ -632,10 +655,18 @@ public final class PublisherInstrumentation extends Instrumentation {
         do {
             AccessibilityNodeInfo root = getUiAutomation().getRootInActiveWindow();
             if (root != null) for (AccessibilityNodeInfo match : root.findAccessibilityNodeInfosByText(text)) {
-                if (!packageName.equals(String.valueOf(match.getPackageName())) || !match.isVisibleToUser()
+                if (!packageName.equals(String.valueOf(match.getPackageName()))
                     || !(text.equalsIgnoreCase(String.valueOf(match.getText())) || text.equalsIgnoreCase(String.valueOf(match.getContentDescription())))) continue;
                 AccessibilityNodeInfo target = match;
                 while (target != null && !target.isClickable()) target = target.getParent();
+                // DocumentsUI can expose an off-screen grid item in its tree.
+                // Scroll the actual accessible row into view before clicking;
+                // adding setup fixtures must not make an older file unselectable.
+                if (target != null && (!match.isVisibleToUser() || !target.isVisibleToUser())) {
+                    target.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_SHOW_ON_SCREEN.getId());
+                    waitForIdleSync();
+                    continue;
+                }
                 if (target != null && target.isEnabled() && target.isVisibleToUser()
                     && target.performAction(AccessibilityNodeInfo.ACTION_CLICK)) return;
             }

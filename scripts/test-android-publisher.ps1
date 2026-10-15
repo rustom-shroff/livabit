@@ -1,6 +1,7 @@
 param([switch]$OpenClaw)
 $ErrorActionPreference = 'Stop'
 $taskRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+. (Join-Path $PSScriptRoot 'android-publisher-job-state.ps1')
 $taskAdb = Join-Path $taskRoot 'artifacts\android-sdk\platform-tools\adb.exe'
 $taskSerial = 'emulator-5580'
 $taskRun = Join-Path $taskRoot ('artifacts\android-publisher\run-' + [Guid]::NewGuid().ToString())
@@ -30,8 +31,8 @@ function Read-PublisherState {
     return (Invoke-Device @('shell','run-as','org.liveabit.publish','cat','files/sender.json') | ConvertFrom-Json)
 }
 function Read-PublisherJob([int]$JobId) {
-    # Some Android builds return a nonzero shell exit for an absent job. That is
-    # the expected state before BOOT_COMPLETED and while sharing is stopped.
+    # API 35 returns a nonzero shell exit for an absent job. Recognize only its
+    # captured missing-job response, never an unrelated unknown-command error.
     $taskPreviousErrorAction = $ErrorActionPreference
     try {
         $ErrorActionPreference = 'Continue'
@@ -39,8 +40,7 @@ function Read-PublisherJob([int]$JobId) {
         $taskJobExit = $LASTEXITCODE
     } finally { $ErrorActionPreference = $taskPreviousErrorAction }
     $taskJobText = $taskJobOutput -join "`n"
-    if ($taskJobExit -ne 0 -and $taskJobText -notmatch '\bunknown\b') { throw 'Owned publisher job state could not be read.' }
-    return $taskJobText
+    return (ConvertFrom-PublisherJobResponse $taskJobText $taskJobExit $JobId)
 }
 function Restart-OwnedEmulator([string]$Label) {
     $taskBootBefore = [int](Invoke-Device @('shell','settings','get','global','boot_count')).Trim()
@@ -106,7 +106,7 @@ try {
     }
     if (-not (Test-Path -LiteralPath $taskConnection)) { throw 'Isolated receiver setup was not created.' }
     $taskConfig = Get-Content -LiteralPath $taskConnection -Raw | ConvertFrom-Json
-    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.11.0-poc.apk'
+    $taskApk = Join-Path $taskRoot 'artifacts\android-publisher\liveabit-sender-0.12.0-poc.apk'
     $taskTests = Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\androidTest\debug\publisher-app-debug-androidTest.apk'
     Invoke-Device @('install','-r',$taskApk) | Out-Null
     Invoke-Device @('install','-r',$taskTests) | Out-Null
@@ -119,10 +119,24 @@ try {
     Invoke-Device @('pull',$taskInstalled,(Join-Path $taskRun 'installed-sender.apk')) | Out-Null
     $taskHash = (Get-FileHash -LiteralPath $taskApk -Algorithm SHA256).Hash.ToLowerInvariant()
     if ((Get-FileHash -LiteralPath (Join-Path $taskRun 'installed-sender.apk') -Algorithm SHA256).Hash.ToLowerInvariant() -ne $taskHash) { throw 'Installed APK differs from the trial candidate.' }
+    Invoke-Device @('shell','input','keyevent','KEYCODE_WAKEUP') | Out-Null
+    Invoke-Device @('shell','wm','dismiss-keyguard') | Out-Null
     Invoke-Device @('shell','am','start','-W','-n','org.liveabit.fixture/.MainActivity') | Out-Null
     Start-Sleep -Seconds 2
     Invoke-Device @('shell','am','start','-W','-n','org.liveabit.publish/.MainActivity') | Out-Null
     Start-Sleep -Seconds 1
+    $taskInitialFocus = @()
+    $taskFocusWait = [Diagnostics.Stopwatch]::StartNew()
+    do {
+        $taskInitialFocus = @((Invoke-Device @('shell','dumpsys','window')) -split "`n" | Where-Object { $_ -match 'mCurrentFocus=' })
+        if (($taskInitialFocus -join "`n") -match 'mCurrentFocus=.*org\.liveabit\.publish.*MainActivity') { break }
+        Start-Sleep -Milliseconds 200
+    } while ($taskFocusWait.Elapsed.TotalSeconds -lt 5)
+    [ordered]@{ owned_avd_verified=$true; wake_and_unlock_requested=$true; focus=$taskInitialFocus } |
+        ConvertTo-Json -Depth 4 | Set-Content -LiteralPath (Join-Path $taskRun 'initial-window-focus.json') -Encoding utf8
+    if (($taskInitialFocus -join "`n") -notmatch 'mCurrentFocus=.*org\.liveabit\.publish.*MainActivity') {
+        throw 'The owned emulator has no focused publisher window. Inspect initial-window-focus.json for a blocking system dialog.'
+    }
     $taskResult = Invoke-Device @('shell','am','instrument','-w','-r','-e','endpoint',$taskConfig.emulator_events_url,
         '-e','key',$taskConfig.token,'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
     $taskResult | Set-Content -LiteralPath (Join-Path $taskRun 'native-tests.txt') -Encoding utf8
@@ -155,14 +169,15 @@ try {
         Copy-Item -LiteralPath $taskRetainedSource -Destination $taskRetainedWifiFile
         Copy-Item -LiteralPath (Join-Path $taskRoot 'artifacts\openclaw\connection.json') -Destination $taskWrongHostFile
     } else {
-        $taskOfflineWifi = @{ format='liveabit.openclaw.connection.v1'; url='http://192.168.1.234:62283/hooks/liveabit'; key=('f' * 43); agent_id='liveabit'; warning_minutes=60 }
+        $taskOfflineWifi = @{ format='liveabit.openclaw.connection.v1'; url='http://192.168.1.234:62283/liveabit/activity'; key=('f' * 43); agent_id='main'; warning_minutes=60 }
         [IO.File]::WriteAllText($taskCurrentWifiFile, ($taskOfflineWifi | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
-        $taskOfflineWifi.agent_id = 'main'
-        [IO.File]::WriteAllText($taskRetainedWifiFile, ($taskOfflineWifi | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
+        $taskRetainedOfflineWifi = @{ format='liveabit.openclaw.connection.v1'; url='http://192.168.1.234:62283/hooks/liveabit'; key=('f' * 43); agent_id='main'; warning_minutes=60 }
+        [IO.File]::WriteAllText($taskRetainedWifiFile, ($taskRetainedOfflineWifi | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
         [IO.File]::WriteAllText($taskWrongHostFile, (@{format='liveabit.openclaw.local.v1'; port=62283; token=('f' * 43)} | ConvertTo-Json), (New-Object Text.UTF8Encoding($false)))
     }
     $taskCurrentWifi = Get-Content -LiteralPath $taskCurrentWifiFile -Raw | ConvertFrom-Json
     $taskRetainedWifi = Get-Content -LiteralPath $taskRetainedWifiFile -Raw | ConvertFrom-Json
+    $taskCurrentWifiExpectedAgent = if (([Uri]$taskCurrentWifi.url).AbsolutePath -eq '/hooks/liveabit' -and $taskCurrentWifi.agent_id -eq 'main') { 'liveabit' } else { $taskCurrentWifi.agent_id }
     $taskMalformed = Join-Path $taskRun 'malformed-secret.json'
     [IO.File]::WriteAllText($taskMalformed, '{"key":"malformed_private_fixture_key_do_not_echo_12345",', (New-Object Text.UTF8Encoding($false)))
     Invoke-Device @('push',$taskCurrentWifiFile,'/sdcard/Download/liveabit-current-openclaw-wifi.json') | Out-Null
@@ -171,7 +186,7 @@ try {
     Invoke-Device @('push',$taskMalformed,'/sdcard/Download/liveabit-malformed-secret.json') | Out-Null
     $taskImportRegression = Invoke-Device @('shell','am','instrument','-w','-r','-e','phase','setup_import_regression',
         '-e','endpoint',$taskConfig.emulator_events_url,'-e','key',$taskConfig.token,
-        '-e','wifi_url',$taskCurrentWifi.url,'-e','wifi_key',$taskCurrentWifi.key,
+        '-e','wifi_url',$taskCurrentWifi.url,'-e','wifi_key',$taskCurrentWifi.key,'-e','wifi_agent',$taskCurrentWifiExpectedAgent,
         '-e','legacy_url',$taskRetainedWifi.url,'-e','legacy_key',$taskRetainedWifi.key,
         'org.liveabit.publish.test/org.liveabit.publish.PublisherInstrumentation')
     $taskImportRegression | Set-Content -LiteralPath (Join-Path $taskRun 'setup-import-regression.txt') -Encoding utf8
@@ -333,7 +348,29 @@ try {
     $taskOffBefore = Read-PublisherState
     $taskOffRecordsBefore = Invoke-RestMethod -Uri $taskEventsUrl -Headers $taskHeaders
     Restart-OwnedEmulator 'sharing-off'
-    Start-Sleep -Seconds 5
+    # sys.boot_completed precedes delivery of this package's BOOT_COMPLETED receiver.
+    # Android may briefly restore an older persisted job while its asynchronous
+    # cancellation is being reconciled. Observe bounded settlement without opening
+    # the publisher, and require sharing to remain stopped throughout that interval.
+    $taskOffWait = [Diagnostics.Stopwatch]::StartNew()
+    $taskOffJobObservations = @()
+    $taskOffAbsentSamples = 0
+    do {
+        $taskOffSample = Read-PublisherState
+        if ($taskOffSample.enabled -or $taskOffSample.pending.Count -ne 0 -or $taskOffSample.failure_since -ne 0) {
+            throw 'Stopped sharing became active while Android settled the reboot.'
+        }
+        $taskOffJobStates = [ordered]@{}
+        foreach ($taskJob in @(310,311,313)) { $taskOffJobStates[[string]$taskJob] = Read-PublisherJob $taskJob }
+        $taskOffAllAbsent = @($taskOffJobStates.Values | Where-Object { $_ -notmatch '\bunknown\b' }).Count -eq 0
+        $taskOffJobObservations += [ordered]@{ elapsed_ms=[int]$taskOffWait.ElapsedMilliseconds; jobs=$taskOffJobStates; sharing_enabled=[bool]$taskOffSample.enabled }
+        $taskOffAbsentSamples = if ($taskOffAllAbsent) { $taskOffAbsentSamples + 1 } else { 0 }
+        if ($taskOffAbsentSamples -ge 2) { break }
+        Start-Sleep -Seconds 1
+    } while ($taskOffWait.Elapsed.TotalSeconds -lt 60)
+    [ordered]@{ maximum_wait_seconds=60; elapsed_ms=[int]$taskOffWait.ElapsedMilliseconds; stable_absent=$taskOffAbsentSamples -ge 2; observations=$taskOffJobObservations } |
+        ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $taskRun 'reboot-off-job-settlement.json') -Encoding utf8
+    if ($taskOffAbsentSamples -lt 2) { throw 'Stopped sharing jobs did not settle after reboot within one minute.' }
     $taskOffAfter = Read-PublisherState
     Assert-SavedConfiguration $taskOffBefore $taskOffAfter
     Assert-PublisherNotResumed

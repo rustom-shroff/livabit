@@ -1,0 +1,23 @@
+{
+  "format": "liveabit.android-job-state-fixtures.v1",
+  "platform": "Android 15/API 35",
+  "package": "org.liveabit.publish",
+  "observations": [
+    {
+      "name": "captured_restored_automatic_job",
+      "source": "artifacts/android-publisher/run-466f0749-0fb2-4c82-b8c4-8e804cc3353a/restored-automatic-job.txt",
+      "job_id": 310,
+      "exit_code": 0,
+      "text": "waiting",
+      "absent": false
+    },
+    {
+      "name": "captured_missing_owned_job",
+      "source": "artifacts/implementation-2026-10-15/android-job-state-live-absence.json",
+      "job_id": 310,
+      "exit_code": 23,
+      "text": "unknown(u0a148/jid310)\nCould not find job 310 in package org.liveabit.publish / user 0",
+      "absent": true
+    }
+  ]
+}

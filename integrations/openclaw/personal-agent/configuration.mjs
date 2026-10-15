@@ -1,7 +1,7 @@
 // Pure configuration planning; native OpenClaw validates/applies its own patch.
 import { isAbsolute, join, relative } from 'node:path';
 
-export const PERSONAL_TOOLS = ['liveabit_context', 'liveabit_record_decision', 'liveabit_record_feedback', 'liveabit_notify'];
+export const PERSONAL_TOOLS = ['liveabit_context', 'liveabit_record_decision', 'liveabit_record_feedback', 'liveabit_notify', 'liveabit_schedule_review'];
 const unique = values => [...new Set(values.filter(value => typeof value === 'string' && value))];
 const check = (condition, reason) => { if (!condition) throw new Error(reason); };
 export function planConfiguration(config, { agentId = 'main', stateDir, pluginDir } = {}) {
@@ -18,7 +18,9 @@ export function planConfiguration(config, { agentId = 'main', stateDir, pluginDi
   const mainKey = config.session?.mainKey || 'main';
   check(config.session?.scope !== 'global', 'global_session_requires_explicit_migration');
   check(typeof mainKey === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(mainKey), 'unsupported_main_session_key');
-  const sessionKey = `agent:${agentId}:${mainKey}`;
+  check(mainKey !== 'liveabit-activity', 'activity_session_collides_with_main');
+  const mainSessionKey = `agent:${agentId}:${mainKey}`;
+  const sessionKey = `agent:${agentId}:liveabit-activity`;
   mappings.push({ id: 'liveabit-personal', match: { path: 'liveabit' }, action: 'agent',
     agentId, sessionKey, sessionMode: 'persistent', name: 'liveabit', wakeMode: 'now',
     messageTemplate: '{{message}}', deliver: false, transform: { module: 'liveabit-personal-agent.mjs' } });
@@ -46,7 +48,7 @@ export function planConfiguration(config, { agentId = 'main', stateDir, pluginDi
       allowedAgentIds: unique([...(config.hooks.allowedAgentIds ?? []), agentId]),
       allowRequestSessionKey: false,
       allowedSessionKeyPrefixes: unique([...(config.hooks.allowedSessionKeyPrefixes ?? []), sessionKey]) } };
-  return { patch, agentId, mainKey, sessionKey, workspace: agent.workspace,
+  return { patch, agentId, mainKey, mainSessionKey, sessionKey, workspace: agent.workspace,
     pluginDir, settingsPath: join(stateDir, 'liveabit-personal-agent', 'settings.json'),
     databasePath: join(stateDir, 'plugins', 'liveabit-personal-agent', 'activity.sqlite'),
     deliveryPolicyPath: join(agent.workspace, 'skills', 'liveabit', 'references', 'delivery.json'),

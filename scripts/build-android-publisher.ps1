@@ -18,8 +18,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Android sender build failed.' }
     $taskOutput = Join-Path $taskRoot 'artifacts\android-publisher'
     New-Item -ItemType Directory -Force -Path $taskOutput | Out-Null
-    Copy-Item -LiteralPath (Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\debug\publisher-app-debug.apk') -Destination (Join-Path $taskOutput 'liveabit-sender-0.11.0-poc.apk')
-    Get-FileHash -LiteralPath (Join-Path $taskOutput 'liveabit-sender-0.11.0-poc.apk') -Algorithm SHA256
+    Copy-Item -LiteralPath (Join-Path $taskRoot 'android\publisher-app\build\outputs\apk\debug\publisher-app-debug.apk') -Destination (Join-Path $taskOutput 'liveabit-sender-0.12.0-poc.apk')
+    Get-FileHash -LiteralPath (Join-Path $taskOutput 'liveabit-sender-0.12.0-poc.apk') -Algorithm SHA256
 } finally {
     foreach ($taskName in $taskNames) { [Environment]::SetEnvironmentVariable($taskName,$taskPrevious[$taskName],'Process') }
 }

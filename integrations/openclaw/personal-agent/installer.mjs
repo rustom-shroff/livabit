@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { ActivityStore } from './store.mjs';
 import { planConfiguration, updateManagedInstructions } from './configuration.mjs';
+import { validateSettings } from './runtime.mjs';
 
 const args = process.argv.slice(2);
 let agentId = 'main', prepareStoppedUpdate = false, usePreparedInventory = false;
@@ -157,11 +158,21 @@ const payload = JSON.parse(readFileSync(join(pluginDir, 'install-payload.json'),
 const guide = Buffer.from(payload.guide, 'base64').toString('utf8');
 const existingInstructions = existsSync(instructionPath) ? readFileSync(instructionPath, 'utf8') : '';
 const newInstructions = updateManagedInstructions(existingInstructions, guide);
-const settings = { format: 'liveabit.personal-agent.settings.v1', enabled: true,
-  agentId, mainKey: plan.mainKey, sessionKey: plan.sessionKey, databasePath: plan.databasePath,
+const previousSettings = existsSync(plan.settingsPath) ? validateSettings(JSON.parse(readFileSync(plan.settingsPath, 'utf8'))) : null;
+if (previousSettings && (previousSettings.agentId !== agentId || previousSettings.databasePath !== plan.databasePath))
+  throw new Error('existing_activity_owner_requires_explicit_migration');
+if (previousSettings?.mainSessionKey && previousSettings.mainSessionKey !== plan.mainSessionKey)
+  throw new Error('main_conversation_changed_requires_explicit_migration');
+const settings = { format: 'liveabit.personal-agent.settings.v2', enabled: true,
+  agentId, mainKey: plan.mainKey, mainSessionKey: plan.mainSessionKey, sessionKey: plan.sessionKey, databasePath: plan.databasePath,
   timeZone: policy.time_zone, historyDays: 30, episodeDays: 90,
+  analysisEnabled: true, analysisCoalesceMs: 300000,
+  legacyEpisodeSessionKeys: previousSettings
+    ? [...new Set([...(previousSettings.legacyEpisodeSessionKeys ?? []),
+      ...(previousSettings.sessionKey === plan.mainSessionKey ? [plan.mainSessionKey] : [])])] : [],
   deliveryPolicyPath: plan.deliveryPolicyPath, deliveryStatePath: plan.deliveryStatePath,
   accountabilityEmailsEnabled: false };
+validateSettings(settings);
 policy = { ...policy, agent_id: agentId };
 try {
 if (readFileSync(sourceStatePath).compare(stateBytes) !== 0 || readFileSync(sourcePolicyPath).compare(sourcePolicyBytes) !== 0)
@@ -186,6 +197,8 @@ cli(['plugins', 'install', '--link', '--no-enable', '--force', '--accept-capabil
 const configAfter = JSON.parse(readFileSync(configPath, 'utf8'));
 if (agentFingerprint(configAfter) !== beforeFingerprint) throw new Error('agent_model_or_runtime_changed');
 if (readFileSync(plan.deliveryStatePath).compare(stateBytes) !== 0) throw new Error('delivery_state_changed_during_setup');
+// The exact prior main-session episode ledger is an explicit trusted alias.
+// Existing rows and native transcripts remain untouched, including on rollback.
 // Retire only the recognized old dedicated reminder policy after the new
 // mapping has been applied. Global channels and other agents stay intact.
 if (sourcePolicyPath !== plan.deliveryPolicyPath) {
@@ -196,6 +209,8 @@ if (sourcePolicyPath !== plan.deliveryPolicyPath) {
 }
 const validation = { format: 'liveabit.personal-agent.installation.v1', configured: true,
   agent_id: agentId, session_key: plan.sessionKey, automatic_hook_announcements: false,
+  main_session_key: plan.mainSessionKey, durable_receipt_path: '/liveabit/activity',
+  legacy_hook_run_acknowledgement_preserved: true, scheduled_analysis_enabled: true,
   durable_activity_storage: true, history_days: settings.historyDays, episode_days: settings.episodeDays,
   accountability_emails_enabled: false, models_and_reasoning_preserved: true,
   original_instructions_preserved: newInstructions.startsWith(existingInstructions) || existingInstructions.includes('<!-- liveabit-personal-agent:start -->'),

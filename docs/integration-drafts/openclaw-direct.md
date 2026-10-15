@@ -1,5 +1,9 @@
 # OpenClaw direct Android integration
 
+**Current direction, 2026-10-15:** the [personal-agent runtime](../../integrations/openclaw/personal-agent/README.md), [current system guide](../current-system.md) and [ADR-0025](../decisions/0025-durable-activity-analysis.md) govern the new same-main-agent activity-session pipeline. The mappings, setup commands and acknowledgement below describe the preserved October 13 sender/dedicated-agent baseline. Do not apply that historical configuration over a newer personal-agent setup. An acknowledgement-contract change requires matching endpoint/sender compatibility evidence, not relabeling an old `runId` as completed analysis.
+
+## Preserved October 13 direct integration
+
 Updated: **2026-10-13**. Current sender: [liveabit Sender 0.11.0](../../artifacts/android-publisher/liveabit-sender-0.11.0-poc.apk), with retained OpenClaw file migration, safe useful import errors and exactly three connection actions even while editing manually. [Setup regression review](../review/android-setup-regressions-2026-10-13.md). Remembered sharing and startup restoration under [ADR-0022](../decisions/0022-android-sharing-restart.md) remain; the [0.10.0 startup review](../review/android-reboot-resume-2026-10-13.md) preserves its exact 87-check evidence. [ADR-0021](../decisions/0021-task-aware-liveabit-agent.md) retains the dedicated task-aware route; its [0.9.0 review](../review/openclaw-task-aware-2026-10-13.md) preserves 80 native checks. Task coaching remains distinct from HTTP admission and earlier user-confirmed WhatsApp notifications.
 
 Activity travels directly from Android to the user's installed OpenClaw **liveabit** agent. OpenClaw owns personal tasks, interpretation and phone communication. Main manages the tasks; liveabit uses the shared Workboard task store when activity arrives. The independent display receiver remains available for local inspection and does not forward requests.

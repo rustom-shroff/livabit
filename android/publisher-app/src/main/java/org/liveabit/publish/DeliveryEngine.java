@@ -184,7 +184,7 @@ final class DeliveryEngine {
                 Receipt receipt;
                 try { receipt = post(state, item); } catch (Exception error) { receipt = new Receipt(Outcome.UNREACHABLE); }
                 Outcome outcome = receipt.outcome;
-                boolean accepted = outcome == Outcome.ACCEPTED || outcome == Outcome.OPENCLAW_ACCEPTED;
+                boolean accepted = outcome == Outcome.ACCEPTED || outcome == Outcome.OPENCLAW_ACCEPTED || outcome == Outcome.OPENCLAW_STORED;
                 synchronized (this) {
                     JSONObject latest = store.read(); if (!sameSession(latest, state)) return;
                     if (accepted) {
@@ -233,6 +233,7 @@ final class DeliveryEngine {
     }
     private enum Outcome {
         ACCEPTED("Receiver acknowledged activity"), OPENCLAW_ACCEPTED("OpenClaw accepted activity for processing"),
+        OPENCLAW_STORED("OpenClaw safely stored activity — review is scheduled separately"),
         UNREACHABLE("Cannot reach receiver — check the address and connection"),
         BAD_KEY("Receiver refused the connection key"), UNAVAILABLE("Receiver is unavailable"),
         REJECTED("Receiver rejected the activity request"), INVALID_ACK("Receiver sent an incorrect acknowledgement");
@@ -288,6 +289,9 @@ final class DeliveryEngine {
             try { ack = new JSONObject(new String(response, StandardCharsets.UTF_8)); }
             catch (org.json.JSONException malformed) { return new Receipt(Outcome.INVALID_ACK); }
             if (openClaw) {
+                if (OpenClawWebhook.isReceiptEndpoint(endpoint))
+                    return new Receipt(OpenClawWebhook.acceptedReceipt(ack, item.getString("event_id"), sha256(body))
+                        ? Outcome.OPENCLAW_STORED : Outcome.INVALID_ACK);
                 String runId = OpenClawWebhook.acceptedRunId(ack);
                 return runId == null ? new Receipt(Outcome.INVALID_ACK) : new Receipt(Outcome.OPENCLAW_ACCEPTED, runId);
             }
@@ -442,6 +446,6 @@ final class DeliveryEngine {
                 || host.matches("192\\.168\\.\\d{1,3}\\.\\d{1,3}")
                 || host.matches("172\\.(?:1[6-9]|2\\d|3[01])\\.\\d{1,3}\\.\\d{1,3}");
             if (!local) throw new IllegalArgumentException();
-        } catch (Exception error) { throw new IllegalArgumentException("Use the receiver /events or OpenClaw /hooks/liveabit or /hooks/agent URL. HTTP is limited to your local network."); }
+        } catch (Exception error) { throw new IllegalArgumentException("Use OpenClaw /liveabit/activity, a legacy /hooks/liveabit or /hooks/agent URL, or receiver /events. HTTP is limited to your local network."); }
     }
 }

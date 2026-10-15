@@ -143,7 +143,49 @@ final class OpenClawContractCases {
             passed.add("native_openclaw_http_refusal_durable_retry_and_admission_recovery");
             mappedLiveabitRouting(context, engine, fixture, endpoint, token, passed);
             agentRouting(context, engine, fixture, endpoint, token, mainSetup.agentId, passed);
+            durableReceipt(context, engine, fixture, endpoint, token, passed);
         } finally { engine.stop(); }
+    }
+
+    private static void durableReceipt(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
+                                       String token, List<String> passed) throws Exception {
+        engine.stop(); fixture.respond(503, "{\"ok\":false}");
+        String durable = endpoint.replace("/hooks/agent", "/liveabit/activity");
+        ConnectionSetup imported = ConnectionSetup.parse(new JSONObject().put("format", OpenClawWebhook.SETUP_FORMAT)
+            .put("url", durable).put("key", token).put("agent_id", "main").toString());
+        check(imported.agentId.equals("main") && !imported.legacyAgentMigrated, "Receipt route changed personal-agent identity");
+        engine.configure(durable, token, "org.liveabit.fixture", 60, "main");
+        context.getSystemService(JobScheduler.class).cancel(DeliveryEngine.PERIODIC_JOB);
+        cycle(context, engine, true);
+        JSONObject first = engine.snapshot().getJSONArray("pending").getJSONObject(0);
+        String id = first.getString("event_id"), body = first.getString("body");
+        JSONObject valid = new JSONObject().put("format", OpenClawWebhook.RECEIPT_FORMAT).put("ok", true).put("durable", true)
+            .put("event_id", id).put("body_sha256", DeliveryEngine.sha256(body.getBytes(StandardCharsets.UTF_8)))
+            .put("disposition", "accepted").put("analysis_scheduled", true);
+        String[] invalid = { new JSONObject(valid.toString()).put("durable", "true").toString(),
+            new JSONObject(valid.toString()).put("ok", "true").toString(),
+            new JSONObject(valid.toString()).put("event_id", "wrong-event").toString(),
+            new JSONObject(valid.toString()).put("body_sha256", "0".repeat(64)).toString(),
+            new JSONObject(valid.toString()).put("format", "other.receipt").toString(),
+            new JSONObject(valid.toString()).put("disposition", "queued").toString(),
+            "{\"ok\":true,\"runId\":\"legacy-only\"}" };
+        for (String acknowledgement : invalid) {
+            fixture.respond(200, acknowledgement); cycle(context, engine, false);
+            check(engine.snapshot().getJSONArray("pending").getJSONObject(0).getString("body").equals(body)
+                && engine.snapshot().getLong("last_ack") == 0, "Mismatched durable receipt discarded pending activity");
+        }
+        fixture.respondReceipts(); cycle(context, engine, false);
+        JSONObject stored = engine.snapshot();
+        check(stored.getJSONArray("pending").length() == 0 && stored.getLong("last_ack") > 0
+            && stored.getString("status").contains("safely stored") && stored.optString("last_run_id").isEmpty(),
+            "Durable receipt incorrectly required or invented an agent run");
+        for (int index = 0; index < fixture.count(); index++) {
+            Request sent = fixture.request(index);
+            if (id.equals(sent.headers.get("idempotency-key"))) check(sent.path.equals("/liveabit/activity") && sent.body.equals(body),
+                "Durable receipt retry changed original bytes or route");
+        }
+        fixture.assertHealthy();
+        passed.add("native_openclaw_durable_receipt_requires_exact_event_hash_and_literal_storage_ack_without_run_id");
     }
 
     private static void mappedLiveabitRouting(Context context, DeliveryEngine engine, HookFixture fixture, String endpoint,
@@ -265,9 +307,10 @@ final class OpenClawContractCases {
                     output.write(diagnostic.toString().getBytes(StandardCharsets.UTF_8));
                 }
             }
+            boolean receipt = OpenClawWebhook.isReceiptEndpoint(endpoint);
             check(state.getString("agent_id").equals(agentId) && state.getLong("last_ack") > 0 && state.getJSONArray("pending").length() == 0
-                && !state.optString("last_run_id").isEmpty()
-                && "OpenClaw accepted activity for processing".equals(state.getString("status")),
+                && (receipt ? state.getString("status").contains("safely stored")
+                    : !state.optString("last_run_id").isEmpty() && "OpenClaw accepted activity for processing".equals(state.getString("status"))),
                 "Installed OpenClaw did not admit the Android activity: " + state.getString("status"));
             passed.add("actual_android_activity_admitted_by_installed_openclaw_gateway");
         } finally { engine.stop(); }
@@ -289,12 +332,14 @@ final class OpenClawContractCases {
         private final Thread thread;
         private volatile int responseCode = 503;
         private volatile String responseBody = "{\"ok\":false}";
+        private volatile boolean receiptResponses;
         private volatile Throwable failure;
         HookFixture() throws Exception {
             thread = new Thread(this::serve, "openclaw-native-hook-fixture"); thread.start();
         }
         String endpoint() { return "http://127.0.0.1:" + server.getLocalPort() + "/hooks/agent"; }
-        void respond(int code, String body) { responseCode = code; responseBody = body; }
+        void respond(int code, String body) { receiptResponses = false; responseCode = code; responseBody = body; }
+        void respondReceipts() { responseCode = 200; receiptResponses = true; }
         synchronized Request request(int index) { check(index < requests.size(), "Native HTTP fixture saw no request"); return requests.get(index); }
         synchronized int count() { return requests.size(); }
         void assertHealthy() { check(failure == null, "Native HTTP fixture failed: " + failure); }
@@ -314,7 +359,11 @@ final class OpenClawContractCases {
                     check(length > 0 && length <= 65_536, "Unexpected hook body length");
                     byte[] bytes = input.readNBytes(length); check(bytes.length == length, "Truncated hook request");
                     synchronized (this) { requests.add(new Request(parts[1], new String(bytes, StandardCharsets.UTF_8), headers)); }
-                    byte[] reply = responseBody.getBytes(StandardCharsets.UTF_8);
+                    String outgoing = receiptResponses ? new JSONObject().put("ok", true).put("format", OpenClawWebhook.RECEIPT_FORMAT)
+                        .put("durable", true).put("event_id", headers.get("idempotency-key"))
+                        .put("body_sha256", DeliveryEngine.sha256(bytes)).put("disposition", "accepted")
+                        .put("analysis_scheduled", true).toString() : responseBody;
+                    byte[] reply = outgoing.getBytes(StandardCharsets.UTF_8);
                     String head = "HTTP/1.1 " + responseCode + " Fixture\r\nContent-Type: application/json\r\nContent-Length: "
                         + reply.length + "\r\nConnection: close\r\n\r\n";
                     socket.getOutputStream().write(head.getBytes(StandardCharsets.US_ASCII));

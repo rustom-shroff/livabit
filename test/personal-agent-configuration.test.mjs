@@ -40,7 +40,7 @@ function freeze(value) {
   return value;
 }
 
-test('configuration fixes OAP routing to the existing main conversation and disables hook announcements', () => {
+test('configuration isolates activity within the existing personal agent and disables hook announcements', () => {
   const config = fixture();
   config.hooks.mappings = [
     { id: 'liveabit-main', match: { path: 'liveabit' }, action: 'agent', agentId: '{{agentId}}', sessionKey: '{{sessionKey}}', deliver: true },
@@ -48,15 +48,16 @@ test('configuration fixes OAP routing to the existing main conversation and disa
   ];
   const plan = planConfiguration(freeze(config), options);
   assert.equal(plan.agentId, 'main');
-  assert.equal(plan.sessionKey, 'agent:main:main');
+  assert.equal(plan.sessionKey, 'agent:main:liveabit-activity');
+  assert.equal(plan.mainSessionKey, 'agent:main:main');
   assert.deepEqual(plan.patch.hooks.mappings, [{
     id: 'liveabit-personal', match: { path: 'liveabit' }, action: 'agent', agentId: 'main',
-    sessionKey: 'agent:main:main', sessionMode: 'persistent', name: 'liveabit', wakeMode: 'now',
+    sessionKey: 'agent:main:liveabit-activity', sessionMode: 'persistent', name: 'liveabit', wakeMode: 'now',
     messageTemplate: '{{message}}', deliver: false, transform: { module: 'liveabit-personal-agent.mjs' },
   }]);
   assert.equal(plan.patch.hooks.allowRequestSessionKey, false);
   assert.ok(plan.patch.hooks.allowedAgentIds.includes('main'));
-  assert.ok(plan.patch.hooks.allowedSessionKeyPrefixes.includes('agent:main:main'));
+  assert.ok(plan.patch.hooks.allowedSessionKeyPrefixes.includes('agent:main:liveabit-activity'));
 });
 
 test('planning leaves unrelated routes and existing agent models, permissions and unrestricted skills untouched', () => {
@@ -71,7 +72,7 @@ test('planning leaves unrelated routes and existing agent models, permissions an
   assert.deepEqual(config, before);
   assert.deepEqual(plan.patch.hooks.mappings[0], unrelated);
   assert.deepEqual(plan.patch.hooks.allowedAgentIds, ['other', 'main']);
-  assert.deepEqual(plan.patch.hooks.allowedSessionKeyPrefixes, ['agent:other:main', 'agent:main:main']);
+  assert.deepEqual(plan.patch.hooks.allowedSessionKeyPrefixes, ['agent:other:main', 'agent:main:liveabit-activity']);
   const entry = plan.patch.agents.entries.main;
   // Native config patch merges objects: omitted existing fields must remain intact.
   assert.deepEqual(Object.keys(entry), ['tools']);
@@ -185,7 +186,8 @@ test('a custom main-session key is retained and the chosen existing agent is exp
   const config = fixture();
   config.session.mainKey = 'personal_daily';
   const plan = planConfiguration(config, { ...options, agentId: 'other' });
-  assert.equal(plan.sessionKey, 'agent:other:personal_daily');
+  assert.equal(plan.sessionKey, 'agent:other:liveabit-activity');
+  assert.equal(plan.mainSessionKey, 'agent:other:personal_daily');
   assert.equal(plan.patch.hooks.mappings.at(-1).agentId, 'other');
   assert.equal(plan.patch.hooks.mappings.at(-1).sessionKey, plan.sessionKey);
   assert.equal(plan.workspace, config.agents.entries.other.workspace);
